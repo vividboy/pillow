@@ -1,8 +1,6 @@
 'use strict';
 
-const _ = require('../tool/util');
-
-function Particle(){
+function Particle() {
 
 }
 

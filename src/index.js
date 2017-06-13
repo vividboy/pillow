@@ -1,3 +1,4 @@
+/* global define */
 'use strict';
 
 ;(function(root, factory) {
@@ -9,7 +10,7 @@
   } else {
     factory(root['pillow'] || (root['pillow'] = {}));
   }
-})(this, function(exports, undefined) {
+})(this, function(exports) {
   exports.RenderObjectModel = require('./render/RenderObjectModel');
   exports.Img = require('./render/elements/Img');
   exports.Sprite = require('./render/elements/Sprite');

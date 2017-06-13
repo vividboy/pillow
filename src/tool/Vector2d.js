@@ -30,7 +30,7 @@ var proto = {
     return new Vector2d(this.x, this.y);
   },
   mag: function() {
-    return Math.sqrt(this.x*this.x + this.y*this.y);
+    return Math.sqrt(this.x * this.x + this.y * this.y);
   },
   add: function(other) {
     this.x += other.x;
@@ -95,11 +95,11 @@ var proto = {
     return this.x * other.x + this.y * other.y;
   },
   dotCoords: function(x, y) {
-    return this.x * x + this.y + y
+    return this.x * x + this.y + y;
   },
   normalize: function() {
     var m = this.mag();
-    if (m != 0 && m != 1) {
+    if (m !== 0 && m !== 1) {
       this.div(m);
     }
     return this;
@@ -111,15 +111,15 @@ var proto = {
     }
     return this;
   },
-  heading2d: function() {
+  heading2d: function(x, y) {
     var angle = Math.atan2(-y, x);
     return -1 * angle;
   },
   rotate: function(rads) {
     var s = Math.sin(rads);
     var c = Math.cos(rads);
-    var xrot = (c * this.x) - (s * this.y);
-    this.y = (s * this.x) + (c * this.y);
+    var xrot = c * this.x - s * this.y;
+    this.y = s * this.x + c * this.y;
     this.x = xrot;
     return this;
   },
@@ -143,54 +143,63 @@ var proto = {
     this.y = 0;
   },
   equals: function(other) {
-    return this.x === other.x && this.y === other.y
+    return this.x === other.x && this.y === other.y;
   },
   toString: function() {
-    return "[" + this.x + "," + this.y + "]";
+    return '[' + this.x + ',' + this.y + ']';
   }
 };
-_.augment(Vector2d,proto);
+
+_.augment(Vector2d, proto);
+
 Vector2d.add = function(one, other) {
   var vec = new Vector2d();
   vec.setCoords(one.x + other.x, one.y + other.y);
   return vec;
-}
+};
+
 Vector2d.sub = function(one, other) {
   var vec = new Vector2d();
   vec.setCoords(one.x - other.x, one.y - other.y);
   return vec;
-}
+};
+
 Vector2d.dist = function(one, other) {
   var dx = one.x - other.x;
   var dy = one.y - other.y;
-  return Math.sqrt(dx*dx + dy*dy);
-}
+  return Math.sqrt(dx * dx + dy * dy);
+};
+
 Vector2d.random = function(mag) {
   var vec = new Vector2d(Math.random(), Math.random());
   if (mag) vec.scale(mag);
   return vec;
-}
+};
+
 Vector2d.mult = function(one, scalar) {
   var vec = new Vector2d(one.x, one.y);
   vec.x *= scalar;
-  vec.y *= scalar
+  vec.y *= scalar;
   return vec;
-}
+};
+
 Vector2d.normal = function(vec) {
   return new Vector2d(-vec.y, vec.x);
-}
+};
+
 Vector2d.normalize = function(vec) {
   var v = new Vector2d(vec.x, vec.y);
   var m = v.mag();
-  if (m != 0 && m != 1) {
+  if (m !== 0 && m !== 1) {
     v.div(m);
   }
   return v;
-}
+};
+
 Vector2d.componentVector = function(vec, directionVec) {
   directionVec.normalize();
   directionVec.mult(vec.dot(directionVec));
   return directionVec;
-}
+};
 
 module.exports = Vector2d;

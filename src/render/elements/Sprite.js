@@ -2,7 +2,6 @@
 
 const Img = require('./Img');
 const _ = require('../../tool/util');
-const RenderObjectModel = require('../RenderObjectModel');
 
 function Sprite(cfg) {
   var that = this;
@@ -10,56 +9,58 @@ function Sprite(cfg) {
   that.paused = false;
   that.loop = true;
   that.offset = {
-    x:0,
-    y:0
-  },
-    Sprite.sup.call(that,cfg);
-  _.merge(that,cfg);
+    x: 0,
+    y: 0
+  };
+  Sprite.sup.call(that, cfg);
+  _.merge(that, cfg);
   that.init();
 }
+
 var proto = {
-  init:function(){
+  init: function() {
     var that = this;
-    that.xs = that.size.width/that.width;
-    that.ys = that.size.height/that.height;
+    that.xs = that.size.width / that.width;
+    that.ys = that.size.height / that.height;
   },
-  pause:function(){
+  pause: function() {
     var that = this;
     that.paused = true;
   },
-  play:function(){
+  play: function() {
     var that = this;
     that.paused = false;
   },
-  next:function(){
+  next: function() {
     var that = this;
-    !that.paused && that.frame ++;
+    !that.paused && that.frame++;
   },
-  prev:function(){
+  prev: function() {
     var that = this;
-    !that.paused && !!that.frame && that.frame --;
+    !that.paused && !!that.frame && that.frame--;
   },
-  to:function(index){
+  to: function(index) {
     var that = this;
-    that.frame = that.paused? that.frame: index;
+    that.frame = that.paused ? that.frame : index;
   },
-  getCurrentFrame:function(){
+  getCurrentFrame: function() {
     var that = this;
-    var x = that.frame%that.xs;
-    var y = parseInt(that.frame/that.xs);
-    if(!x && y == that.ys){
-      if(that.loop){
+    var x = that.frame % that.xs;
+    var y = parseInt(that.frame / that.xs, 10);
+
+    if (!x && y === that.ys) {
+      if (that.loop) {
         that.frame = 0;
-      }else{
+      } else {
         that.paused = true;
       }
     }
     return {
-      x:x*that.width + that.offset.x,
-      y:y*that.height + that.offset.y
+      x: x * that.width + that.offset.x,
+      y: y * that.height + that.offset.y
     };
   },
-  hitTest:function(){
+  hitTest: function() {
     return true;
   }
 };

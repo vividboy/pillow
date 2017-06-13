@@ -22,25 +22,25 @@ function RenderObject() {
   that.debug = false;
 }
 var proto = {
-  _draw:function(context){
+  _draw: function(context) {
     var that = this;
-    if(!that.visible){
+    if (!that.visible) {
       return;
     }
-    that.context = that.context||context;
+    that.context = that.context || context;
     that.update();
     that.context.save();
     that.context.globalAlpha = that.alpha;
-    that.context.translate(that.x,that.y);
-    that.context.rotate(that.rotation*Math.PI/180);
-    that.context.scale(that.scaleX,that.scaleY);
+    that.context.translate(that.x, that.y);
+    that.context.rotate(that.rotation * Math.PI / 180);
+    that.context.scale(that.scaleX, that.scaleY);
     that.draw();
     for (var i = 0; i < that.children.length; i++) {
       that.children[i]._draw(that.context);
     }
     that.context.restore();
   },
-  _debug:function(context){
+  _debug: function(context) {
     var that = this;
     that.context = that.context || context;
     that.draw();
@@ -48,13 +48,13 @@ var proto = {
       that.children[i]._debug(that.context);
     }
   },
-  draw:function(){},
-  update:function(){
+  draw: function() {},
+  update: function() {
     var that = this;
-    that.handle = that.handle || arguments[0]
+    that.handle = that.handle || arguments[0];
     that.handle && that.handle();
   },
-  clear:function(x, y, width, height){
+  clear: function(x, y, width, height) {
     this.context.clearRect(x, y, width, height);
   }
 };

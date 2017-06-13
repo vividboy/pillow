@@ -45,7 +45,8 @@ var pillow =
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
+	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/* global define */
+	'use strict';
 
 	;(function (root, factory) {
 	  'use strict';
@@ -56,7 +57,7 @@ var pillow =
 	  } else {
 	    factory(root['pillow'] || (root['pillow'] = {}));
 	  }
-	})(undefined, function (exports, undefined) {
+	})(undefined, function (exports) {
 	  exports.RenderObjectModel = __webpack_require__(1);
 	  exports.Img = __webpack_require__(5);
 	  exports.Sprite = __webpack_require__(6);
@@ -91,12 +92,12 @@ var pillow =
 	  that.parent = null;
 	  _.merge(that, cfg);
 	}
+
 	var proto = {
 	  render: function render(context) {
 	    var that = this;
 	    that.clear(0, 0, that.width, that.height);
 	    that._draw(that.context);
-	    //that._debug(context);
 	  },
 	  append: function append(node) {
 	    var that = this;
@@ -110,13 +111,12 @@ var pillow =
 	    this.children = [];
 	  },
 	  traversal: function traversal(callback) {
-	    var node = this,
-	        current,
-	        parent,
-	        children,
-	        i,
-	        nodes = _.type(node) == 'array' ? node.slice(0).reverse() : [node],
-	        parents = [];
+	    var node = this;
+	    var current;
+	    var children;
+	    var nodes = _.type(node) === 'array' ? node.slice(0).reverse() : [node];
+	    var parents = [];
+
 	    if (_.type(nodes[0]) === 'undefined' && nodes.length === 1) {
 	      return;
 	    }
@@ -125,7 +125,7 @@ var pillow =
 	    }
 	    while (nodes.length > 0) {
 	      current = nodes.pop();
-	      parent = parents.pop();
+	      parents.pop();
 	      callback(current);
 	      children = current && current['children'] ? current['children'] : [];
 	      for (var i = children.length - 1; i >= 0; i--) {
@@ -177,7 +177,7 @@ var pillow =
 	  guid: function guid() {
 	    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
 	      var r = Math.random() * 16 | 0;
-	      var v = c == 'x' ? r : r & 0x3 | 0x8;
+	      var v = c === 'x' ? r : r & 0x3 | 0x8;
 	      return v.toString(16);
 	    });
 	  },
@@ -207,7 +207,7 @@ var pillow =
 	    });
 	  },
 	  log: function log(l) {
-	    console && this.type(console.log) == 'function' && console.log(l);
+	    console && this.type(console.log) === 'function' && console.log(l);
 	  },
 	  indexOf: function indexOf(arr, val) {
 	    if (arr.indexOf) {
@@ -378,25 +378,27 @@ var pillow =
 	  }
 	};
 	function __bind(key, handle) {
-	  var events = key.split(" ");
+	  var events = key.split(' ');
 	  for (var i = 0, l = events.length; i < l; i++) {
 	    var t = events[i];
 	    if (!this.NotifyHash[t]) {
 	      this.NotifyHash[t] = [];
 	    }
 	    this.NotifyHash[t].push({
-	      "handler": handle,
-	      "type": t
+	      handler: handle,
+	      type: t
 	    });
 	  }
 	}
+
 	function Notify() {
 	  this.DataHash = {};
 	  this.NotifyHash = {};
-	};
+	}
+
 	Notify.prototype = {
 	  on: function on(arg1, arg2) {
-	    if (_.type(arg1) == 'object') {
+	    if (_.type(arg1) === 'object') {
 	      for (var j in arg1) {
 	        __bind.call(this, j, arg1[j]);
 	      }
@@ -406,11 +408,11 @@ var pillow =
 	    return this;
 	  },
 	  emit: function emit(types, data) {
-	    var items = types.split(" ");
+	    var items = types.split(' ');
 	    for (var i = 0, l = items.length; i < l; i++) {
 	      var type = items[i];
 	      if (this.NotifyHash[type]) {
-	        __emit.call(this, type, _.type(data) == 'undefined' ? null : data);
+	        __emit.call(this, type, _.type(data) === 'undefined' ? null : data);
 	      }
 	    }
 	    return this;
@@ -478,7 +480,6 @@ var pillow =
 
 	var Img = __webpack_require__(5);
 	var _ = __webpack_require__(2);
-	var RenderObjectModel = __webpack_require__(1);
 
 	function Sprite(cfg) {
 	  var that = this;
@@ -488,10 +489,12 @@ var pillow =
 	  that.offset = {
 	    x: 0,
 	    y: 0
-	  }, Sprite.sup.call(that, cfg);
+	  };
+	  Sprite.sup.call(that, cfg);
 	  _.merge(that, cfg);
 	  that.init();
 	}
+
 	var proto = {
 	  init: function init() {
 	    var that = this;
@@ -521,8 +524,9 @@ var pillow =
 	  getCurrentFrame: function getCurrentFrame() {
 	    var that = this;
 	    var x = that.frame % that.xs;
-	    var y = parseInt(that.frame / that.xs);
-	    if (!x && y == that.ys) {
+	    var y = parseInt(that.frame / that.xs, 10);
+
+	    if (!x && y === that.ys) {
 	      if (that.loop) {
 	        that.frame = 0;
 	      } else {
@@ -558,11 +562,12 @@ var pillow =
 	  Text.sup.call(that, cfg);
 	  that.x = 0;
 	  that.y = 0;
-	  that.text = "";
-	  that.font = "12px arial";
-	  that.color = "#000";
+	  that.text = '';
+	  that.font = '12px arial';
+	  that.color = '#000';
 	  _.merge(that, cfg);
 	}
+
 	var proto = {
 	  draw: function draw() {
 	    var that = this;
@@ -603,7 +608,7 @@ var pillow =
 	      var action = data.action;
 	      if (that.context[action]) {
 	        var args = data.args;
-	        if (_.type(args) == 'array' || !args) {
+	        if (_.type(args) === 'array' || !args) {
 	          that.context[action].apply(that.context, args);
 	        } else {
 	          that.context[action] = that[action];
@@ -651,14 +656,9 @@ var pillow =
 	  },
 	  hitTest: function hitTest(x, y) {
 	    var that = this;
-	    switch (that.hitType) {
-	      case 'rect':
-	        return x >= that.x && x <= that.x + that.width && y >= that.y && y <= that.y + that.height;
-	        break;
-	      case 'circle':
-	        break;
-	      case 'polygon':
-	        break;
+
+	    if (that.hitType === 'rect') {
+	      return x >= that.x && x <= that.x + that.width && y >= that.y && y <= that.y + that.height;
 	    }
 	  }
 	};
@@ -689,7 +689,7 @@ var pillow =
 	    var that = this;
 	    that.target = that.container;
 	    if (that.target) {
-	      that.context = that.target.getContext("2d");
+	      that.context = that.target.getContext('2d');
 	      that.canvas = that.context.canvas;
 	      that.canvas.width = that.width || that.canvas.width;
 	      that.canvas.height = that.height || that.canvas.height;
@@ -721,6 +721,7 @@ var pillow =
 	var _ = __webpack_require__(2);
 
 	var noop = function noop() {};
+
 	var KEYS = {
 	  A: 65,
 	  B: 66,
@@ -783,6 +784,7 @@ var pillow =
 	  ESC: 27,
 	  SPACE: 32
 	};
+
 	var _KEYS = _.transpose(KEYS);
 
 	var keysDown = [];
@@ -798,6 +800,7 @@ var pillow =
 	function Key(keyCode) {
 	  this.keyCode = keyCode;
 	}
+
 	var proto = {
 	  _downHandler: noop,
 	  _upHandler: noop,
@@ -824,15 +827,18 @@ var pillow =
 	    this._pressHandler = noop;
 	  }
 	};
+
 	_.augment(Key, proto);
+
 	var Keyboard = {};
+
 	Keyboard.Key = Key;
+
 	var running = false;
-	var proto = {
+
+	var methods = {
 	  simulate: function simulate() {
-	    var i,
-	        len = keysDown.length;
-	    for (i = 0; i < len; i++) {
+	    for (var i = 0; i < keysDown.length; i++) {
 	      var keyCode = keysDown[i];
 	      var keyName = _KEYS[keyCode];
 	      if (keyName) {
@@ -854,10 +860,13 @@ var pillow =
 	    running = false;
 	  }
 	};
-	_.extend(Keyboard, proto);
+
+	_.extend(Keyboard, methods);
+
 	_.each(KEYS, function (keyCode, keyName) {
 	  Keyboard[keyName] = new Key(keyCode);
 	});
+
 	_.bindEvent('keydown', function (evt) {
 	  var keyCode = evt.keyCode;
 	  var keyName = _KEYS[keyCode];
@@ -866,6 +875,7 @@ var pillow =
 	    Keyboard[keyName].press();
 	  }
 	});
+
 	_.bindEvent('keyup', function (evt) {
 	  var keyCode = _.removeValue(keysDown, evt.keyCode);
 	  var keyName = _KEYS[keyCode];
@@ -873,6 +883,7 @@ var pillow =
 	    Keyboard[keyName].up();
 	  }
 	});
+
 	_.bindEvent('blur', function (evt) {
 	  keysDown.length = 0;
 	});
@@ -889,19 +900,22 @@ var pillow =
 	var _ = __webpack_require__(2);
 
 	function getOffset(element) {
-	  var x = 0,
-	      y = 0;
+	  var x = 0;
+	  var y = 0;
 	  var offsetParent = element;
-	  while (offsetParent != null && offsetParent != document.body) {
+	  while (offsetParent !== null && offsetParent !== document.body) {
 	    x += offsetParent.offsetLeft;
 	    y += offsetParent.offsetTop;
 	    offsetParent = offsetParent.offsetParent;
 	  }
-	  return { x: x, y: y };
+	  return {
+	    x: x,
+	    y: y
+	  };
 	}
 	function Mouse(cfg) {
 	  var that = this;
-	  that.types = "ontouch" in window ? ["touchstart", "touchmove", "touchend"] : ["mousedown", "mousemove", "mouseup"];
+	  that.types = 'ontouch' in window ? ['touchstart', 'touchmove', 'touchend'] : ['mousedown', 'mousemove', 'mouseup'];
 	  that.element = document;
 	  _.merge(that, cfg);
 	  this.bind();
@@ -941,6 +955,7 @@ var pillow =
 	  that.paused = false;
 	  that.init();
 	}
+
 	Timer.prototype = {
 	  init: function init() {
 	    var that = this;
@@ -1087,7 +1102,7 @@ var pillow =
 	  },
 	  normalize: function normalize() {
 	    var m = this.mag();
-	    if (m != 0 && m != 1) {
+	    if (m !== 0 && m !== 1) {
 	      this.div(m);
 	    }
 	    return this;
@@ -1099,7 +1114,7 @@ var pillow =
 	    }
 	    return this;
 	  },
-	  heading2d: function heading2d() {
+	  heading2d: function heading2d(x, y) {
 	    var angle = Math.atan2(-y, x);
 	    return -1 * angle;
 	  },
@@ -1134,47 +1149,56 @@ var pillow =
 	    return this.x === other.x && this.y === other.y;
 	  },
 	  toString: function toString() {
-	    return "[" + this.x + "," + this.y + "]";
+	    return '[' + this.x + ',' + this.y + ']';
 	  }
 	};
+
 	_.augment(Vector2d, proto);
+
 	Vector2d.add = function (one, other) {
 	  var vec = new Vector2d();
 	  vec.setCoords(one.x + other.x, one.y + other.y);
 	  return vec;
 	};
+
 	Vector2d.sub = function (one, other) {
 	  var vec = new Vector2d();
 	  vec.setCoords(one.x - other.x, one.y - other.y);
 	  return vec;
 	};
+
 	Vector2d.dist = function (one, other) {
 	  var dx = one.x - other.x;
 	  var dy = one.y - other.y;
 	  return Math.sqrt(dx * dx + dy * dy);
 	};
+
 	Vector2d.random = function (mag) {
 	  var vec = new Vector2d(Math.random(), Math.random());
 	  if (mag) vec.scale(mag);
 	  return vec;
 	};
+
 	Vector2d.mult = function (one, scalar) {
 	  var vec = new Vector2d(one.x, one.y);
 	  vec.x *= scalar;
 	  vec.y *= scalar;
 	  return vec;
 	};
+
 	Vector2d.normal = function (vec) {
 	  return new Vector2d(-vec.y, vec.x);
 	};
+
 	Vector2d.normalize = function (vec) {
 	  var v = new Vector2d(vec.x, vec.y);
 	  var m = v.mag();
-	  if (m != 0 && m != 1) {
+	  if (m !== 0 && m !== 1) {
 	    v.div(m);
 	  }
 	  return v;
 	};
+
 	Vector2d.componentVector = function (vec, directionVec) {
 	  directionVec.normalize();
 	  directionVec.mult(vec.dot(directionVec));
@@ -1185,20 +1209,13 @@ var pillow =
 
 /***/ },
 /* 14 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
 	'use strict';
 
-	var _ = __webpack_require__(2);
-
 	var _Math = {
 	  random: function random(min, max) {
-	    return parseInt(Math.random() * (max - min + 1) + min);
-	  },
-	  getRandomColor: function getRandomColor() {
-	    return '#' + (function (color) {
-	      return (color += '0123456789abcdef'[Math.floor(Math.random() * 16)]) && color.length == 6 ? color : arguments.callee(color);
-	    })('');
+	    return parseInt(Math.random() * (max - min + 1) + min, 10);
 	  }
 	};
 
@@ -1239,7 +1256,7 @@ var pillow =
 	        height: image.height
 	      };
 	      that.num++;
-	      if (that.num == that.getSize()) {
+	      if (that.num === that.getSize()) {
 	        that.emit('success', that.hash);
 	      }
 	    };
@@ -1274,19 +1291,13 @@ var pillow =
 	  that.init();
 	}
 	var proto = {
-	  init: function init() {
-	    var that = this;
-	  },
+	  init: function init() {},
 	  clearCache: function clearCache() {
 	    var that = this;
 	    that.lock = false;
 	  },
 	  draw: function draw() {
 	    var that = this;
-	    if (that.lock) {
-	      that.context.drawImage(images[j].src, images[j].x, images[j].y, that.size.width, that.size.height, that.size.width * y, that.size.height * x, that.size.width, that.size.height);
-	      return;
-	    }
 	    var images = that.resource;
 	    _.each(that.matrix, function (i, x) {
 	      _.each(i, function (j, y) {

@@ -13,7 +13,7 @@ var _ = {
   guid: function() {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
       var r = Math.random() * 16 | 0;
-      var v = c == 'x' ? r : (r & 0x3 | 0x8);
+      var v = c === 'x' ? r : r & 0x3 | 0x8;
       return v.toString(16);
     });
   },
@@ -28,22 +28,22 @@ var _ = {
     }
     return object;
   },
-  inherit:function(sub, sup) {
+  inherit: function(sub, sup) {
     var temp = sub.prototype;
     sub.prototype = this.create(sup.prototype);
-    for(var i in temp) {
+    for (var i in temp) {
       sub.prototype[i] = temp[i];
     }
     sub.prototype.constructor = sub;
     sub.sup = sup;
   },
   augment: function(r, s) {
-    this.each(s,function(v, k) {
-      r.prototype[k]= v;
+    this.each(s, function(v, k) {
+      r.prototype[k] = v;
     });
   },
   log: function(l) {
-    console && (this.type(console.log) == 'function') && console.log(l);
+    console && this.type(console.log) === 'function' && console.log(l);
   },
   indexOf: function(arr, val) {
     if (arr.indexOf) {
@@ -58,7 +58,7 @@ var _ = {
     }
     return -1;
   },
-  merge: function(r,s){
+  merge: function(r, s) {
     for (var i in s) {
       r[i] = s[i];
     }
@@ -95,19 +95,19 @@ var _ = {
       return Object.prototype.toString.call(c).replace(/\[object |\]/g, '').toLowerCase();
     }
   },
-  transpose: function (obj) {
+  transpose: function(obj) {
     var transpose = {};
     this.each(obj, function(val, key) {
       transpose[val] = key;
     });
     return transpose;
   },
-  slice:Array.prototype.slice,
-  requestAnimationFrame :
-  global.requestAnimationFrame  ||
+  slice: Array.prototype.slice,
+  requestAnimationFrame:
+  global.requestAnimationFrame ||
   global.webkitRequestAnimationFrame ||
-  global.mozRequestAnimationFrame    ||
-  function(callback){
+  global.mozRequestAnimationFrame ||
+  function(callback) {
     global.setTimeout(callback, 1000 / 60);
   },
   bindEvent: function(e, handler) {

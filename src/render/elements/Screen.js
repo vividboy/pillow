@@ -5,8 +5,8 @@ const RenderObjectModel = require('../RenderObjectModel');
 
 function Screen(cfg) {
   var that = this;
-  Screen.sup.call(that,cfg);
-  _.merge(that,cfg);
+  Screen.sup.call(that, cfg);
+  _.merge(that, cfg);
   that.init();
 }
 
@@ -15,11 +15,11 @@ var proto = {
     var that = this;
     that.target = that.container;
     if (that.target) {
-      that.context = that.target.getContext("2d");
+      that.context = that.target.getContext('2d');
       that.canvas = that.context.canvas;
-      that.canvas.width = that.width||that.canvas.width;
-      that.canvas.height = that.height||that.canvas.height;
-    }else{
+      that.canvas.width = that.width || that.canvas.width;
+      that.canvas.height = that.height || that.canvas.height;
+    } else {
       _.log('init error');
       return;
     }

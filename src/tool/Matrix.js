@@ -2,10 +2,11 @@
 
 const _ = require('../tool/util');
 
+var PI = Math.PI;
 var Matrix = Array;
 
 var proto = {
-  copy : function () {
+  copy: function() {
     return [
       this[0],
       this[1],
@@ -13,7 +14,7 @@ var proto = {
       this[3]
     ];
   },
-  multiplyScalar : function (s) {
+  multiplyScalar: function(s) {
     return [
       this[0] * s,
       this[1] * s,
@@ -21,7 +22,7 @@ var proto = {
       this[3] * s || 0
     ];
   },
-  subtract : function (p) {
+  subtract: function(p) {
     return [
       this[0] - p[0],
       this[1] - p[1],
@@ -29,7 +30,7 @@ var proto = {
       this[3] - p[3]
     ];
   },
-  add : function (p) {
+  add: function(p) {
     return [
       this[0] + p[0],
       this[1] + p[1],
@@ -37,31 +38,38 @@ var proto = {
       this[3] + p[3]
     ];
   },
-  applyMatrix : function (m) {
-    var px = this[0], py = this[1], pz = this[2], pw = this[3];
-    this[0] = px * m[0] + py * m[4] + pz * m[8] +  pw * m[12];
-    this[1] = px * m[1] + py * m[5] + pz * m[9] +  pw * m[13];
+  applyMatrix: function(m) {
+    var px = this[0];
+    var py = this[1];
+    var pz = this[2];
+    var pw = this[3];
+    this[0] = px * m[0] + py * m[4] + pz * m[8] + pw * m[12];
+    this[1] = px * m[1] + py * m[5] + pz * m[9] + pw * m[13];
     this[2] = px * m[2] + py * m[6] + pz * m[10] + pw * m[14];
     this[3] = px * m[3] + py * m[7] + pz * m[11] + pw * m[15];
     return this;
   },
-  multiplyMatrix : function (m) {
-    var px = this[0], py = this[1], pz = this[2], pw = this[3];
+  multiplyMatrix: function(m) {
+    var px = this[0];
+    var py = this[1];
+    var pz = this[2];
+    var pw = this[3];
     return [
-      px * m[0] + py * m[4] + pz * m[8] +  pw * m[12],
-      px * m[1] + py * m[5] + pz * m[9] +  pw * m[13],
+      px * m[0] + py * m[4] + pz * m[8] + pw * m[12],
+      px * m[1] + py * m[5] + pz * m[9] + pw * m[13],
       px * m[2] + py * m[6] + pz * m[10] + pw * m[14],
       px * m[3] + py * m[7] + pz * m[11] + pw * m[15]
     ];
-  },crossProduct : function (p) {
+  },
+  crossProduct: function(p) {
     return [
-      this[1] * p[2] - this[2] * p[1], 
+      this[1] * p[2] - this[2] * p[1],
       this[2] * p[0] - this[0] * p[2],
       this[0] * p[1] - this[1] * p[0],
       0
     ];
   },
-  dotProduct : function (p) {
+  dotProduct: function(p) {
     return (
       this[0] * p[0] +
       this[1] * p[1] +
@@ -69,7 +77,7 @@ var proto = {
       (this[3] || 0) * (p[3] || 0)
     );
   },
-  normalize : function () {
+  normalize: function() {
     var n = Math.sqrt(
       this[0] * this[0] +
       this[1] * this[1] +
@@ -82,29 +90,65 @@ var proto = {
     this[3] /= n;
     return this;
   },
-  rotateXYZ : function (angleX, angleY, angleZ) {
-    var cw = Math.cos(angleX),
-      sw = Math.sin(angleX),
-      cy = Math.cos(angleY),
-      sy = Math.sin(angleY),
-      ck = angleZ ? Math.cos(angleZ) : 1,
-      sk = angleZ ? Math.sin(angleZ) : 0;
+  rotateXYZ: function(angleX, angleY, angleZ) {
+    var cw = Math.cos(angleX);
+    var sw = Math.sin(angleX);
+    var cy = Math.cos(angleY);
+    var sy = Math.sin(angleY);
+    var ck = angleZ ? Math.cos(angleZ) : 1;
+    var sk = angleZ ? Math.sin(angleZ) : 0;
     return [
-      cy*ck,		 cw*sk+sw*sy*ck,		sw*sk-cw*sy*ck,		0,
-      -cy*sk,		 cw*ck-sw*sy*sk,		sw*ck+cw*sy*sk,		0,
-      sy,		-sw*cy,					cw*cy,				0,
-      0,			 0,						0,					1
+      cy * ck,
+      cw * sk + sw * sy * ck,
+      sw * sk - cw * sy * ck,
+      0,
+      -cy * sk,
+      cw * ck - sw * sy * sk,
+      sw * ck + cw * sy * sk,
+      0,
+      sy,
+      -sw * cy,
+      cw * cy,
+      0,
+      0,
+      0,
+      0,
+      1
     ];
   },
-  multiply : function (m) {
-    var m1XX = this[0],		m1XY = this[1],		m1XZ = this[2],		m1XW = this[3],
-      m1YX = this[4],		m1YY = this[5],		m1YZ = this[6],		m1YW = this[7],
-      m1ZX = this[8],		m1ZY = this[9],		m1ZZ = this[10],	m1ZW = this[11],
-      m1WX = this[12],	m1WY = this[13],	m1WZ = this[14],	m1WW = this[15],
-      m2XX = m[0],		m2XY = m[1],		m2XZ = m[2],		m2XW = m[3],
-      m2YX = m[4],		m2YY = m[5],		m2YZ = m[6],		m2YW = m[7],
-      m2ZX = m[8],		m2ZY = m[9],		m2ZZ = m[10],		m2ZW = m[11],
-      m2WX = m[12],		m2WY = m[13],		m2WZ = m[14],		m2WW = m[15];
+  multiply: function(m) {
+    var m1XX = this[0];
+    var m1XY = this[1];
+    var m1XZ = this[2];
+    var m1XW = this[3];
+    var m1YX = this[4];
+    var m1YY = this[5];
+    var m1YZ = this[6];
+    var m1YW = this[7];
+    var m1ZX = this[8];
+    var m1ZY = this[9];
+    var m1ZZ = this[10];
+    var m1ZW = this[11];
+    var m1WX = this[12];
+    var m1WY = this[13];
+    var m1WZ = this[14];
+    var m1WW = this[15];
+    var m2XX = m[0];
+    var m2XY = m[1];
+    var m2XZ = m[2];
+    var m2XW = m[3];
+    var m2YX = m[4];
+    var m2YY = m[5];
+    var m2YZ = m[6];
+    var m2YW = m[7];
+    var m2ZX = m[8];
+    var m2ZY = m[9];
+    var m2ZZ = m[10];
+    var m2ZW = m[11];
+    var m2WX = m[12];
+    var m2WY = m[13];
+    var m2WZ = m[14];
+    var m2WW = m[15];
     return [
       m1XX * m2XX + m1XY * m2YX + m1XZ * m2ZX + m1XW * m2WX,
       m1XX * m2XY + m1XY * m2YY + m1XZ * m2ZY + m1XW * m2WY,
@@ -124,25 +168,36 @@ var proto = {
       m1WX * m2XW + m1WY * m2YW + m1WZ * m2ZW + m1WW * m2WW
     ];
   },
-  inverse : function (m) {
-    var a00 = m[0],  a01 = m[1],  a02 = m[2],  a03 = m[3],
-      a10 = m[4],  a11 = m[5],  a12 = m[6],  a13 = m[7],
-      a20 = m[8],  a21 = m[9],  a22 = m[10], a23 = m[11],
-      a30 = m[12], a31 = m[13], a32 = m[14], a33 = m[15],
-      b00 = a00 * a11 - a01 * a10,
-      b01 = a00 * a12 - a02 * a10,
-      b02 = a00 * a13 - a03 * a10,
-      b03 = a01 * a12 - a02 * a11,
-      b04 = a01 * a13 - a03 * a11,
-      b05 = a02 * a13 - a03 * a12,
-      b06 = a20 * a31 - a21 * a30,
-      b07 = a20 * a32 - a22 * a30,
-      b08 = a20 * a33 - a23 * a30,
-      b09 = a21 * a32 - a22 * a31,
-      b10 = a21 * a33 - a23 * a31,
-      b11 = a22 * a33 - a23 * a32,
-      // Calculate the determinant
-      det = b00 * b11 - b01 * b10 + b02 * b09 + b03 * b08 - b04 * b07 + b05 * b06;
+  inverse: function(m) {
+    var a00 = m[0];
+    var a01 = m[1];
+    var a02 = m[2];
+    var a03 = m[3];
+    var a10 = m[4];
+    var a11 = m[5];
+    var a12 = m[6];
+    var a13 = m[7];
+    var a20 = m[8];
+    var a21 = m[9];
+    var a22 = m[10];
+    var a23 = m[11];
+    var a30 = m[12];
+    var a31 = m[13];
+    var a32 = m[14];
+    var a33 = m[15];
+    var b00 = a00 * a11 - a01 * a10;
+    var b01 = a00 * a12 - a02 * a10;
+    var b02 = a00 * a13 - a03 * a10;
+    var b03 = a01 * a12 - a02 * a11;
+    var b04 = a01 * a13 - a03 * a11;
+    var b05 = a02 * a13 - a03 * a12;
+    var b06 = a20 * a31 - a21 * a30;
+    var b07 = a20 * a32 - a22 * a30;
+    var b08 = a20 * a33 - a23 * a30;
+    var b09 = a21 * a32 - a22 * a31;
+    var b10 = a21 * a33 - a23 * a31;
+    var b11 = a22 * a33 - a23 * a32;
+    var det = b00 * b11 - b01 * b10 + b02 * b09 + b03 * b08 - b04 * b07 + b05 * b06;
     if (!det) return this;
     det = 1.0 / det;
     return [
@@ -164,24 +219,33 @@ var proto = {
       (a20 * b03 - a21 * b01 + a22 * b00) * det
     ];
   },
-  viewMatrix : function (u, v, n, r) {
+  viewMatrix: function(u, v, n, r) {
     return [
-      u[0],	v[0],	n[0],	0,
-      u[1],	v[1],	n[1],	0,
-      u[2],	v[2],	n[2],	0,
-      - (
+      u[0],
+      v[0],
+      n[0],
+      0,
+      u[1],
+      v[1],
+      n[1],
+      0,
+      u[2],
+      v[2],
+      n[2],
+      0,
+      -(
         r[0] * u[0] +
         r[1] * u[1] +
         r[2] * u[2] +
         r[3] * u[3]
       ),
-      - (
+      -(
         r[0] * v[0] +
         r[1] * v[1] +
         r[2] * v[2] +
         r[3] * v[3]
       ),
-      - (
+      -(
         r[0] * n[0] +
         r[1] * n[1] +
         r[2] * n[2] +
@@ -189,21 +253,17 @@ var proto = {
       ), 1
     ];
   },
-  perspective : function (distance) {
+  perspective: function(distance) {
     return [
       1, 0, 0, 0,
       0, 1, 0, 0,
-      0, 0, 1,-1 / distance,	//	set the perspective factor to 1 / distance to the picture plane
+      0, 0, 1, -1 / distance,	//	set the perspective factor to 1 / distance to the picture plane
       0, 0, 0, 1
     ];
   },
-  definePlane : function () {
-    var sum = [0,0,0,0];
-    for (
-      var i = 0, last = this.length - 1;
-      i < this.length;
-      last = i, i++
-    ) {
+  definePlane: function() {
+    var sum = [0, 0, 0, 0];
+    for (var i = 0, last = this.length - 1; i < this.length; last = i, i++) {
       var A = this[last];		//	assumes counter-clockwise points order
       var B = this[i];
       sum[0] += (A[1] - B[1]) * (A[2] + B[2]);
@@ -216,7 +276,7 @@ var proto = {
       sum[0],
       sum[1],
       sum[2],
-      - (
+      -(
         sum[0] * p[0] +
         sum[1] * p[1] +
         sum[2] * p[2] +
@@ -224,7 +284,7 @@ var proto = {
       )
     ];
   },
-  identity : function() {
+  identity: function() {
     return [	// identity matrix
       1, 0, 0, 0,
       0, 1, 0, 0,
@@ -232,7 +292,7 @@ var proto = {
       0, 0, 0, 1
     ];
   },
-  scale : function (x, y, z) {
+  scale: function(x, y, z) {
     return this.multiply(
       [
         x, 0, 0, 0,
@@ -242,7 +302,7 @@ var proto = {
       ]
     );
   },
-  translate : function (x, y, z) {
+  translate: function(x, y, z) {
     return this.multiply(
       [
         1, 0, 0, 0,
@@ -251,39 +311,40 @@ var proto = {
         x, y, z, 1
       ]
     );
-  },rotateX : function (angle) {
-    angle = angle * (Math.PI / 180);
-    var c = Math.cos(angle),
-      s = Math.sin(angle);
+  },
+  rotateX: function(angle) {
+    angle = angle * (PI / 180);
+    var c = Math.cos(angle);
+    var s = Math.sin(angle);
     return this.multiply(
       [
         1, 0, 0, 0,
         0, c, s, 0,
-        0,-s, c, 0,
+        0, -s, c, 0,
         0, 0, 0, 1
       ]
     );
   },
-  rotateY : function (angle) {
-    angle = angle * (Math.PI / 180);
-    var c = Math.cos(angle),
-      s = Math.sin(angle);
+  rotateY: function(angle) {
+    angle = angle * (PI / 180);
+    var c = Math.cos(angle);
+    var s = Math.sin(angle);
     return this.multiply(
       [
-        c, 0,-s, 0,
+        c, 0, -s, 0,
         0, 1, 0, 0,
         s, 0, c, 0,
         0, 0, 0, 1
       ]
     );
   },
-  rotateZ : function (angle) {
-    angle = angle * (Math.PI / 180);
-    var c = Math.cos(angle),
-      s = Math.sin(angle);
+  rotateZ: function(angle) {
+    angle = angle * (PI / 180);
+    var c = Math.cos(angle);
+    var s = Math.sin(angle);
     return this.multiply(
       [
-        c,-s, 0, 0,
+        c, -s, 0, 0,
         s, c, 0, 0,
         0, 0, 1, 0,
         0, 0, 0, 1
@@ -292,6 +353,6 @@ var proto = {
   }
 };
 
-_.augment(Matrix,proto);
+_.augment(Matrix, proto);
 
 module.exports = Matrix;

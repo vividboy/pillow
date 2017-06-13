@@ -2,47 +2,48 @@
 
 const _ = require('../tool/util');
 
-function Timer(target,fps){
+function Timer(target, fps) {
   var that = this;
   that.fps = fps;
   that.target = target;
   that.paused = false;
   that.init();
 }
+
 Timer.prototype = {
-  init:function(){
+  init: function() {
     var that = this;
-    that.run = function(){
-      if(!that.paused){
-        that.target.run ? that.target.run():that.target();
+    that.run = function() {
+      if (!that.paused) {
+        that.target.run ? that.target.run() : that.target();
       }
-      if(that.fps){
-        if(that.loop) {
-          return
+      if (that.fps) {
+        if (that.loop) {
+          return;
         }
-        that.loop = function(){
-          global.setTimeout(function(){
+        that.loop = function() {
+          global.setTimeout(function() {
             that.run();
             that.loop();
           }, 1000 / that.fps);
-          return true
-        }
-        that.loop()
-      }else{
-        _.requestAnimationFrame.call(global,function(){
+          return true;
+        };
+        that.loop();
+      } else {
+        _.requestAnimationFrame.call(global, function() {
           that.run();
         });
       }
-    }
+    };
   },
-  start:function(){
+  start: function() {
     var that = this;
     that.run();
   },
-  pause:function(){
+  pause: function() {
     this.paused = true;
   },
-  go:function(){
+  go: function() {
     this.paused = false;
   }
 };
