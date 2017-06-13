@@ -1,6 +1,6 @@
 'use strict';
 
-const _ = require('../tool/util');
+const _ = require('../tool/Util');
 const RenderObject = require('./RenderObject');
 
 function RenderObjectModel(cfg) {

@@ -1,6 +1,6 @@
 'use strict';
 
-const _ = require('../tool/util');
+const _ = require('../tool/Util');
 const RenderObjectModel = require('../render/RenderObjectModel');
 
 function Map(cfg) {
