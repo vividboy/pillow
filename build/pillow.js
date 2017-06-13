@@ -64,7 +64,7 @@ var pillow =
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 16);
+/******/ 	return __webpack_require__(__webpack_require__.s = 17);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -202,7 +202,7 @@ module.exports = _;
 
 
 var _ = __webpack_require__(0);
-var RenderObject = __webpack_require__(17);
+var RenderObject = __webpack_require__(18);
 
 function RenderObjectModel(cfg) {
   var that = this;
@@ -591,6 +591,60 @@ module.exports = Notify;
 
 /***/ }),
 /* 6 */
+/***/ (function(module, exports) {
+
+module.exports = {
+	"name": "pillowjs",
+	"version": "1.1.6",
+	"description": "HTML5 2D rendering engine",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/xudafeng/pillow.git"
+	},
+	"keywords": [
+		"canvas"
+	],
+	"main": "./dist/index.js",
+	"homepage": "https://xudafeng.github.com/pillow",
+	"precommit": [
+		"lint"
+	],
+	"scripts": {
+		"lint": "eslint ./src",
+		"build": "webpack && babel src/ --out-dir dist/",
+		"server": "startserver -p 8081 -s -m",
+		"test": "node ./test/pillow.test.js",
+		"prepublish": "npm run build"
+	},
+	"dependencies": {
+		"monitor.js": "^1.0.5"
+	},
+	"devDependencies": {
+		"babel": "~5.8.23",
+		"babel-core": "^5.x",
+		"babel-loader": "^5.x",
+		"eslint": "^4.0.0",
+		"json-loader": "^0.5.2",
+		"jsx-loader": "^0.13.2",
+		"mocha": "^3.4.2",
+		"node-libs-browser": "^2.0.0",
+		"pre-commit": "^1.2.2",
+		"should": "*",
+		"startserver": "^1.3.7",
+		"startserver-webpack": "^1.0.2",
+		"uitest": "^1.1.4",
+		"webpack": "^2.6.1"
+	},
+	"startserver": [
+		{
+			"startserver-webpack": "*"
+		}
+	],
+	"license": "MIT"
+};
+
+/***/ }),
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -770,7 +824,7 @@ module.exports = Keyboard;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -820,7 +874,7 @@ _.augment(Mouse, proto);
 module.exports = Mouse;
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -907,7 +961,7 @@ _.inherit(Graphics, RenderObjectModel);
 module.exports = Graphics;
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -952,7 +1006,7 @@ _.inherit(Screen, RenderObjectModel);
 module.exports = Screen;
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1029,7 +1083,7 @@ _.inherit(Sprite, Img);
 module.exports = Sprite;
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1064,7 +1118,7 @@ _.inherit(Text, RenderObjectModel);
 module.exports = Text;
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1109,7 +1163,7 @@ _.inherit(Map, RenderObjectModel);
 module.exports = Map;
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1124,7 +1178,7 @@ var _Math = {
 module.exports = _Math;
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1153,12 +1207,19 @@ var proto = {
     var image = new Image();
     image.crossOrigin = '*';
     image.onload = function () {
-      that.hash[item.id] = {
+      var id = item.id;
+      that.hash[id] = {
         image: image,
         width: image.width,
         height: image.height
       };
       that.num++;
+      that.emit('loaded', {
+        number: that.num,
+        id: id,
+        image: that.hash[id]
+      });
+
       if (that.num === that.getSize()) {
         that.emit('success', that.hash);
       }
@@ -1176,7 +1237,7 @@ _.inherit(SourceLoader, Notify);
 module.exports = SourceLoader;
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1387,7 +1448,7 @@ Vector2d.componentVector = function (vec, directionVec) {
 module.exports = Vector2d;
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1407,28 +1468,30 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
     factory(root['pillow'] || (root['pillow'] = {}));
   }
 })(undefined, function (exports) {
+  var pkg = __webpack_require__(6);
+  exports.version = pkg.version;
   exports.RenderObjectModel = __webpack_require__(1);
   exports.Img = __webpack_require__(3);
-  exports.Sprite = __webpack_require__(10);
-  exports.Text = __webpack_require__(11);
-  exports.Graphics = __webpack_require__(8);
-  exports.Screen = __webpack_require__(9);
+  exports.Sprite = __webpack_require__(11);
+  exports.Text = __webpack_require__(12);
+  exports.Graphics = __webpack_require__(9);
+  exports.Screen = __webpack_require__(10);
 
-  exports.Keyboard = __webpack_require__(6);
-  exports.Mouse = __webpack_require__(7);
+  exports.Keyboard = __webpack_require__(7);
+  exports.Mouse = __webpack_require__(8);
 
   exports._ = __webpack_require__(0);
-  exports.Vector2d = __webpack_require__(15);
-  exports.Math = __webpack_require__(13);
-  exports.SourceLoader = __webpack_require__(14);
-  exports.Map = __webpack_require__(12);
+  exports.Vector2d = __webpack_require__(16);
+  exports.Math = __webpack_require__(14);
+  exports.SourceLoader = __webpack_require__(15);
+  exports.Map = __webpack_require__(13);
 
   exports.Timer = __webpack_require__(2).Timer;
   exports.FPSBoard = __webpack_require__(2).FPSBoard;
 });
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
