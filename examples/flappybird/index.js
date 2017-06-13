@@ -69,6 +69,7 @@
       this.bindEvent();
     },
     initScreen: function() {
+      var that = this;
       this.screen = new Screen({
         container: document.querySelector('#screen'),
         width: CONFIG['SCREENWIDTH'],
@@ -76,7 +77,12 @@
         x:0,
         y:0
       });
-      this.timer = new Timer(this.screen)
+      this.timer = new Timer({
+        fps: 60
+      });
+      this.timer.update(function() {
+        that.screen.run();
+      });
       this.timer.start();
     },
     initCeiling: function() {

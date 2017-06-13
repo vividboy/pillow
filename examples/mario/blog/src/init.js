@@ -52,24 +52,29 @@
             });
         },
         initScreen:function(){
-            var that = this;
-            global.__screen = that.screen = new Screen({
-                container: document.querySelector('#screen'),
-                width:CONFIG['SCREENWIDTH'],
-                height:CONFIG['SCREENHEIGHT'],
-                x:0,
-                y:0
-            });
-            that.screen.update(function(){
-                var gradient = that.screen.context.createLinearGradient(0,0,0,CONFIG['SCREENHEIGHT']);
-                gradient.addColorStop(0,"#00a4fd");
-                gradient.addColorStop(1,"#e7f9fe");
-                that.screen.context.fillStyle = gradient;
-　　            that.screen.context.fillRect(0,0,CONFIG['SCREENWIDTH'],CONFIG['SCREENHEIGHT']);
-            });
-            var timer = new Timer(that.screen);
-            timer.start();
-            //timer.pause();
+          var that = this;
+          global.__screen = that.screen = new Screen({
+            container: document.querySelector('#screen'),
+            width:CONFIG['SCREENWIDTH'],
+            height:CONFIG['SCREENHEIGHT'],
+            x:0,
+            y:0
+          });
+          that.screen.update(function(){
+            var gradient = that.screen.context.createLinearGradient(0,0,0,CONFIG['SCREENHEIGHT']);
+            gradient.addColorStop(0,"#00a4fd");
+            gradient.addColorStop(1,"#e7f9fe");
+            that.screen.context.fillStyle = gradient;
+            　　            that.screen.context.fillRect(0,0,CONFIG['SCREENWIDTH'],CONFIG['SCREENHEIGHT']);
+          });
+
+          var timer = new Timer({
+            fps: 60
+          });
+          timer.update(function() {
+            that.screen.run();
+          });
+          timer.start();
         },
         initMario:function(resource){
             var that = this;

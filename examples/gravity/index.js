@@ -61,16 +61,19 @@
     }
     Controller.prototype = {
         init:function(){
-            var that = this;
-            that.dropBalls = [];
-            that.r = 8;
-            that.a = 0.8;
-            that.offset = 18;
-            that.getTime();
-            var timer = new Timer(function(){
-                that.render();
-            },fps);
-            timer.start();
+          var that = this;
+          that.dropBalls = [];
+          that.r = 8;
+          that.a = 0.8;
+          that.offset = 18;
+          that.getTime();
+          that.timer = new Timer({
+            fps: 60
+          });
+          that.timer.update(function() {
+            that.render();
+          });
+          that.timer.start();
         },
         render:function(){
             var that = this;

@@ -58,7 +58,7 @@ var pillow =
 	    factory(root['pillow'] || (root['pillow'] = {}));
 	  }
 	})(undefined, function (exports) {
-	  exports.RenderObjectModel = __webpack_require__(1);
+	  exports.RenderObjectModel = __webpack_require__(2);
 	  exports.Img = __webpack_require__(5);
 	  exports.Sprite = __webpack_require__(6);
 	  exports.Text = __webpack_require__(7);
@@ -68,96 +68,18 @@ var pillow =
 	  exports.Keyboard = __webpack_require__(10);
 	  exports.Mouse = __webpack_require__(11);
 
-	  exports._ = __webpack_require__(2);
-	  exports.Timer = __webpack_require__(12);
-	  exports.Vector2d = __webpack_require__(13);
-	  exports.Math = __webpack_require__(14);
-	  exports.SourceLoader = __webpack_require__(15);
-	  exports.Map = __webpack_require__(16);
+	  exports._ = __webpack_require__(1);
+	  exports.Vector2d = __webpack_require__(12);
+	  exports.Math = __webpack_require__(13);
+	  exports.SourceLoader = __webpack_require__(14);
+	  exports.Map = __webpack_require__(15);
+
+	  exports.Timer = __webpack_require__(16).Timer;
+	  exports.FPSBoard = __webpack_require__(16).FPSBoard;
 	});
 
 /***/ },
 /* 1 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _ = __webpack_require__(2);
-	var RenderObject = __webpack_require__(3);
-
-	function RenderObjectModel(cfg) {
-	  var that = this;
-	  RenderObjectModel.sup.call(that, cfg);
-	  that.children = [];
-	  that.parent = null;
-	  _.merge(that, cfg);
-	}
-
-	var proto = {
-	  render: function render(context) {
-	    var that = this;
-	    that.clear(0, 0, that.width, that.height);
-	    that._draw(that.context);
-	  },
-	  append: function append(node) {
-	    var that = this;
-	    node.parent = that;
-	    that.children[that.children.length] = node;
-	  },
-	  removeChildren: function removeChildren(index) {
-	    this.children[index] && this.children.splice(index, 1);
-	  },
-	  removeAllChildren: function removeAllChildren() {
-	    this.children = [];
-	  },
-	  traversal: function traversal(callback) {
-	    var node = this;
-	    var current;
-	    var children;
-	    var nodes = _.type(node) === 'array' ? node.slice(0).reverse() : [node];
-	    var parents = [];
-
-	    if (_.type(nodes[0]) === 'undefined' && nodes.length === 1) {
-	      return;
-	    }
-	    for (var i = nodes.length - 1; i >= 0; i--) {
-	      parents.push(null);
-	    }
-	    while (nodes.length > 0) {
-	      current = nodes.pop();
-	      parents.pop();
-	      callback(current);
-	      children = current && current['children'] ? current['children'] : [];
-	      for (var i = children.length - 1; i >= 0; i--) {
-	        nodes.push(children[i]);
-	        parents.push(current);
-	      }
-	    }
-	  },
-	  dispatch: function dispatch(type, x, y) {
-	    var that = this;
-	    var children = that.children;
-	    var i = children.length;
-	    var _x = x - that.x;
-	    var _y = y - that.y;
-	    that.emit(type);
-	    while (i--) {
-	      var child = children[i];
-	      if (child.hitTest(_x, _y)) {
-	        child.dispatch(type, _x, _y);
-	        return;
-	      }
-	    }
-	  }
-	};
-
-	_.augment(RenderObjectModel, proto);
-	_.inherit(RenderObjectModel, RenderObject);
-
-	module.exports = RenderObjectModel;
-
-/***/ },
-/* 2 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {'use strict';
@@ -283,12 +205,92 @@ var pillow =
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
+/* 2 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _ = __webpack_require__(1);
+	var RenderObject = __webpack_require__(3);
+
+	function RenderObjectModel(cfg) {
+	  var that = this;
+	  RenderObjectModel.sup.call(that, cfg);
+	  that.children = [];
+	  that.parent = null;
+	  _.merge(that, cfg);
+	}
+
+	var proto = {
+	  render: function render(context) {
+	    var that = this;
+	    that.clear(0, 0, that.width, that.height);
+	    that._draw(that.context);
+	  },
+	  append: function append(node) {
+	    var that = this;
+	    node.parent = that;
+	    that.children[that.children.length] = node;
+	  },
+	  removeChildren: function removeChildren(index) {
+	    this.children[index] && this.children.splice(index, 1);
+	  },
+	  removeAllChildren: function removeAllChildren() {
+	    this.children = [];
+	  },
+	  traversal: function traversal(callback) {
+	    var node = this;
+	    var current;
+	    var children;
+	    var nodes = _.type(node) === 'array' ? node.slice(0).reverse() : [node];
+	    var parents = [];
+
+	    if (_.type(nodes[0]) === 'undefined' && nodes.length === 1) {
+	      return;
+	    }
+	    for (var i = nodes.length - 1; i >= 0; i--) {
+	      parents.push(null);
+	    }
+	    while (nodes.length > 0) {
+	      current = nodes.pop();
+	      parents.pop();
+	      callback(current);
+	      children = current && current['children'] ? current['children'] : [];
+	      for (var i = children.length - 1; i >= 0; i--) {
+	        nodes.push(children[i]);
+	        parents.push(current);
+	      }
+	    }
+	  },
+	  dispatch: function dispatch(type, x, y) {
+	    var that = this;
+	    var children = that.children;
+	    var i = children.length;
+	    var _x = x - that.x;
+	    var _y = y - that.y;
+	    that.emit(type);
+	    while (i--) {
+	      var child = children[i];
+	      if (child.hitTest(_x, _y)) {
+	        child.dispatch(type, _x, _y);
+	        return;
+	      }
+	    }
+	  }
+	};
+
+	_.augment(RenderObjectModel, proto);
+	_.inherit(RenderObjectModel, RenderObject);
+
+	module.exports = RenderObjectModel;
+
+/***/ },
 /* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _ = __webpack_require__(2);
+	var _ = __webpack_require__(1);
 	var Notify = __webpack_require__(4);
 
 	function RenderObject() {
@@ -358,7 +360,7 @@ var pillow =
 
 	'use strict';
 
-	var _ = __webpack_require__(2);
+	var _ = __webpack_require__(1);
 
 	function __emit(type, data) {
 	  var handlers = _.slice.call(this.NotifyHash[type]);
@@ -448,8 +450,8 @@ var pillow =
 
 	'use strict';
 
-	var _ = __webpack_require__(2);
-	var RenderObjectModel = __webpack_require__(1);
+	var _ = __webpack_require__(1);
+	var RenderObjectModel = __webpack_require__(2);
 
 	function Img(cfg) {
 	  var that = this;
@@ -479,7 +481,7 @@ var pillow =
 	'use strict';
 
 	var Img = __webpack_require__(5);
-	var _ = __webpack_require__(2);
+	var _ = __webpack_require__(1);
 
 	function Sprite(cfg) {
 	  var that = this;
@@ -554,8 +556,8 @@ var pillow =
 
 	'use strict';
 
-	var _ = __webpack_require__(2);
-	var RenderObjectModel = __webpack_require__(1);
+	var _ = __webpack_require__(1);
+	var RenderObjectModel = __webpack_require__(2);
 
 	function Text(cfg) {
 	  var that = this;
@@ -588,8 +590,8 @@ var pillow =
 
 	'use strict';
 
-	var _ = __webpack_require__(2);
-	var RenderObjectModel = __webpack_require__(1);
+	var _ = __webpack_require__(1);
+	var RenderObjectModel = __webpack_require__(2);
 
 	function Graphics(cfg) {
 	  var that = this;
@@ -674,8 +676,8 @@ var pillow =
 
 	'use strict';
 
-	var _ = __webpack_require__(2);
-	var RenderObjectModel = __webpack_require__(1);
+	var _ = __webpack_require__(1);
+	var RenderObjectModel = __webpack_require__(2);
 
 	function Screen(cfg) {
 	  var that = this;
@@ -718,7 +720,7 @@ var pillow =
 
 	/* WEBPACK VAR INJECTION */(function(global) {'use strict';
 
-	var _ = __webpack_require__(2);
+	var _ = __webpack_require__(1);
 
 	var noop = function noop() {};
 
@@ -897,7 +899,7 @@ var pillow =
 
 	'use strict';
 
-	var _ = __webpack_require__(2);
+	var _ = __webpack_require__(1);
 
 	function getOffset(element) {
 	  var x = 0;
@@ -944,66 +946,9 @@ var pillow =
 /* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(global) {'use strict';
-
-	var _ = __webpack_require__(2);
-
-	function Timer(target, fps) {
-	  var that = this;
-	  that.fps = fps;
-	  that.target = target;
-	  that.paused = false;
-	  that.init();
-	}
-
-	Timer.prototype = {
-	  init: function init() {
-	    var that = this;
-	    that.run = function () {
-	      if (!that.paused) {
-	        that.target.run ? that.target.run() : that.target();
-	      }
-	      if (that.fps) {
-	        if (that.loop) {
-	          return;
-	        }
-	        that.loop = function () {
-	          global.setTimeout(function () {
-	            that.run();
-	            that.loop();
-	          }, 1000 / that.fps);
-	          return true;
-	        };
-	        that.loop();
-	      } else {
-	        _.requestAnimationFrame.call(global, function () {
-	          that.run();
-	        });
-	      }
-	    };
-	  },
-	  start: function start() {
-	    var that = this;
-	    that.run();
-	  },
-	  pause: function pause() {
-	    this.paused = true;
-	  },
-	  go: function go() {
-	    this.paused = false;
-	  }
-	};
-
-	module.exports = Timer;
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
-
-/***/ },
-/* 13 */
-/***/ function(module, exports, __webpack_require__) {
-
 	'use strict';
 
-	var _ = __webpack_require__(2);
+	var _ = __webpack_require__(1);
 
 	function Vector2d(x, y) {
 	  this.x = x || 0;
@@ -1208,7 +1153,7 @@ var pillow =
 	module.exports = Vector2d;
 
 /***/ },
-/* 14 */
+/* 13 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1222,12 +1167,12 @@ var pillow =
 	module.exports = _Math;
 
 /***/ },
-/* 15 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _ = __webpack_require__(2);
+	var _ = __webpack_require__(1);
 	var Notify = __webpack_require__(4);
 
 	function SourceLoader(cfg) {
@@ -1273,13 +1218,13 @@ var pillow =
 	module.exports = SourceLoader;
 
 /***/ },
-/* 16 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _ = __webpack_require__(2);
-	var RenderObjectModel = __webpack_require__(1);
+	var _ = __webpack_require__(1);
+	var RenderObjectModel = __webpack_require__(2);
 
 	function Map(cfg) {
 	  var that = this;
@@ -1315,6 +1260,166 @@ var pillow =
 	_.inherit(Map, RenderObjectModel);
 
 	module.exports = Map;
+
+/***/ },
+/* 16 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
+
+	;(function (root, factory) {
+	  'use strict';
+	  if (true) {
+	    return !(__WEBPACK_AMD_DEFINE_ARRAY__ = [exports], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	  } else if (typeof exports !== 'undefined') {
+	    return factory(exports);
+	  } else {
+	    factory(root['Monitor'] || (root['Monitor'] = {}));
+	  }
+	})(undefined, function (exports, undefined) {
+	  'use strict';
+
+	  function Timer(options) {
+	    var opts = options || {};
+	    opts.fps = opts.fps || 60;
+	    this.options = opts;
+	    this._queue = [];
+	    this._paused = false;
+	    this._now = null;
+	    this._fps = -1;
+	    this._interval = 1000 / opts.fps;
+	  }
+
+	  Timer.prototype.update = function (handle) {
+	    this._queue.push(handle.bind(this));
+	  };
+
+	  Timer.prototype.start = function () {
+	    var targetTime = new Date().getTime() + this._interval;
+	    var loop = (function () {
+	      this._now = this._now || +new Date();
+	      var now = +new Date();
+
+	      if (now - this._now >= 1000) {
+	        this._now = now;
+	        this._fps = -1;
+	      }
+
+	      var nowTime = new Date().getTime();
+
+	      if (nowTime >= targetTime) {
+
+	        if (nowTime >= targetTime + this._interval) {
+	          targetTime = nowTime + this._interval;
+	        } else {
+	          targetTime += this._interval;
+	        }
+	        this._fps++;
+	        this._queue.forEach(function (handle) {
+	          handle();
+	        });
+	      }
+
+	      requestAnimationFrame(loop);
+	    }).bind(this);
+	    loop();
+	  };
+
+	  Timer.prototype.toggle = function () {
+	    this._paused = !this._paused;
+	  };
+
+	  var render = function render() {
+	    var fps = this._fps;
+	    var context = this._context;
+	    setTimeout((function () {
+	      var textHeight = 8;
+	      var padding = 2;
+	      var paddingTop = textHeight + padding * 2;
+	      var height = (this.options.height - paddingTop) * fps / 60;
+	      context.globalAlpha = this.options.alpha;
+	      context.fillStyle = this.options.boardColor;
+	      context.clearRect(0, 0, this.options.width, this.options.height);
+	      context.fillRect(0, 0, this.options.width, this.options.height);
+	      context.font = padding + 'px';
+	      context.fillStyle = this.options.textColor;
+	      context.fillText('fps: ' + fps, padding, textHeight + padding);
+	      context.fillRect(this.options.width - 1, this.options.height - height, 1 * this._pixelRatio, height);
+	      this._imgData && context.putImageData(this._imgData, 0, paddingTop * this._pixelRatio);
+	      this._imgData = context.getImageData(1 * this._pixelRatio, paddingTop * this._pixelRatio, (this.options.width - 1) * this._pixelRatio, (this.options.height - paddingTop) * this._pixelRatio);
+	    }).bind(this), 16);
+	  };
+
+	  var create = function create() {
+	    var canvas = document.createElement('canvas');
+	    var width = this.options.width;
+	    var height = this.options.height;
+	    canvas.style.cssText = 'width:' + width + 'px;height:' + height + 'px;';
+	    canvas.width = width * this._pixelRatio;
+	    canvas.height = height * this._pixelRatio;
+
+	    var context = canvas.getContext('2d');
+	    context.scale(this._pixelRatio, this._pixelRatio);
+
+	    var container = document.createElement('div');
+	    var styles = {
+	      position: 'fixed',
+	      top: 0,
+	      right: 0,
+	      cursor: 'pointer',
+	      'z-index': 999999
+	    };
+
+	    Object.assign(styles, this.options.containerStyles);
+
+	    Object.keys(styles).forEach(function (key) {
+	      container.style.cssText += key + ':' + styles[key];
+	    });
+
+	    container.addEventListener('click', function (e) {
+	      e.preventDefault();
+	    }, false);
+
+	    container.appendChild(canvas);
+	    this.options.container.appendChild(container);
+	    return context;
+	  };
+
+	  function FPSBoard(options) {
+	    var opts = options || {};
+	    opts.container = document.querySelector(opts.container) || document.body;
+	    opts.width = opts.width || 80;
+	    opts.height = opts.height || 48;
+	    opts.alpha = opts.alpha || 0.9;
+	    opts.boardColor = opts.boardColor || 'grey';
+	    opts.textColor = opts.textColor || 'red';
+	    opts.containerStyles = opts.containerStyles || {};
+	    this.options = opts;
+	    this._now = null;
+	    this._fps = 0;
+	    this._imgData = null;
+	    this._pixelRatio = Math.floor(window.devicePixelRatio) || 1;
+	    this._context = create.call(this);
+	  }
+
+	  FPSBoard.prototype.tick = function () {
+	    this._now = this._now || +new Date();
+	    var now = +new Date();
+
+	    if (now - this._now >= 1000) {
+	      render.call(this);
+	      this._now = now;
+	      this._fps = 0;
+	    }
+
+	    this._fps++;
+	  };
+
+	  function Monitor() {}
+
+	  exports.Timer = Monitor.Timer = Timer;
+	  exports.FPSBoard = Monitor.FPSBoard = FPSBoard;
+	});
 
 /***/ }
 /******/ ]);

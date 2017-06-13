@@ -5,7 +5,6 @@
   var Img = P.Img;
   var Vector2d = P.Vector2d;
   var math = P.Math;
-  var Timer = P.Timer;
   var AStar = global.AStar.Constructor;
   var SourceLoader = new P.SourceLoader();
 

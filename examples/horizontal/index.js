@@ -103,9 +103,9 @@
     }
     drawText();
     var _w = 400,
-        _h = 250,
-        _x = WIDTH/2-_w/2,
-        _y = HEIGHT/2-_h/2;
+      _h = 250,
+      _x = WIDTH/2-_w/2,
+      _y = HEIGHT/2-_h/2;
     ctx.beginPath();
     ctx.lineWidth=20;
     ctx.fillStyle='rgba(209, 209, 209, 0.4)';
@@ -153,9 +153,9 @@
   }
   function drawText(){
     var _w = 400,
-        _h = 250,
-        _x = WIDTH/2-_w/2 +30,
-        _y = HEIGHT/2-_h/2 + 130;
+      _h = 250,
+      _x = WIDTH/2-_w/2 +30,
+      _y = HEIGHT/2-_h/2 + 130;
     ctx.font="30px Verdana";
     var gradient=ctx.createLinearGradient(0,0,20,0);
     gradient.addColorStop("0","magenta");
@@ -188,10 +188,10 @@
   canvas.addEventListener('click', function(e) {
     e.preventDefault()
     dialog = !dialog;
-  shadow = true;
-  Loop = false;
-  plater1Audio.play();
-  backgroundSound.pause();
+    shadow = true;
+    Loop = false;
+    plater1Audio.play();
+    backgroundSound.pause();
   })
   backgroundSound = new Audio('background.mp3');
   backgroundSound.volume = 0.4;
@@ -206,7 +206,10 @@
     this.play();
   }, false);
   backgroundSound.play();
-  var timer = new Timer(function(){
+  var timer = new Timer({
+    fps: 60
+  });
+  timer.update(function() {
     drawScene();
   });
   timer.start();
