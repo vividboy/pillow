@@ -1,3 +1,8 @@
+'use strict';
+
+const _ = require('../tool/util');
+
 var Physics = {
 };
-exports.Physics = Physics;
+
+module.exports = Physics;

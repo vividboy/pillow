@@ -1,15 +1,20 @@
+'use strict';
+
+const _ = require('../tool/util');
+const Notify = require('../notify/Notify');
+
 function SourceLoader(cfg){
   var that = this;
   that.hash = {};
   SourceLoader.sup.call(that,cfg);
-  Util.merge(that,cfg);
+  _.merge(that,cfg);
 }
 var proto = {
   load:function(query){
     var that = this;
     that.num = 0;
     that.query = query;
-    Util.each(that.query,function(i){
+    _.each(that.query,function(i){
       that.imageLoader(i);
     });
   },
@@ -34,6 +39,8 @@ var proto = {
     return this.query.length;
   }
 };
-Util.augment(SourceLoader,proto);
-Util.inherit(SourceLoader,Notify);
-exports.SourceLoader = SourceLoader;
+
+_.augment(SourceLoader, proto);
+_.inherit(SourceLoader, Notify);
+
+module.exports = SourceLoader;

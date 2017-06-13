@@ -1,4 +1,9 @@
+'use strict';
+
+const _ = require('../tool/util');
+
 function Particle(){
 
 }
-exports.Particle = Particle;
+
+module.exports = Particle;

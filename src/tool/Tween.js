@@ -1,3 +1,7 @@
+'use strict';
+
+const _ = require('../tool/util');
+
 var Tween = {
   swing:function(t) {
     return ( -Math.cos(t * PI) / 2 ) + 0.5;
@@ -80,4 +84,5 @@ var Tween = {
     return r;
   }
 };
-exports.Tween = Tween;
+
+module.exports = Tween;

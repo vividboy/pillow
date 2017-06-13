@@ -1,4 +1,10 @@
-function Sprite(cfg){
+'use strict';
+
+const Img = require('./Img');
+const _ = require('../../tool/util');
+const RenderObjectModel = require('../RenderObjectModel');
+
+function Sprite(cfg) {
   var that = this;
   that.frame = 0;
   that.paused = false;
@@ -8,7 +14,7 @@ function Sprite(cfg){
     y:0
   },
     Sprite.sup.call(that,cfg);
-  Util.merge(that,cfg);
+  _.merge(that,cfg);
   that.init();
 }
 var proto = {
@@ -57,6 +63,8 @@ var proto = {
     return true;
   }
 };
-Util.augment(Sprite,proto);
-Util.inherit(Sprite,Img);
-exports.Sprite = Sprite;
+
+_.augment(Sprite, proto);
+_.inherit(Sprite, Img);
+
+module.exports = Sprite;

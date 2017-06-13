@@ -3,7 +3,7 @@
  * http://xdf.me/
  */
 ;(function(global,P){
-    var Util = P.Util;
+    var Util = P._;
     var CONFIG = global.CONFIG;
     var Screen = P.Screen;
     var Timer = P.Timer;
@@ -54,7 +54,7 @@
         initScreen:function(){
             var that = this;
             global.__screen = that.screen = new Screen({
-                container:'screen',
+                container: document.querySelector('#screen'),
                 width:CONFIG['SCREENWIDTH'],
                 height:CONFIG['SCREENHEIGHT'],
                 x:0,

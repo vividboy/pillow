@@ -1,10 +1,15 @@
+'use strict';
+
+const _ = require('../tool/util');
+const RenderObjectModel = require('../render/RenderObjectModel');
+
 function Map(cfg){
   var that = this;
   that.cache = true;
   that.lock = false;
   that.source = {};
   Map.sup.call(that,cfg);
-  Util.merge(that,cfg);
+  _.merge(that,cfg);
   that.init();
 }
 var proto = {
@@ -22,8 +27,8 @@ var proto = {
       return;
     }
     var images = that.resource;
-    Util.each(that.matrix,function(i,x){
-      Util.each(i,function(j,y){
+    _.each(that.matrix,function(i,x){
+      _.each(i,function(j,y){
         that.context.drawImage(images[j].image,0,0,that.size.width,that.size.height,that.size.width*y,that.size.height*x,that.size.width,that.size.height);
       });
     });
@@ -33,6 +38,8 @@ var proto = {
     }
   }
 };
-Util.augment(Map,proto);
-Util.inherit(Map,RenderObjectModel);
-exports.Map = Map;
+
+_.augment(Map,proto);
+_.inherit(Map,RenderObjectModel);
+
+module.exports = Map;

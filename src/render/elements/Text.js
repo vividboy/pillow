@@ -1,3 +1,8 @@
+'use strict';
+
+const _ = require('../../tool/util');
+const RenderObjectModel = require('../RenderObjectModel');
+
 function Text(cfg){
   var that = this;
   Text.sup.call(that,cfg);
@@ -6,7 +11,7 @@ function Text(cfg){
   that.text = "";
   that.font = "12px arial";
   that.color = "#000";
-  Util.merge(that,cfg)
+  _.merge(that,cfg)
 }
 var proto = {
   draw:function(){
@@ -16,6 +21,8 @@ var proto = {
     that.context.fillText(that.text, that.x, that.y);
   }
 };
-Util.augment(Text,proto);
-Util.inherit(Text,RenderObjectModel);
-exports.Text = Text;
+
+_.augment(Text,proto);
+_.inherit(Text,RenderObjectModel);
+
+module.exports = Text;

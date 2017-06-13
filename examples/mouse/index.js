@@ -3,7 +3,7 @@
  * http://xdf.me/
  */
 ;(function(global,P){
-    var Util = P.Util;
+    var Util = P._;
     var Notify = P.Notify;
     var Screen = P.Screen;
     var Timer = P.Timer;
@@ -56,7 +56,7 @@
         initScreen:function(){
             var that = this;
             that.screen = new Screen({
-                container:'screen',
+                container: document.querySelector('#screen'),
                 width:800,
                 height:400,
                 x:0,

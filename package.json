@@ -1,6 +1,6 @@
 {
   "name": "pillowjs",
-  "version": "1.0.6",
+  "version": "1.1.3",
   "description": "HTML5 2D rendering engine",
   "repository": {
     "type": "git",
@@ -9,23 +9,38 @@
   "keywords": [
     "canvas"
   ],
-  "main": "./build/pillow.js",
+  "main": "./dist/index.js",
   "homepage": "https://xudafeng.github.com/pillow",
   "devDependencies": {
-    "grunt": "^1.0.1",
-    "grunt-cli": "^1.2.0",
-    "grunt-contrib-concat": "^1.0.1",
-    "grunt-text-replace": "^0.4.0",
+    "babel": "~5.8.23",
+    "babel-core": "^5.x",
+    "babel-loader": "^5.x",
+    "eslint-plugin-react": "~2.5.2",
     "jshint": "^2.9.4",
+    "json-loader": "^0.5.2",
+    "jsx-loader": "^0.13.2",
     "mocha": "^3.4.2",
+    "node-libs-browser": "^2.0.0",
+    "pre-commit": "^1.2.2",
     "should": "*",
     "startserver": "^1.3.7",
+    "startserver-webpack": "^1.0.2",
     "uitest": "^1.1.4"
   },
+  "startserver": [
+    {
+      "startserver-webpack": "*"
+    }
+  ],
+  "precommit": [
+    "lint"
+  ],
   "scripts": {
-    "build": "grunt",
+    "lint": "eslint ./src",
+    "build": "babel src/ --out-dir dist/",
     "server": "startserver -p 8081 -s -m",
-    "test": "node ./test/pillow.test.js"
+    "test": "node ./test/pillow.test.js",
+    "prepublish": "npm run build"
   },
   "license": "MIT"
 }

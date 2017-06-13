@@ -1,3 +1,7 @@
+'use strict';
+
+const _ = require('../tool/util');
+
 var _Math = {
   random:function(min,max){
     return parseInt(Math.random()*(max-min+1)+min);
@@ -8,4 +12,5 @@ var _Math = {
     })('');
   }
 };
-exports.Math = _Math;
+
+module.exports = _Math;

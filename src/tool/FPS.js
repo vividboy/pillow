@@ -1,5 +1,10 @@
+'use strict';
+
+const _ = require('../tool/util');
+
 var fps = 60;
 var realFps = 0;
+
 function FPS(cfg){
   var that = this;
   that.width = 100;
@@ -40,5 +45,7 @@ var proto = {
     that.lock();
   }
 };
-Util.augment(FPS,proto);
-exports.FPS = FPS;
+
+_.augment(FPS,proto);
+
+module.exports = FPS;

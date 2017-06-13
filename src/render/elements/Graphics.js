@@ -1,4 +1,9 @@
-function Graphics(cfg){
+'use strict';
+
+const _ = require('../../tool/util');
+const RenderObjectModel = require('../RenderObjectModel');
+
+function Graphics(cfg) {
   var that = this;
   Graphics.sup.call(that,cfg);
   that.hitType = 'rect';
@@ -6,16 +11,16 @@ function Graphics(cfg){
   that.lineWidth = 1;
   that.fillStyle = 'transparent';
   that.query = [];
-  Util.merge(that,cfg);
+  _.merge(that,cfg);
 }
 var proto = {
-  draw:function(){
+  draw: function() {
     var that = this;
-    Util.each(that.query,function(data){
+    _.each(that.query,function(data) {
       var action = data.action;
       if(that.context[action]){
         var args = data.args;
-        if(Util.type(args) == 'array' || !args){
+        if(_.type(args) == 'array' || !args){
           that.context[action].apply(that.context,args);
         }else{
           that.context[action] = that[action];
@@ -74,6 +79,8 @@ var proto = {
     }
   }
 }
-Util.augment(Graphics,proto);
-Util.inherit(Graphics,RenderObjectModel);
-exports.Graphics = Graphics;
+
+_.augment(Graphics, proto);
+_.inherit(Graphics, RenderObjectModel);
+
+module.exports = Graphics;

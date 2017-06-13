@@ -1,4 +1,9 @@
-function RenderObject(){
+'use strict';
+
+const _ = require('../tool/util');
+const Notify = require('../notify/Notify');
+
+function RenderObject() {
   var that = this;
   RenderObject.sup.call(that);
   that.x = 0;
@@ -52,7 +57,9 @@ var proto = {
   clear:function(x, y, width, height){
     this.context.clearRect(x, y, width, height);
   }
-}
-Util.augment(RenderObject,proto);
-Util.inherit(RenderObject,Notify);
-exports.RenderObject = RenderObject;
+};
+
+_.augment(RenderObject, proto);
+_.inherit(RenderObject, Notify);
+
+module.exports = RenderObject;

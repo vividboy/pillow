@@ -1,9 +1,14 @@
+'use strict';
+
+const _ = require('../tool/util');
+const RenderObject = require('./RenderObject');
+
 function RenderObjectModel(cfg){
   var that = this;
   RenderObjectModel.sup.call(that,cfg);
   that.children = [];
   that.parent = null;
-  Util.merge(that,cfg);
+  _.merge(that,cfg);
 }
 var proto = {
   render:function(context){
@@ -29,12 +34,12 @@ var proto = {
       parent,
       children,
       i,
-      nodes = Util.type(node) == 'array'? node.slice(0).reverse() : [node],
+      nodes = _.type(node) == 'array'? node.slice(0).reverse() : [node],
       parents = [];
-    if (Util.type(nodes[0]) === 'undefined' && nodes.length === 1) {
+    if (_.type(nodes[0]) === 'undefined' && nodes.length === 1) {
       return;
     }
-    for (i = nodes.length-1; i >= 0; i--){
+    for (var i = nodes.length-1; i >= 0; i--){
       parents.push(null);
     }
     while (nodes.length > 0) {
@@ -42,7 +47,7 @@ var proto = {
       parent = parents.pop();
       callback(current);
       children = (current && current['children'])? current['children'] : [];
-      for (i = children.length-1; i >= 0; i--) {
+      for (var i = children.length-1; i >= 0; i--) {
         nodes.push(children[i]);
         parents.push(current);
       }
@@ -55,15 +60,17 @@ var proto = {
     var _x = x - that.x;
     var _y = y - that.y;
     that.emit(type);
-    while(i--){
+    while (i--) {
       var child = children[i];
-      if(child.hitTest(_x, _y)){
+      if (child.hitTest(_x, _y)) {
         child.dispatch(type,_x,_y);
         return;
       }
     }
   }
 };
-Util.augment(RenderObjectModel,proto);
-Util.inherit(RenderObjectModel,RenderObject);
-exports.RenderObjectModel = RenderObjectModel;
+
+_.augment(RenderObjectModel, proto);
+_.inherit(RenderObjectModel, RenderObject);
+
+module.exports = RenderObjectModel;

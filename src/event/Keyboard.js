@@ -1,3 +1,7 @@
+'use strict';
+
+const _ = require('../tool/util');
+
 var noop = function(){};
 var KEYS = {
   A:65,
@@ -61,7 +65,7 @@ var KEYS = {
   ESC:27,
   SPACE:32
 };
-var _KEYS = Util.transpose(KEYS);
+var _KEYS = _.transpose(KEYS);
 
 var keysDown = [];
 
@@ -81,7 +85,7 @@ var proto = {
   _upHandler:noop,
   _pressHandler:noop,
   isDown:function () {
-    return Util.indexOf(keysDown, this.keyCode) !== -1;
+    return _.indexOf(keysDown, this.keyCode) !== -1;
   },
   down:function (opt_handler) {
     bindOrFire(this, '_downHandler', opt_handler);
@@ -102,7 +106,7 @@ var proto = {
     this._pressHandler = noop;
   }
 };
-Util.augment(Key,proto);
+_.augment(Key,proto);
 var Keyboard = {};
 Keyboard.Key = Key;
 var running = false;
@@ -119,7 +123,7 @@ var proto = {
   },
   run : function (handler) {
     running = true;
-    Util.requestAnimationFrame.call(global, function () {
+    _.requestAnimationFrame.call(global, function () {
       if (!running) {
         return;
       }
@@ -131,26 +135,27 @@ var proto = {
     running = false;
   }
 }
-Util.extend(Keyboard,proto);
-Util.each(KEYS, function (keyCode, keyName) {
+_.extend(Keyboard,proto);
+_.each(KEYS, function (keyCode, keyName) {
   Keyboard[keyName] = new Key(keyCode);
 });
-Util.bind('keydown', function (evt) {
+_.bindEvent('keydown', function (evt) {
   var keyCode = evt.keyCode;
   var keyName = _KEYS[keyCode];
-  var isNew = Util.pushUnique(keysDown, keyCode);
+  var isNew = _.pushUnique(keysDown, keyCode);
   if (isNew && Keyboard[keyName]) {
     Keyboard[keyName].press();
   }
 });
-Util.bind('keyup', function (evt) {
-  var keyCode = Util.removeValue(keysDown, evt.keyCode);
+_.bindEvent('keyup', function (evt) {
+  var keyCode = _.removeValue(keysDown, evt.keyCode);
   var keyName = _KEYS[keyCode];
   if (keyName) {
     Keyboard[keyName].up();
   }
 });
-Util.bind('blur', function (evt) {
+_.bindEvent('blur', function (evt) {
   keysDown.length = 0;
 });
-exports.Keyboard = Keyboard;
+
+module.exports = Keyboard;

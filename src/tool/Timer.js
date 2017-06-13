@@ -1,3 +1,7 @@
+'use strict';
+
+const _ = require('../tool/util');
+
 function Timer(target,fps){
   var that = this;
   that.fps = fps;
@@ -25,7 +29,7 @@ Timer.prototype = {
         }
         that.loop()
       }else{
-        Util.requestAnimationFrame.call(global,function(){
+        _.requestAnimationFrame.call(global,function(){
           that.run();
         });
       }
@@ -42,4 +46,5 @@ Timer.prototype = {
     this.paused = false;
   }
 };
-exports.Timer = Timer;
+
+module.exports = Timer;

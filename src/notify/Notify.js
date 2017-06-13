@@ -1,7 +1,11 @@
+'use strict';
+
+const _ = require('../tool/util');
+
 function __emit(type, data) {
-  var handlers = Util.slice.call(this.NotifyHash[type]);
+  var handlers = _.slice.call(this.NotifyHash[type]);
   for (var i = 0, l = handlers.length; i < l; i++) {
-    var j = Util.extend({}, handlers[i]);
+    var j = _.extend({}, handlers[i]);
     var scope = (j.scope) ? j.scope : this;
     j.scope = scope;
     j.handler.call(j.scope, data, j);
@@ -34,7 +38,7 @@ function Notify(){
 };
 Notify.prototype = {
   on : function(arg1,arg2) {
-    if(Util.type(arg1) == 'object'){
+    if(_.type(arg1) == 'object'){
       for (var j in arg1) {
         __bind.call(this,j,arg1[j]);
       }
@@ -48,7 +52,7 @@ Notify.prototype = {
     for (var i = 0, l = items.length; i < l; i++) {
       var type = items[i];
       if (this.NotifyHash[type]) {
-        __emit.call(this, type, Util.type(data) == 'undefined' ? null : data);
+        __emit.call(this, type, _.type(data) == 'undefined' ? null : data);
       }
     }
     return this;
@@ -75,4 +79,5 @@ Notify.prototype = {
     }
   }
 };
-exports.Notify = Notify;
+
+module.exports = Notify;

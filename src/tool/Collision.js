@@ -1,3 +1,7 @@
+'use strict';
+
+const _ = require('../tool/util');
+
 function Collision(cg){
   /**
    *点和矩形间的碰撞
@@ -24,4 +28,5 @@ function Collision(cg){
     return(Math.pow((circleObjA.x-circleObjB.x),2)+Math.pow((circleObjA.y-circleObjB.y),2)<Math.pow((circleObjA.r+circleObjB).r,2));
   }
 };
-exports.Collision = Collision;
+
+module.exports = Collision;

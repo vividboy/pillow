@@ -1,3 +1,7 @@
+'use strict';
+
+const _ = require('../tool/util');
+
 function Vector2d(x, y) {
   this.x = x || 0;
   this.y = y || 0;
@@ -145,7 +149,7 @@ var proto = {
     return "[" + this.x + "," + this.y + "]";
   }
 };
-Util.augment(Vector2d,proto);
+_.augment(Vector2d,proto);
 Vector2d.add = function(one, other) {
   var vec = new Vector2d();
   vec.setCoords(one.x + other.x, one.y + other.y);
@@ -188,4 +192,5 @@ Vector2d.componentVector = function(vec, directionVec) {
   directionVec.mult(vec.dot(directionVec));
   return directionVec;
 }
-exports.Vector2d = Vector2d;
+
+module.exports = Vector2d;

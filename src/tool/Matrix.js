@@ -1,4 +1,9 @@
+'use strict';
+
+const _ = require('../tool/util');
+
 var Matrix = Array;
+
 var proto = {
   copy : function () {
     return [
@@ -286,5 +291,7 @@ var proto = {
     );
   }
 };
-Util.augment(Matrix,proto);
-exports.Matrix = Matrix;
+
+_.augment(Matrix,proto);
+
+module.exports = Matrix;

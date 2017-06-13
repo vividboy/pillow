@@ -1,3 +1,7 @@
+'use strict';
+
+const _ = require('../tool/util');
+
 function getOffset(element){
   var x=0,y=0;
   var offsetParent = element;
@@ -12,7 +16,7 @@ function Mouse(cfg){
   var that = this;
   that.types = "ontouch" in window ? ["touchstart", "touchmove", "touchend"] : ["mousedown","mousemove","mouseup"];
   that.element = document;
-  Util.merge(that,cfg);
+  _.merge(that,cfg);
   this.bind();
 }
 var proto = {
@@ -20,7 +24,7 @@ var proto = {
     var that = this;
     that.element = that.screen.target;
     that.offset = getOffset(that.element);
-    Util.each(that.types,function(i){
+    _.each(that.types,function(i){
       that.element.addEventListener(i,function(e){
         e.preventDefault();
         var x = e.changedTouches?e.changedTouches[0].pageX:e.pageX;
@@ -30,5 +34,7 @@ var proto = {
     });
   }
 };
-Util.augment(Mouse,proto);
-exports.Mouse = Mouse;
+
+_.augment(Mouse,proto);
+
+module.exports = Mouse;
