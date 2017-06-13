@@ -22,9 +22,11 @@
   exports.Mouse = require('./event/Mouse');
 
   exports._ = require('./tool/util');
-  exports.Timer = require('./tool/Timer');
   exports.Vector2d = require('./tool/Vector2d');
   exports.Math = require('./tool/Math');
   exports.SourceLoader = require('./tool/SourceLoader');
   exports.Map = require('./tool/Map');
+
+  exports.Timer = require('monitor.js').Timer;
+  exports.FPSBoard = require('monitor.js').FPSBoard;
 });

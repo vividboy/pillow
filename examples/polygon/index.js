@@ -84,7 +84,10 @@
   canvas.addEventListener('mouseup', function(e) {
     selected = null;
   });
-  var timer = new Timer(function(){
+  var timer = new Timer({
+    fps: 60
+  });
+  timer.update(function() {
     updateScence();
   });
   timer.start();

@@ -46,7 +46,11 @@
         return;
       }
       start = true;
-      var timer = new Timer(function(){
+
+      var timer = new Timer({
+        fps: 60
+      });
+      timer.update(function() {
         for(var i =0;i<query.length;i++){
           var d = query[i];
           d.x += d.sx;

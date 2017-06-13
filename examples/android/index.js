@@ -8,7 +8,6 @@
   var Vector2d = P.Vector2d;
   var math = P.Math;
   var Sprite = P.Sprite;
-  var Timer = P.Timer;
   var SourceLoader = P.SourceLoader;
   var IMAGE = '3d.png';
   var doc = document;
