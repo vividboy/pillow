@@ -27,7 +27,7 @@ $ npm i pillowjs --save
 
 ## Examples
 
-[examples](.)
+[examples](./html)
 
 ## License
 
