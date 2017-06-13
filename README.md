@@ -32,5 +32,3 @@ $ npm i pillowjs --save
 ## License
 
 The MIT License (MIT)
-
-First committed on May 25, 2014
