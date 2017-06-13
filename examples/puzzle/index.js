@@ -1,14 +1,14 @@
 /*dafeng 随意demo*/
 ;(function(global,P){
   var m = [];
-    m.push('http://gtms01.alicdn.com/tps/i1/T1gV5KFEJjXXb96jso-290-290.jpg');
-    m.push('http://www.gravatar.com/avatar/d073bab2ffabc6aff53d6af77662a149?s=290');
+    m.push('//wx1.sinaimg.cn/square/6d308bd9gy1fgjwiqlietj20820820sl.jpg');
+    m.push('//www.gravatar.com/avatar/d073bab2ffabc6aff53d6af77662a149?s=290');
   var SourceLoader = P.SourceLoader;
-  var Util = P.Util;
+  var Util = P._;
   var math = P.Math;
   var Img = m[math.random(0,1)];
   var col = 3;
-  var elm = Util.$('puzzle');
+  var elm = document.querySelector('#puzzle');
   var width = elm.width;
   var img;
   var ctx = elm.getContext('2d');

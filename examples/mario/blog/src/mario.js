@@ -1,6 +1,6 @@
 ;(function(global,P){
     var CONFIG = global.CONFIG;
-    var Util = P.Util;
+    var Util = P._;
     var Sprite = P.Sprite;
     var MARIOWIDTH = 30;
     var MARIOHEIGHT = 37;

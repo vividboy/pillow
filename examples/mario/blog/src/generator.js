@@ -1,6 +1,6 @@
 ;(function(global,P){
     var CONFIG = global.CONFIG;
-    var Util = P.Util;
+    var Util = P._;
     var math = P.Math;
     var Map = P.Map;
     var MATRIX = [];

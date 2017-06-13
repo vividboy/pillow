@@ -1,9 +1,8 @@
 ;(function(global, P) {
-  var Util = P.Util;
+  var Util = P._;
   var requestAnimationFrame = P.requestAnimationFrame;
   var RenderObjectModel = P.RenderObjectModel;
   var Img = P.Img;
-  var Screen = P.Screen;
   var Vector2d = P.Vector2d;
   var math = P.Math;
   var Timer = P.Timer;
@@ -146,7 +145,7 @@
   };
 
   function showInfo(msg) {
-    Util.$('info').innerHTML = 'INFO: ' + msg;
+    document.querySelector('#info').innerHTML = 'INFO: ' + msg;
   };
 
   PathFinding.prototype = {
@@ -163,7 +162,7 @@
         var y = parseInt(e.offsetY / cellWidth);
         that.searchPath(x, y);
       });
-      Event.on(Util.$("panel"), 'change', function(e) {
+      Event.on(document.querySelector('#panel'), 'change', function(e) {
         var target = e.target;
         var name = target.name;
         var type = target.type;
@@ -199,6 +198,6 @@
       }
     }
   };
-  new PathFinding(Util.$("screen"), {});
+  new PathFinding(document.querySelector("#screen"), {});
 })(window, pillow);
 

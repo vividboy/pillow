@@ -7,7 +7,7 @@
     var ctx = canvas.getContext("2d");
     var WIDTH = canvas.width,
         HEIGHT = canvas.height;
-    var Util = P.Util;
+    var Util = P._;
     var Vector2d = P.Vector2d;
     var math = P.Math;
     var Timer = P.Timer;

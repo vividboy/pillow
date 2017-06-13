@@ -1,23 +1,23 @@
-var Util = {
-  create:function(o){
+'use strcit';
+
+var _ = {
+  create: function(o) {
     if (Object.create) {
       return Object.create(o);
     } else {
-      var F = function(){};
+      var F = function() {};
       F.prototype = o;
       return new F();
     }
   },
-  guid:function(){
+  guid: function() {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-      var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+      var r = Math.random() * 16 | 0;
+      var v = c === 'x' ? r : r & 0x3 | 0x8;
       return v.toString(16);
     });
   },
-  $:function(id){
-    return document.getElementById(id);
-  },
-  extend:function(){
+  extend: function() {
     var args = this.slice.call(arguments);
     var object = args.shift();
     for (var i = 0, l = args.length; i < l; i++) {
@@ -28,28 +28,29 @@ var Util = {
     }
     return object;
   },
-  inherit:function(sub, sup) {
+  inherit: function(sub, sup) {
     var temp = sub.prototype;
     sub.prototype = this.create(sup.prototype);
-    for(var i in temp) {
+    for (var i in temp) {
       sub.prototype[i] = temp[i];
     }
     sub.prototype.constructor = sub;
     sub.sup = sup;
   },
-  augment:function(r,s){
-    this.each(s,function(v,k){
-      r.prototype[k]= v;
+  augment: function(r, s) {
+    this.each(s, function(v, k) {
+      r.prototype[k] = v;
     });
   },
-  log:function (l){
-    console && (this.type(console.log) == 'function') && console.log(l);
+  log: function(l) {
+    console && this.type(console.log) === 'function' && console.log(l);
   },
-  indexOf:function (arr, val) {
+  indexOf: function(arr, val) {
     if (arr.indexOf) {
       return arr.indexOf(val);
     }
-    var i, len = arr.length;
+    var i;
+    var len = arr.length;
     for (i = 0; i < len; i++) {
       if (arr[i] === val) {
         return i;
@@ -57,59 +58,59 @@ var Util = {
     }
     return -1;
   },
-  merge:function(r,s){
-    for(var i in s){
+  merge: function(r, s) {
+    for (var i in s) {
       r[i] = s[i];
-    };
+    }
     return r;
   },
-  each:function(object, fn) {
-    if(!object){
+  each: function(object, fn) {
+    if (!object) {
       return;
     }
-    for(var i in object){
-      if(object.hasOwnProperty(i)){
-        fn.call(this,object[i],i);
+    for (var i in object) {
+      if (object.hasOwnProperty(i)) {
+        fn.call(this, object[i], i);
       }
     }
     return object;
   },
-  pushUnique : function (arr, val) {
+  pushUnique: function(arr, val) {
     if (this.indexOf(arr, val) === -1) {
       arr.push(val);
       return true;
     }
     return false;
   },
-  removeValue : function (arr, val) {
+  removeValue: function(arr, val) {
     var index = this.indexOf(arr, val);
     if (index !== -1) {
       return arr.splice(index, 1)[0];
     }
   },
-  type:function(c){
-    if (c === null || typeof c === "undefined") {
+  type: function(c) {
+    if (c === null || typeof c === 'undefined') {
       return String(c);
     } else {
       return Object.prototype.toString.call(c).replace(/\[object |\]/g, '').toLowerCase();
     }
   },
-  transpose : function (obj) {
+  transpose: function(obj) {
     var transpose = {};
-    this.each(obj, function (val, key) {
+    this.each(obj, function(val, key) {
       transpose[val] = key;
     });
     return transpose;
   },
-  slice:Array.prototype.slice,
-  requestAnimationFrame :
-  global.requestAnimationFrame  ||
+  slice: Array.prototype.slice,
+  requestAnimationFrame:
+  global.requestAnimationFrame ||
   global.webkitRequestAnimationFrame ||
-  global.mozRequestAnimationFrame    ||
-  function(callback){
+  global.mozRequestAnimationFrame ||
+  function(callback) {
     global.setTimeout(callback, 1000 / 60);
   },
-  bind: function (e, handler) {
+  bindEvent: function(e, handler) {
     if (global.addEventListener) {
       global.addEventListener(e, handler, false);
     } else if (document.attachEvent) {
@@ -117,4 +118,5 @@ var Util = {
     }
   }
 };
-exports.Util = exports._ = Util;
+
+module.exports = _;

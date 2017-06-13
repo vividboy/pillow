@@ -1,4 +1,7 @@
-function Particle(){
+'use strict';
+
+function Particle() {
 
 }
-exports.Particle = Particle;
+
+module.exports = Particle;

@@ -1,3 +1,6 @@
+'use strict';
+
 var Physics = {
 };
-exports.Physics = Physics;
+
+module.exports = Physics;

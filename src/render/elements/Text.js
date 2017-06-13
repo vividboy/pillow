@@ -1,21 +1,29 @@
-function Text(cfg){
+'use strict';
+
+const _ = require('../../tool/util');
+const RenderObjectModel = require('../RenderObjectModel');
+
+function Text(cfg) {
   var that = this;
-  Text.sup.call(that,cfg);
+  Text.sup.call(that, cfg);
   that.x = 0;
   that.y = 0;
-  that.text = "";
-  that.font = "12px arial";
-  that.color = "#000";
-  Util.merge(that,cfg)
+  that.text = '';
+  that.font = '12px arial';
+  that.color = '#000';
+  _.merge(that, cfg);
 }
+
 var proto = {
-  draw:function(){
+  draw: function() {
     var that = this;
     that.context.fillStyle = that.color;
-    that.context.font=that.font;
+    that.context.font = that.font;
     that.context.fillText(that.text, that.x, that.y);
   }
 };
-Util.augment(Text,proto);
-Util.inherit(Text,RenderObjectModel);
-exports.Text = Text;
+
+_.augment(Text, proto);
+_.inherit(Text, RenderObjectModel);
+
+module.exports = Text;

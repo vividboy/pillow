@@ -3,7 +3,7 @@
  * http://xdf.me/
  */
 ;(function(global, P) {
-  var Util = P.Util;
+  var Util = P._;
   var requestAnimationFrame = P.requestAnimationFrame;
   var RenderObjectModel = P.RenderObjectModel;
   var Img = P.Img;
@@ -70,7 +70,7 @@
     },
     initScreen: function() {
       this.screen = new Screen({
-        container: 'screen',
+        container: document.querySelector('#screen'),
         width: CONFIG['SCREENWIDTH'],
         height: CONFIG['SCREENHEIGHT'],
         x:0,
