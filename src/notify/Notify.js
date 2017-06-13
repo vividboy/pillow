@@ -1,6 +1,6 @@
 'use strict';
 
-const _ = require('../tool/util');
+const _ = require('../tool/Util');
 
 function __emit(type, data) {
   var handlers = _.slice.call(this.NotifyHash[type]);

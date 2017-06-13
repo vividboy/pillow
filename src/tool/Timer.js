@@ -1,6 +1,6 @@
 'use strict';
 
-const _ = require('../tool/util');
+const _ = require('../tool/Util');
 
 function Timer(target, fps) {
   var that = this;

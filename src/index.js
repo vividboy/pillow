@@ -21,7 +21,7 @@
   exports.Keyboard = require('./event/Keyboard');
   exports.Mouse = require('./event/Mouse');
 
-  exports._ = require('./tool/util');
+  exports._ = require('./tool/Util');
   exports.Vector2d = require('./tool/Vector2d');
   exports.Math = require('./tool/Math');
   exports.SourceLoader = require('./tool/SourceLoader');

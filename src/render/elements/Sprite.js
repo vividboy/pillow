@@ -1,7 +1,7 @@
 'use strict';
 
 const Img = require('./Img');
-const _ = require('../../tool/util');
+const _ = require('../../tool/Util');
 
 function Sprite(cfg) {
   var that = this;
