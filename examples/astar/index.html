@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>A* Path Finding With Pillow</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-touch-fullscreen" content="no"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <meta name="format-detection" content="telephone=no"/>
+  <script src="BinaryHeap.js"></script>
+  <script src="Matrix.js"></script>
+  <script src="AStar.js"></script>
+  <link rel="stylesheet" href="index.css"/>
+</head>
+<body>
+  <a href="https://github.com/xudafeng/AStar.git" target="_blank">
+    <img id="github" src="http://gtms02.alicdn.com/tps/i2/T17kyAFydcXXax3xne-140-134.png" alt="Fork me on GitHub">
+  </a>
+  <div id="content">
+    <h1>A* Path Finding</h1>
+    <p id="info"></p>
+    <p id="panel">
+      <label>debug: <input type="checkbox" name="debug"/></label>
+      <label>diagonal: <input type="checkbox" name="diagonal"/></label>
+      <label>barrier: <input type="text" name="barrier" value="0.2"/></label>
+      <label>size: <input type="text" name="size" value="15"/></label>
+      <label>cellWidth: <input disabled type="text" name="cellWidth" value="30"/>px</label>
+    </p>
+    <canvas id="screen"></canvas>
+  </div>
+  <script src="../../build/pillow.js"></script>
+  <script src="index.js"></script>
+</body>
+</html>

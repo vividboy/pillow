@@ -1,0 +1,26 @@
+html, body {
+  height: 100%;
+  -webkit-text-size-adjust: none;
+  padding:0;
+  margin:0;
+}
+#content {
+  text-align: center;
+  padding-top: 30px;
+}
+
+#content input[type="text"] {
+  width: 30px;
+}
+#screen {
+  background:#fff;
+  border: 1px solid #000;
+  cursor: pointer;
+}
+#github{
+  position: absolute;
+  z-index: 999;
+  top: 0px;
+  right:0;
+  border: 0;
+}

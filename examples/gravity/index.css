@@ -1,0 +1,17 @@
+html, body{
+  margin:0;
+  padding:0;
+  background:#000;
+  font: 14px/1.5 Arial,"Rosario", "Xin Gothic", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
+}
+body{
+  text-align:center;
+}
+#footer {
+  color: #fff;
+  padding: 20px;
+  text-align: center;
+}
+#footer a {
+  color: #fff;
+}

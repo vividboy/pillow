@@ -1,0 +1,40 @@
+html, body {
+  min-width:320px;
+  height: 100%;
+  line-height:0;
+  color: #fff;
+  -webkit-text-size-adjust: none;
+  padding:0;
+  margin:0;
+  background:#c2c2c2;
+  padding:10px 0;
+}
+footer {
+  color:#eee;
+  cursor:inherit;
+}
+#content {
+  width:382px;
+  height:800px;
+  margin:0 auto;
+  background-image:url(images/iphone.png);
+  background-size:382px 800px;
+  position:relative;
+}
+#screen {
+  position:absolute;
+  left:33px;
+  top:114px;
+}
+@media screen and (max-width: 500px) {
+  html,body{
+    padding:0;
+  }
+  #content{
+    background:#4ec0ca;
+  }
+  #screen{
+    top:0;
+    left:0;
+  }
+}
