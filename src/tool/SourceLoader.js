@@ -23,12 +23,19 @@ var proto = {
     var image = new Image();
     image.crossOrigin = '*';
     image.onload = function() {
-      that.hash[item.id] = {
+      var id = item.id;
+      that.hash[id] = {
         image: image,
         width: image.width,
         height: image.height
       };
       that.num++;
+      that.emit('loaded', {
+        number: that.num,
+        id: id,
+        image: that.hash[id]
+      });
+
       if (that.num === that.getSize()) {
         that.emit('success', that.hash);
       }

@@ -11,6 +11,8 @@
     factory(root['pillow'] || (root['pillow'] = {}));
   }
 })(this, function(exports) {
+  const pkg = require('../package');
+  exports.version = pkg.version;
   exports.RenderObjectModel = require('./render/RenderObjectModel');
   exports.Img = require('./render/elements/Img');
   exports.Sprite = require('./render/elements/Sprite');
