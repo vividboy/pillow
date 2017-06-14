@@ -1,8 +1,8 @@
 'use strict';
 
 var _Math = {
-  random: function(min, max) {
-    return parseInt(Math.random() * (max - min + 1) + min, 10);
+  getRandom: function(min, max) {
+    return Math.random() * (max - min + 1) + min;
   }
 };
 

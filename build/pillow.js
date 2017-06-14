@@ -595,7 +595,7 @@ module.exports = Notify;
 
 module.exports = {
 	"name": "pillowjs",
-	"version": "1.1.6",
+	"version": "1.1.7",
 	"description": "HTML5 2D rendering engine",
 	"repository": {
 		"type": "git",
@@ -1170,8 +1170,8 @@ module.exports = Map;
 
 
 var _Math = {
-  random: function random(min, max) {
-    return parseInt(Math.random() * (max - min + 1) + min, 10);
+  getRandom: function getRandom(min, max) {
+    return Math.random() * (max - min + 1) + min;
   }
 };
 
