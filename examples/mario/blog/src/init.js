@@ -103,7 +103,7 @@
       });
       Keyboard.LEFT.down(function(){
         that.mario.backforward();
-      })
+      });
       that.screen.on('mousedown',function(e){
         that.mario.forward();
       });

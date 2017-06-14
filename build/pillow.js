@@ -337,6 +337,10 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
   Timer.prototype.start = function () {
     var targetTime = new Date().getTime() + this._interval;
     var loop = (function () {
+      if (this._paused) {
+        return;
+      }
+      var that = this;
       this._now = this._now || +new Date();
       var now = +new Date();
 
@@ -363,6 +367,10 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       requestAnimationFrame(loop);
     }).bind(this);
     loop();
+  };
+
+  Timer.prototype.stop = function () {
+    this._paused = true;
   };
 
   Timer.prototype.toggle = function () {
@@ -747,13 +755,13 @@ var _KEYS = _.transpose(KEYS);
 
 var keysDown = [];
 
-function bindOrFire(key, handlerName, opt_handler) {
+var handleWrapper = function handleWrapper(key, handlerName, opt_handler) {
   if (opt_handler) {
     key[handlerName] = opt_handler;
   } else {
     key[handlerName]();
   }
-}
+};
 
 function Key(keyCode) {
   this.keyCode = keyCode;
@@ -767,13 +775,13 @@ var proto = {
     return _.indexOf(keysDown, this.keyCode) !== -1;
   },
   down: function down(opt_handler) {
-    bindOrFire(this, '_downHandler', opt_handler);
+    handleWrapper(this, '_downHandler', opt_handler);
   },
   up: function up(opt_handler) {
-    bindOrFire(this, '_upHandler', opt_handler);
+    handleWrapper(this, '_upHandler', opt_handler);
   },
   press: function press(opt_handler) {
-    bindOrFire(this, '_pressHandler', opt_handler);
+    handleWrapper(this, '_pressHandler', opt_handler);
   },
   unbindDown: function unbindDown() {
     this._downHandler = noop;

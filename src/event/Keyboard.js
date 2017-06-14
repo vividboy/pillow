@@ -72,13 +72,13 @@ var _KEYS = _.transpose(KEYS);
 
 var keysDown = [];
 
-function bindOrFire(key, handlerName, opt_handler) {
+var handleWrapper = function(key, handlerName, opt_handler) {
   if (opt_handler) {
     key[handlerName] = opt_handler;
   } else {
     key[handlerName]();
   }
-}
+};
 
 function Key(keyCode) {
   this.keyCode = keyCode;
@@ -92,13 +92,13 @@ var proto = {
     return _.indexOf(keysDown, this.keyCode) !== -1;
   },
   down: function(opt_handler) {
-    bindOrFire(this, '_downHandler', opt_handler);
+    handleWrapper(this, '_downHandler', opt_handler);
   },
   up: function(opt_handler) {
-    bindOrFire(this, '_upHandler', opt_handler);
+    handleWrapper(this, '_upHandler', opt_handler);
   },
   press: function(opt_handler) {
-    bindOrFire(this, '_pressHandler', opt_handler);
+    handleWrapper(this, '_pressHandler', opt_handler);
   },
   unbindDown: function() {
     this._downHandler = noop;

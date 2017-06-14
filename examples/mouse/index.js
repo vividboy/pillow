@@ -9,7 +9,6 @@
   var Timer = P.Timer;
   var fps = 60;
   var Graphics = P.Graphics;
-  var FPS = P.FPS
   var Mouse = P.Mouse;
   var math = P.Math;
   function MouseEventDetector(){
@@ -35,7 +34,6 @@
       var that = this;
       that.initScreen();
       that.addMods();
-      //that.initFps();
       that.bind();
       that.start();
     },
@@ -62,15 +60,6 @@
         x:0,
         y:0
       });
-    },
-    initFps:function(){
-      var that = this;
-      var fps = new FPS({
-        x:380,
-        y: 10,
-        color:'red'
-      });
-      that.screen.append(fps);
     },
     bind:function(){
       var that = this;

@@ -5,7 +5,8 @@
   var WIDTH = 800;
   var HEIGHT = 600;
   var BACKGROUND_WIDTH = 2418;
-  var canvas, ctx;
+  var canvas;
+  var ctx;
   var backgroundImage1;
   var backgroundImage2;
   var offsetX1 = 0;
