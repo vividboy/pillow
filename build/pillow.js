@@ -64,7 +64,7 @@ var pillow =
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 17);
+/******/ 	return __webpack_require__(__webpack_require__.s = 18);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -202,7 +202,7 @@ module.exports = _;
 
 
 var _ = __webpack_require__(0);
-var RenderObject = __webpack_require__(18);
+var RenderObject = __webpack_require__(19);
 
 function RenderObjectModel(cfg) {
   var that = this;
@@ -218,16 +218,33 @@ var proto = {
     that.clear(0, 0, that.width, that.height);
     that._draw(that.context);
   },
+  prepend: function prepend(node) {
+    var that = this;
+    node.parent = that;
+    that.children.unshift(node);
+  },
   append: function append(node) {
     var that = this;
     node.parent = that;
     that.children[that.children.length] = node;
   },
   removeChildren: function removeChildren(index) {
-    this.children[index] && this.children.splice(index, 1);
+    if (this.children[index]) {
+      this.children.splice(index, 1);
+    }
   },
   removeAllChildren: function removeAllChildren() {
     this.children = [];
+  },
+  remove: function remove() {
+    var that = this;
+    if (that.parent) {
+      _.each(this.parent.children, function (child, index) {
+        if (child === that) {
+          that.parent.removeChildren(index);
+        }
+      });
+    }
   },
   traversal: function traversal(callback) {
     var node = this;
@@ -247,6 +264,7 @@ var proto = {
       parents.pop();
       callback(current);
       children = current && current['children'] ? current['children'] : [];
+
       for (var i = children.length - 1; i >= 0; i--) {
         nodes.push(children[i]);
         parents.push(current);
@@ -262,11 +280,15 @@ var proto = {
     that.emit(type);
     while (i--) {
       var child = children[i];
-      if (child.hitTest(_x, _y)) {
+      if (child.hitTest && child.hitTest(_x, _y)) {
         child.dispatch(type, _x, _y);
         return;
       }
     }
+  },
+  hitTest: function hitTest(x, y) {
+    var that = this;
+    return x >= that.x && x <= that.x + that.width && y >= that.y && y <= that.y + that.height;
   }
 };
 
@@ -462,6 +484,10 @@ var proto = {
     var x = currentFrame ? currentFrame.x : that.x;
     var y = currentFrame ? currentFrame.y : that.y;
     that.context.drawImage(that.image, x, y, that.width, that.height, 0, 0, that.width, that.height);
+  },
+  hitTest: function hitTest(x, y) {
+    var that = this;
+    return x >= that.x && x <= that.x + that.width && y >= that.y && y <= that.y + that.height;
   }
 };
 
@@ -595,7 +621,7 @@ module.exports = Notify;
 
 module.exports = {
 	"name": "pillowjs",
-	"version": "1.1.7",
+	"version": "1.1.9",
 	"description": "HTML5 2D rendering engine",
 	"repository": {
 		"type": "git",
@@ -836,19 +862,22 @@ function getOffset(element) {
   var x = 0;
   var y = 0;
   var offsetParent = element;
+
   while (offsetParent !== null && offsetParent !== document.body) {
     x += offsetParent.offsetLeft;
     y += offsetParent.offsetTop;
     offsetParent = offsetParent.offsetParent;
   }
+
   return {
     x: x,
     y: y
   };
 }
+
 function Mouse(cfg) {
   var that = this;
-  that.types = 'ontouch' in window ? ['touchstart', 'touchmove', 'touchend'] : ['mousedown', 'mousemove', 'mouseup'];
+  that.types = 'ontouchend' in document ? ['touchstart', 'touchmove', 'touchend'] : ['mousedown', 'mousemove', 'mouseup'];
   that.element = document;
   _.merge(that, cfg);
   this.bind();
@@ -858,13 +887,13 @@ var proto = {
     var that = this;
     that.element = that.screen.target;
     that.offset = getOffset(that.element);
-    _.each(that.types, function (i) {
-      that.element.addEventListener(i, function (e) {
+    _.each(that.types, function (event) {
+      that.element.addEventListener(event, function (e) {
         e.preventDefault();
         var x = e.changedTouches ? e.changedTouches[0].pageX : e.pageX;
         var y = e.changedTouches ? e.changedTouches[0].pageY : e.pageY;
-        that.screen.dispatch(i, x - that.offset.x, y - that.offset.y);
-      });
+        that.screen.dispatch(event, x - that.offset.x, y - that.offset.y);
+      }, false);
     });
   }
 };
@@ -1243,6 +1272,98 @@ module.exports = SourceLoader;
 "use strict";
 
 
+var pow = Math.pow;
+var sin = Math.sin;
+var PI = Math.PI;
+var BACK_CONST = 1.70158;
+
+var Tween = {
+  swing: function swing(t) {
+    return -Math.cos(t * PI) / 2 + 0.5;
+  },
+  easeNone: function easeNone(t) {
+    return t;
+  },
+  easeIn: function easeIn(t) {
+    return t * t;
+  },
+  easeOut: function easeOut(t) {
+    return (2 - t) * t;
+  },
+  easeBoth: function easeBoth(t) {
+    return (t *= 2) < 1 ? 0.5 * t * t : 0.5 * (1 - --t * (t - 2));
+  },
+  easeInStrong: function easeInStrong(t) {
+    return t * t * t * t;
+  },
+  easeOutStrong: function easeOutStrong(t) {
+    return 1 - --t * t * t * t;
+  },
+  easeBothStrong: function easeBothStrong(t) {
+    return (t *= 2) < 1 ? 0.5 * t * t * t * t : 0.5 * (2 - (t -= 2) * t * t * t);
+  },
+  elasticIn: function elasticIn(t) {
+    var p = 0.3;
+    var s = p / 4;
+    if (t === 0 || t === 1) return t;
+    return -(pow(2, 10 * (t -= 1)) * sin((t - s) * (2 * PI) / p));
+  },
+  elasticOut: function elasticOut(t) {
+    var p = 0.3;
+    var s = p / 4;
+    if (t === 0 || t === 1) return t;
+    return pow(2, -10 * t) * sin((t - s) * (2 * PI) / p) + 1;
+  },
+  elasticBoth: function elasticBoth(t) {
+    var p = 0.45;
+    var s = p / 4;
+    if (t === 0 || (t *= 2) === 2) return t;
+    if (t < 1) {
+      return -0.5 * (pow(2, 10 * (t -= 1)) * sin((t - s) * (2 * PI) / p));
+    }
+    return pow(2, -10 * (t -= 1)) * sin((t - s) * (2 * PI) / p) * 0.5 + 1;
+  },
+  backIn: function backIn(t) {
+    if (t === 1) t -= 0.001;
+    return t * t * ((BACK_CONST + 1) * t - BACK_CONST);
+  },
+  backOut: function backOut(t) {
+    return (t -= 1) * t * ((BACK_CONST + 1) * t + BACK_CONST) + 1;
+  },
+  backBoth: function backBoth(t) {
+    if ((t *= 2) < 1) {
+      return 0.5 * (t * t * (((BACK_CONST *= 1.525) + 1) * t - BACK_CONST));
+    }
+    return 0.5 * ((t -= 2) * t * (((BACK_CONST *= 1.525) + 1) * t + BACK_CONST) + 2);
+  },
+  bounceIn: function bounceIn(t) {
+    return 1 - Tween.bounceOut(1 - t);
+  },
+  bounceOut: function bounceOut(t) {
+    var s = 7.5625;
+    var r;
+    if (t < 1 / 2.75) {
+      r = s * t * t;
+    } else if (t < 2 / 2.75) {
+      r = s * (t -= 1.5 / 2.75) * t + 0.75;
+    } else if (t < 2.5 / 2.75) {
+      r = s * (t -= 2.25 / 2.75) * t + 0.9375;
+    } else {
+      r = s * (t -= 2.625 / 2.75) * t + 0.984375;
+    }
+    return r;
+  }
+};
+
+module.exports = Tween;
+
+/***/ }),
+/* 17 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
 var _ = __webpack_require__(0);
 
 function Vector2d(x, y) {
@@ -1448,7 +1569,7 @@ Vector2d.componentVector = function (vec, directionVec) {
 module.exports = Vector2d;
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1481,17 +1602,18 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
   exports.Mouse = __webpack_require__(8);
 
   exports._ = __webpack_require__(0);
-  exports.Vector2d = __webpack_require__(16);
+  exports.Vector2d = __webpack_require__(17);
   exports.Math = __webpack_require__(14);
   exports.SourceLoader = __webpack_require__(15);
   exports.Map = __webpack_require__(13);
+  exports.Tween = __webpack_require__(16);
 
   exports.Timer = __webpack_require__(2).Timer;
   exports.FPSBoard = __webpack_require__(2).FPSBoard;
 });
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1549,7 +1671,9 @@ var proto = {
   update: function update() {
     var that = this;
     that.handle = that.handle || arguments[0];
-    that.handle && that.handle();
+    if (that.handle) {
+      that.handle();
+    }
   },
   clear: function clear(x, y, width, height) {
     this.context.clearRect(x, y, width, height);

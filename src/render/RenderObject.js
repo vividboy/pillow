@@ -52,7 +52,9 @@ var proto = {
   update: function() {
     var that = this;
     that.handle = that.handle || arguments[0];
-    that.handle && that.handle();
+    if (that.handle) {
+      that.handle();
+    }
   },
   clear: function(x, y, width, height) {
     this.context.clearRect(x, y, width, height);
