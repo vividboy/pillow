@@ -16,6 +16,10 @@ var proto = {
     var x = currentFrame ? currentFrame.x : that.x;
     var y = currentFrame ? currentFrame.y : that.y;
     that.context.drawImage(that.image, x, y, that.width, that.height, 0, 0, that.width, that.height);
+  },
+  hitTest: function(x, y) {
+    var that = this;
+    return x >= that.x && x <= that.x + that.width && y >= that.y && y <= that.y + that.height;
   }
 };
 
