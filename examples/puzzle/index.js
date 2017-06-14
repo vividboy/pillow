@@ -6,7 +6,7 @@
   var SourceLoader = P.SourceLoader;
   var Util = P._;
   var math = P.Math;
-  var Img = m[math.random(0,1)];
+  var Img = m[math.getRandom(0,1) >> 0];
   var col = 3;
   var elm = document.querySelector('#puzzle');
   var width = elm.width;

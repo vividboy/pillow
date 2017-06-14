@@ -140,7 +140,7 @@
         initCloud:function(resource){
             var that = this;
             var cloudContainer1 = new RenderObjectModel({
-                x:math.random(10,40),
+                x:math.getRandom(10,40),
                 y:CONFIG['SCREENHEIGHT']-CONFIG['CELL']*10,
                 width:resource['cloud00'].width,
                 height:resource['cloud00'].height
@@ -154,7 +154,7 @@
             });
             cloudContainer1.append(cloud1);
             var cloudContainer2 = new RenderObjectModel({
-                x:math.random(100,400),
+                x:math.getRandom(100,400),
                 y:CONFIG['SCREENHEIGHT']-CONFIG['CELL']*10,
                 width:resource['cloud01'].width,
                 height:resource['cloud01'].height
@@ -180,7 +180,7 @@
             function selectTree(i){
                 switch(i){
                     case 0:
-                        return math.random(200,400);
+                        return math.getRandom(200,400);
                         break;
                     case 1:
                         return CONFIG['SCREENWIDTH']-resource['tree0'+i].width;
@@ -189,7 +189,7 @@
                         return 2;
                         break;
                     case 3:
-                        return math.random(CONFIG['SCREENWIDTH']/2,CONFIG['SCREENWIDTH']/2+100);;
+                        return math.getRandom(CONFIG['SCREENWIDTH']/2,CONFIG['SCREENWIDTH']/2+100);;
                         break;
                 }
             }

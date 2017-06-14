@@ -67,7 +67,7 @@
         createPipe:function(){
             var that = this;
             var name = 'pipe';
-            var x = math.random(25,30);
+            var x = math.getRandom(25,30);
 
             MATRIX[that.SCREENHEIGHTSIZE -4][x-1] = 'meadow05';
             MATRIX[that.SCREENHEIGHTSIZE -3][x-1] = 'meadow15';

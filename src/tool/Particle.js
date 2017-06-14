@@ -1,5 +1,7 @@
 'use strict';
 
+const _ = require('../tool/Util');
+
 function Particle(cfg) {
   this.x = 0;
   this.y = 0;

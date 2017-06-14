@@ -17,8 +17,8 @@
     that.init();
   }
   function createGraphics(screen){
-    var x = math.random(10,250);
-    var y = math.random(10,250);
+    var x = math.getRandom(10,250);
+    var y = math.getRandom(10,250);
     var width = 100;
     var height = 100;
     var rect = new Graphics({

@@ -129,11 +129,11 @@
                         });
                         if (result == 0) {
                             var vector = new Vector2d(v.x,v.y);
-                            var x = math.random(1,5);
+                            var x = math.getRandom(1, 5);
                                 x = x%2 ==0?x:-x;
                             Util.merge(vector,{
                                 xv:x,
-                                yv:math.random(0,8),
+                                yv: math.getRandom(0, 8),
                                 color:v.color,
                                 k:key
                             });
