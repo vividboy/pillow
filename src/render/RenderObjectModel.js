@@ -35,7 +35,7 @@ var proto = {
   removeAllChildren: function() {
     this.children = [];
   },
-  remove: function() {
+  removeFromParent: function() {
     var that = this;
     if (that.parent) {
       _.each(this.parent.children, function(child, index) {

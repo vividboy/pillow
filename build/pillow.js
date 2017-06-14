@@ -236,7 +236,7 @@ var proto = {
   removeAllChildren: function removeAllChildren() {
     this.children = [];
   },
-  remove: function remove() {
+  removeFromParent: function removeFromParent() {
     var that = this;
     if (that.parent) {
       _.each(this.parent.children, function (child, index) {
@@ -621,7 +621,7 @@ module.exports = Notify;
 
 module.exports = {
 	"name": "pillowjs",
-	"version": "1.1.9",
+	"version": "1.1.10",
 	"description": "HTML5 2D rendering engine",
 	"repository": {
 		"type": "git",
