@@ -666,7 +666,7 @@ module.exports = Notify;
 
 module.exports = {
 	"name": "pillowjs",
-	"version": "1.1.10",
+	"version": "1.1.11",
 	"description": "HTML5 2D rendering engine",
 	"repository": {
 		"type": "git",
