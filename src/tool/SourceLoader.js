@@ -3,6 +3,11 @@
 const _ = require('../tool/Util');
 const Notify = require('../notify/Notify');
 
+/**
+ * @class pillow.SourceLoader SourceLoader.
+ * @param {Object} options An object literal containing one or more of the following optional properties:
+ */
+
 function SourceLoader(cfg) {
   var that = this;
   that.hash = {};

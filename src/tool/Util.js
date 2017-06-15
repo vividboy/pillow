@@ -1,5 +1,10 @@
 'use strcit';
 
+/**
+ * @class pillow._ Utils.
+ * @param {Object} options An object literal containing one or more of the following optional properties:
+ */
+
 var _ = {
   create: function(o) {
     if (Object.create) {

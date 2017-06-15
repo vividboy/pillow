@@ -3,6 +3,11 @@
 const _ = require('../tool/Util');
 const RenderObjectModel = require('../render/RenderObjectModel');
 
+/**
+ * @class pillow.Map Map.
+ * @param {Object} options An object literal containing one or more of the following optional properties:
+ */
+
 function Map(cfg) {
   var that = this;
   that.cache = true;

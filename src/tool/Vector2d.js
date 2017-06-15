@@ -2,6 +2,11 @@
 
 const _ = require('../tool/Util');
 
+/**
+ * @class pillow.Vector2d Vector2d.
+ * @param {Object} options An object literal containing one or more of the following optional properties:
+ */
+
 function Vector2d(x, y) {
   this.x = x || 0;
   this.y = y || 0;

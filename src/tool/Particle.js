@@ -2,6 +2,11 @@
 
 const _ = require('../tool/Util');
 
+/**
+ * @class pillow.Particle Particle.
+ * @param {Object} options An object literal containing one or more of the following optional properties:
+ */
+
 function Particle(cfg) {
   this.x = 0;
   this.y = 0;

@@ -3,6 +3,22 @@
 const Img = require('./Img');
 const _ = require('../../tool/Util');
 
+/**
+ * @class pillow.Sprite Sprite.
+ * @param {Object} options An object literal containing one or more of the following optional properties:
+ * <li><tt>x</tt></li>
+ * <li><tt>y</tt></li>
+ * <li><tt>width</tt></li>
+ * <li><tt>height</tt></li>
+ * <li><tt>alpha</tt></li>
+ * <li><tt>scaleX</tt></li>
+ * <li><tt>scaleY</tt></li>
+ * <li><tt>rotation</tt></li>
+ * <li><tt>angle</tt></li>
+ * <li><tt>visible</tt></li>
+ * <li><tt>debug</tt></li>
+ */
+
 function Sprite(cfg) {
   var that = this;
   that.frame = 0;

@@ -27,7 +27,11 @@ $ npm i pillowjs --save
 
 ## Examples
 
-[examples](//xudafeng.github.io/pillow)
+[online examples](//xudafeng.github.io/pillow)
+
+## Documents
+
+[online docs](./docs)
 
 ## License
 

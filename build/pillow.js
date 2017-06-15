@@ -76,6 +76,11 @@ var pillow =
 
 'use strcit';
 
+/**
+ * @class pillow._ Utils.
+ * @param {Object} options An object literal containing one or more of the following optional properties:
+ */
+
 var _ = {
   create: function create(o) {
     if (Object.create) {
@@ -203,6 +208,22 @@ module.exports = _;
 
 var _ = __webpack_require__(0);
 var RenderObject = __webpack_require__(19);
+
+/**
+ * @class pillow.RenderObjectModel RenderObjectModel.
+ * @param {Object} options An object literal containing one or more of the following optional properties:
+ * <li><tt>x</tt></li>
+ * <li><tt>y</tt></li>
+ * <li><tt>width</tt></li>
+ * <li><tt>height</tt></li>
+ * <li><tt>alpha</tt></li>
+ * <li><tt>scaleX</tt></li>
+ * <li><tt>scaleY</tt></li>
+ * <li><tt>rotation</tt></li>
+ * <li><tt>angle</tt></li>
+ * <li><tt>visible</tt></li>
+ * <li><tt>debug</tt></li>
+ */
 
 function RenderObjectModel(cfg) {
   var that = this;
@@ -479,6 +500,22 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 var _ = __webpack_require__(0);
 var RenderObjectModel = __webpack_require__(1);
 
+/**
+ * @class pillow.Img Img.
+ * @param {Object} options An object literal containing one or more of the following optional properties:
+ * <li><tt>x</tt></li>
+ * <li><tt>y</tt></li>
+ * <li><tt>width</tt></li>
+ * <li><tt>height</tt></li>
+ * <li><tt>alpha</tt></li>
+ * <li><tt>scaleX</tt></li>
+ * <li><tt>scaleY</tt></li>
+ * <li><tt>rotation</tt></li>
+ * <li><tt>angle</tt></li>
+ * <li><tt>visible</tt></li>
+ * <li><tt>debug</tt></li>
+ */
+
 function Img(cfg) {
   var that = this;
   Img.sup.call(that, cfg);
@@ -645,6 +682,7 @@ module.exports = {
 	],
 	"scripts": {
 		"lint": "eslint ./src",
+		"doc": "rm -rf ./docs/ && jsdoc -c ./jsdoc.json",
 		"build": "webpack && babel src/ --out-dir dist/",
 		"server": "startserver -p 8081 -s -m",
 		"test": "node ./test/pillow.test.js",
@@ -658,6 +696,7 @@ module.exports = {
 		"babel-core": "^5.x",
 		"babel-loader": "^5.x",
 		"eslint": "^4.0.0",
+		"jsdoc": "3.4.0",
 		"json-loader": "^0.5.2",
 		"jsx-loader": "^0.13.2",
 		"mocha": "^3.4.2",
@@ -796,6 +835,11 @@ var proto = {
 
 _.augment(Key, proto);
 
+/**
+ * @class pillow.Keyboard Provides methods for Keyboard events.
+ * @param {Object}
+ */
+
 var Keyboard = {};
 
 Keyboard.Key = Key;
@@ -883,6 +927,12 @@ function getOffset(element) {
   };
 }
 
+/**
+ * @class pillow.Mouse Provides methods for Mouse events.
+ * @param {Object} options An object literal containing one or more of the following optional properties:
+ * <li><tt>screen</tt> : the screen.</li>
+ */
+
 function Mouse(cfg) {
   var that = this;
   that.types = 'ontouchend' in document ? ['touchstart', 'touchmove', 'touchend'] : ['mousedown', 'mousemove', 'mouseup'];
@@ -919,6 +969,22 @@ module.exports = Mouse;
 
 var _ = __webpack_require__(0);
 var RenderObjectModel = __webpack_require__(1);
+
+/**
+ * @class pillow.Graphics Graphics.
+ * @param {Object} options An object literal containing one or more of the following optional properties:
+ * <li><tt>x</tt></li>
+ * <li><tt>y</tt></li>
+ * <li><tt>width</tt></li>
+ * <li><tt>height</tt></li>
+ * <li><tt>alpha</tt></li>
+ * <li><tt>scaleX</tt></li>
+ * <li><tt>scaleY</tt></li>
+ * <li><tt>rotation</tt></li>
+ * <li><tt>angle</tt></li>
+ * <li><tt>visible</tt></li>
+ * <li><tt>debug</tt></li>
+ */
 
 function Graphics(cfg) {
   var that = this;
@@ -1007,6 +1073,22 @@ module.exports = Graphics;
 var _ = __webpack_require__(0);
 var RenderObjectModel = __webpack_require__(1);
 
+/**
+ * @class pillow.Screen Screen.
+ * @param {Object} options An object literal containing one or more of the following optional properties:
+ * <li><tt>x</tt></li>
+ * <li><tt>y</tt></li>
+ * <li><tt>width</tt></li>
+ * <li><tt>height</tt></li>
+ * <li><tt>alpha</tt></li>
+ * <li><tt>scaleX</tt></li>
+ * <li><tt>scaleY</tt></li>
+ * <li><tt>rotation</tt></li>
+ * <li><tt>angle</tt></li>
+ * <li><tt>visible</tt></li>
+ * <li><tt>debug</tt></li>
+ */
+
 function Screen(cfg) {
   var that = this;
   Screen.sup.call(that, cfg);
@@ -1051,6 +1133,22 @@ module.exports = Screen;
 
 var Img = __webpack_require__(3);
 var _ = __webpack_require__(0);
+
+/**
+ * @class pillow.Sprite Sprite.
+ * @param {Object} options An object literal containing one or more of the following optional properties:
+ * <li><tt>x</tt></li>
+ * <li><tt>y</tt></li>
+ * <li><tt>width</tt></li>
+ * <li><tt>height</tt></li>
+ * <li><tt>alpha</tt></li>
+ * <li><tt>scaleX</tt></li>
+ * <li><tt>scaleY</tt></li>
+ * <li><tt>rotation</tt></li>
+ * <li><tt>angle</tt></li>
+ * <li><tt>visible</tt></li>
+ * <li><tt>debug</tt></li>
+ */
 
 function Sprite(cfg) {
   var that = this;
@@ -1129,6 +1227,22 @@ module.exports = Sprite;
 var _ = __webpack_require__(0);
 var RenderObjectModel = __webpack_require__(1);
 
+/**
+ * @class pillow.Text Text.
+ * @param {Object} options An object literal containing one or more of the following optional properties:
+ * <li><tt>x</tt></li>
+ * <li><tt>y</tt></li>
+ * <li><tt>width</tt></li>
+ * <li><tt>height</tt></li>
+ * <li><tt>alpha</tt></li>
+ * <li><tt>scaleX</tt></li>
+ * <li><tt>scaleY</tt></li>
+ * <li><tt>rotation</tt></li>
+ * <li><tt>angle</tt></li>
+ * <li><tt>visible</tt></li>
+ * <li><tt>debug</tt></li>
+ */
+
 function Text(cfg) {
   var that = this;
   Text.sup.call(that, cfg);
@@ -1163,6 +1277,11 @@ module.exports = Text;
 
 var _ = __webpack_require__(0);
 var RenderObjectModel = __webpack_require__(1);
+
+/**
+ * @class pillow.Map Map.
+ * @param {Object} options An object literal containing one or more of the following optional properties:
+ */
 
 function Map(cfg) {
   var that = this;
@@ -1206,6 +1325,11 @@ module.exports = Map;
 "use strict";
 
 
+/**
+ * @class pillow.Math Math.
+ * @param {Object} options An object literal containing one or more of the following optional properties:
+ */
+
 var _Math = {
   getRandom: function getRandom(min, max) {
     return Math.random() * (max - min + 1) + min;
@@ -1223,6 +1347,11 @@ module.exports = _Math;
 
 var _ = __webpack_require__(0);
 var Notify = __webpack_require__(5);
+
+/**
+ * @class pillow.SourceLoader SourceLoader.
+ * @param {Object} options An object literal containing one or more of the following optional properties:
+ */
 
 function SourceLoader(cfg) {
   var that = this;
@@ -1284,6 +1413,11 @@ var pow = Math.pow;
 var sin = Math.sin;
 var PI = Math.PI;
 var BACK_CONST = 1.70158;
+
+/**
+ * @class pillow.Tween Tween.
+ * @param {Object} options An object literal containing one or more of the following optional properties:
+ */
 
 var Tween = {
   swing: function swing(t) {
@@ -1373,6 +1507,11 @@ module.exports = Tween;
 
 
 var _ = __webpack_require__(0);
+
+/**
+ * @class pillow.Vector2d Vector2d.
+ * @param {Object} options An object literal containing one or more of the following optional properties:
+ */
 
 function Vector2d(x, y) {
   this.x = x || 0;
@@ -1648,6 +1787,7 @@ function RenderObject() {
   that.context = null;
   that.debug = false;
 }
+
 var proto = {
   _draw: function _draw(context) {
     var that = this;

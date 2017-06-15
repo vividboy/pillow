@@ -21,6 +21,7 @@ function RenderObject() {
   that.context = null;
   that.debug = false;
 }
+
 var proto = {
   _draw: function(context) {
     var that = this;

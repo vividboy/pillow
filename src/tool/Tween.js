@@ -5,6 +5,11 @@ var sin = Math.sin;
 var PI = Math.PI;
 var BACK_CONST = 1.70158;
 
+/**
+ * @class pillow.Tween Tween.
+ * @param {Object} options An object literal containing one or more of the following optional properties:
+ */
+
 var Tween = {
   swing: function(t) {
     return -Math.cos(t * PI) / 2 + 0.5;

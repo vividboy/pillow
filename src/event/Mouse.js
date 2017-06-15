@@ -19,6 +19,12 @@ function getOffset(element) {
   };
 }
 
+/**
+ * @class pillow.Mouse Provides methods for Mouse events.
+ * @param {Object} options An object literal containing one or more of the following optional properties:
+ * <li><tt>screen</tt> : the screen.</li>
+ */
+
 function Mouse(cfg) {
   var that = this;
   that.types = 'ontouchend' in document ? [

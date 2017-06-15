@@ -3,6 +3,12 @@
 const _ = require('../tool/Util');
 
 var PI = Math.PI;
+
+/**
+ * @class pillow.Matrix Matrix.
+ * @param {Object} options An object literal containing one or more of the following optional properties:
+ */
+
 var Matrix = Array;
 
 var proto = {

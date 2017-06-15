@@ -113,6 +113,11 @@ var proto = {
 
 _.augment(Key, proto);
 
+/**
+ * @class pillow.Keyboard Provides methods for Keyboard events.
+ * @param {Object}
+ */
+
 var Keyboard = {};
 
 Keyboard.Key = Key;
