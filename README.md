@@ -31,7 +31,7 @@ $ npm i pillowjs --save
 
 ## Documents
 
-[online docs](./docs)
+[online docs](//xudafeng.github.io/pillow/docs)
 
 ## License
 
