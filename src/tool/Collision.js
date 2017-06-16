@@ -5,22 +5,24 @@
  * @param {Object} options An object literal containing one or more of the following optional properties:
  */
 
-function Collision(cg) {
-  this.col_Point_Rect = function (pointX, pointY, rectObj) {
-    return pointX > rectObj.x && pointX < rectObj.right || pointY > rectObj.y && pointY < rectObj.bottom;
-  };
+function Collision(cfg) {
 
-  this.col_Between_Rects = function(rectObjA, rectObjB) {
-    return (rectObjA.right > rectObjB.x && rectObjA.right < rectObjB.right || rectObjA.x > rectObjB.x && rectObjA.x < rectObjB.right) && (rectObjA.bottom > rectObjB.y && rectObjA.bottom < rectObjB.bottom || rectObjA.y < rectObjB.bottom && rectObjA.bottom > rectObjB.y);
-  };
+}
 
-  this.col_Point_Circle = function(pointX, pointY, circleObj) {
-    return Math.pow(pointX - circleObj.x, 2) + Math.pow(pointY - circleObj.y, 2) < Math.pow(circleObj.r, 2);
-  };
+Collision.prototype.pointRect = function (point1, point2, rect) {
+  return point1 > rect.x && point1 < rect.right || point2 > rect.y && point2 < rect.bottom;
+};
 
-  this.col_between_Circles = function(circleObjA, circleObjB) {
-    return Math.pow(circleObjA.x - circleObjB.x, 2) + Math.pow(circleObjA.y - circleObjB.y, 2) < Math.pow(circleObjA.r + circleObjB.r, 2);
-  };
+Collision.prototype.betweenRects = function(rect1, rect2) {
+  return (rect1.right > rect2.x && rect1.right < rect2.right || rect1.x > rect2.x && rect1.x < rect2.right) && (rect1.bottom > rect2.y && rect1.bottom < rect2.bottom || rect1.y < rect2.bottom && rect1.bottom > rect2.y);
+};
+
+Collision.prototype.pointCircle = function(point1, point2, circle) {
+  return Math.pow(point1 - circle.x, 2) + Math.pow(point2 - circle.y, 2) < Math.pow(circle.r, 2);
+};
+
+Collision.prototype.betweenCircles = function(circle1, circle2) {
+  return Math.pow(circle1.x - circle2.x, 2) + Math.pow(circle1.y - circle2.y, 2) < Math.pow(circle1.r + circle2.r, 2);
 };
 
 module.exports = Collision;
