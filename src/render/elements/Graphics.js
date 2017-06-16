@@ -32,17 +32,20 @@ function Graphics(cfg) {
 var proto = {
   draw: function() {
     var that = this;
-    _.each(that.query, function(data) {
+    for (var i = 0; i < that.query.length; i++) {
+      var data = that.query[i];
       var action = data.action;
+
       if (that.context[action]) {
         var args = data.args;
+
         if (_.type(args) === 'array' || !args) {
           that.context[action].apply(that.context, args);
         } else {
           that.context[action] = that[action];
         }
       }
-    });
+    }
   },
   push: function(action, args) {
     this.query.push({

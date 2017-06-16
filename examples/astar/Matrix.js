@@ -1,3 +1,5 @@
+/* global define */
+
 /* ================================================================
  * Matrix by xdf(xudafeng[at]126.com)
  *
@@ -14,15 +16,15 @@
 ;(function(root, factory) {
   'use strict';
   /* amd like aml https://github.com/xudafeng/aml.git */
-  if(typeof define === 'function' && define.amd) {
+  if (typeof define === 'function' && define.amd) {
     return define(['exports'], factory);
-  }else if(typeof exports !== 'undefined') {
+  } else if (typeof exports !== 'undefined') {
     return factory(exports);
-  }else{
+  } else {
     /* browser */
     factory(root['Matrix'] || (root['Matrix'] = {}));
   }
-})(this, function(exports, undefined) {
+})(this, function(exports) {
 
   function Node(x, y, flag) {
     this.x = x;
@@ -33,9 +35,9 @@
   function generator(nodes) {
     this.nodes = [];
     this.matrix = [];
-    for(var y = 0; y < nodes.length; y++) {
+    for (var y = 0; y < nodes.length; y++) {
       this.matrix[y] = [];
-      for(var x = 0; x < nodes[y].length; x++) {
+      for (var x = 0; x < nodes[y].length; x++) {
         var node = new Node(x, y, {
           type: nodes[y][x]
         });
@@ -49,7 +51,7 @@
     var result = null;
     var matrix = this.matrix;
 
-    if(matrix[y] && matrix[y][x]) {
+    if (matrix[y] && matrix[y][x]) {
       result = matrix[y][x];
     }
     return result;
@@ -61,7 +63,10 @@
     * @param {bool}
     */
   function Constructor(nodes, diagonal) {
-    if(!nodes) throw('matrix constructor need nodes.');
+    if (!nodes) {
+      console.log('matrix constructor need nodes.');
+      return;
+    }
     this.diagonal = diagonal;
     generator.call(this, nodes);
   }
@@ -70,39 +75,39 @@
 
   proto.get = function(x, y) {
     return getNode.call(this, x, y);
-  }
+  };
 
   proto.up = function(x, y) {
     return getNode.call(this, x, y - 1);
-  }
+  };
 
   proto.right = function(x, y) {
     return getNode.call(this, x + 1, y);
-  }
+  };
 
   proto.down = function(x, y) {
     return getNode.call(this, x, y + 1);
-  }
+  };
 
   proto.left = function(x, y) {
     return getNode.call(this, x - 1, y);
-  }
+  };
 
   proto.rightUp = function(x, y) {
     return getNode.call(this, x + 1, y - 1);
-  }
+  };
 
   proto.rightDown = function(x, y) {
     return getNode.call(this, x, y + 1);
-  }
+  };
 
   proto.leftUp = function(x, y) {
     return getNode.call(this, x - 1, y - 1);
-  }
+  };
 
   proto.leftDown = function(x, y) {
     return getNode.call(this, x - 1, y + 1);
-  }
+  };
 
   proto.neighbors = function(node) {
     var result = [];
@@ -112,7 +117,7 @@
     this.left(x, y) && result.push(this.left(x, y));
     this.right(x, y) && result.push(this.right(x, y));
     this.down(x, y) && result.push(this.down(x, y));
-    this.up(x, y) &&  result.push(this.up(x, y));
+    this.up(x, y) && result.push(this.up(x, y));
 
     if (this.diagonal) {
       this.leftDown(x, y) && result.push(this.leftDown(x, y));
@@ -126,5 +131,4 @@
   exports.Constructor = Constructor;
   exports.version = '0.1.0';
 });
-/* vim: set sw=4 ts=4 et tw=80 : */ 
-
+/* vim: set sw=4 ts=4 et tw=80 : */

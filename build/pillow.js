@@ -358,9 +358,6 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
   Timer.prototype.start = function () {
     var targetTime = new Date().getTime() + this._interval;
     var loop = (function () {
-      if (this._paused) {
-        return;
-      }
       var that = this;
       this._now = this._now || +new Date();
       var now = +new Date();
@@ -380,9 +377,12 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
           targetTime += this._interval;
         }
         this._fps++;
-        this._queue.forEach(function (handle) {
-          handle();
-        });
+
+        if (!this._paused) {
+          this._queue.forEach(function (handle) {
+            handle();
+          });
+        }
       }
 
       requestAnimationFrame(loop);
@@ -666,7 +666,7 @@ module.exports = Notify;
 
 module.exports = {
 	"name": "pillowjs",
-	"version": "1.1.11",
+	"version": "1.1.12",
 	"description": "HTML5 2D rendering engine",
 	"repository": {
 		"type": "git",
@@ -681,7 +681,7 @@ module.exports = {
 		"lint"
 	],
 	"scripts": {
-		"lint": "eslint ./src",
+		"lint": "eslint ./src ./examples",
 		"doc": "rm -rf ./docs/ && jsdoc -c ./jsdoc.json",
 		"build": "webpack && babel src/ --out-dir dist/",
 		"server": "startserver -p 8081 -s -m",
@@ -999,17 +999,20 @@ function Graphics(cfg) {
 var proto = {
   draw: function draw() {
     var that = this;
-    _.each(that.query, function (data) {
+    for (var i = 0; i < that.query.length; i++) {
+      var data = that.query[i];
       var action = data.action;
+
       if (that.context[action]) {
         var args = data.args;
+
         if (_.type(args) === 'array' || !args) {
           that.context[action].apply(that.context, args);
         } else {
           that.context[action] = that[action];
         }
       }
-    });
+    }
   },
   push: function push(action, args) {
     this.query.push({
@@ -1754,6 +1757,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
   exports.SourceLoader = __webpack_require__(15);
   exports.Map = __webpack_require__(13);
   exports.Tween = __webpack_require__(16);
+  exports.Collision = __webpack_require__(20);
 
   exports.Timer = __webpack_require__(2).Timer;
   exports.FPSBoard = __webpack_require__(2).FPSBoard;
@@ -1832,6 +1836,38 @@ _.augment(RenderObject, proto);
 _.inherit(RenderObject, Notify);
 
 module.exports = RenderObject;
+
+/***/ }),
+/* 20 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * @class pillow.Collision Collision.
+ * @param {Object} options An object literal containing one or more of the following optional properties:
+ */
+
+function Collision(cfg) {}
+
+Collision.prototype.pointRect = function (point1, point2, rect) {
+  return point1 > rect.x && point1 < rect.right || point2 > rect.y && point2 < rect.bottom;
+};
+
+Collision.prototype.betweenRects = function (rect1, rect2) {
+  return (rect1.right > rect2.x && rect1.right < rect2.right || rect1.x > rect2.x && rect1.x < rect2.right) && (rect1.bottom > rect2.y && rect1.bottom < rect2.bottom || rect1.y < rect2.bottom && rect1.bottom > rect2.y);
+};
+
+Collision.prototype.pointCircle = function (point1, point2, circle) {
+  return Math.pow(point1 - circle.x, 2) + Math.pow(point2 - circle.y, 2) < Math.pow(circle.r, 2);
+};
+
+Collision.prototype.betweenCircles = function (circle1, circle2) {
+  return Math.pow(circle1.x - circle2.x, 2) + Math.pow(circle1.y - circle2.y, 2) < Math.pow(circle1.r + circle2.r, 2);
+};
+
+module.exports = Collision;
 
 /***/ })
 /******/ ]);
