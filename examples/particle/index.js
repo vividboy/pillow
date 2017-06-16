@@ -1,7 +1,8 @@
+/* global pillow */
+
 (function(global, P) {
-  var canvas = document.getElementById('canvas');
+  var canvas = document.getElementById('particle_1');
   var WIDTH = canvas.width;
-  var HEIGHT = canvas.height;
   var ctx = canvas.getContext('2d');
   var SourceLoader = P.SourceLoader;
   var Timer = P.Timer;
@@ -11,17 +12,17 @@
   }
 
   function randomSpeed() {
-    return parseInt(Math.random() * 6 - 2);
+    return parseInt(Math.random() * 6 - 2, 10);
   }
 
-  var now;
   var query = [];
   var start = false;
   var loader = new SourceLoader();
+  var timer;
 
   loader.load([{
-    id:'avatar',
-    src:'avatar.png'
+    id: 'avatar',
+    src: 'avatar.png'
   }]);
 
   loader.on('success', function(e) {
@@ -45,15 +46,17 @@
           });
         }
       }
-    }
+    };
+
     preprocess();
+
     var handle = function() {
       if (start) {
         return;
       }
       start = true;
 
-      var timer = new Timer({
+      timer = new Timer({
         fps: 60
       });
       timer.update(function() {
@@ -71,11 +74,70 @@
         ctx.putImageData(temp, 0, 0);
       });
       timer.start();
-    }
+    };
+
     canvas.addEventListener('mouseenter', handle, false);
     setTimeout(function() {
       handle();
+      setTimeout(function() {
+        timer.toggle();
+      }, 5000);
     }, 3000);
+
   });
 
-})(window,pillow)
+})(window, pillow);
+
+(function(global, P) {
+  var canvas = document.getElementById('particle_2');
+  var WIDTH = canvas.width;
+  var HEIGHT = canvas.height;
+  var FPSBoard = P.FPSBoard;
+  var Timer = P.Timer;
+  var Screen = P.Screen;
+  var RenderObjectModel = P.RenderObjectModel;
+
+  var fpsBoard = new FPSBoard({
+    container: '#container',
+    width: 100,
+    height: 60,
+    boardColor: '#222',
+    textColor: '#d2ff1d',
+    containerStyles: {
+      position: 'absolute'
+    }
+  });
+
+  var screen = new Screen({
+    container: canvas,
+    width: WIDTH,
+    height: HEIGHT,
+    x: 0,
+    y: 0
+  });
+
+  var container = new RenderObjectModel({
+    x: 0,
+    y: 0,
+    width: 200,
+    height: 200,
+    scaleX: 0,
+    scaleY: 0,
+    rotation: 0
+  });
+
+  screen.append(container);
+
+  screen.update(function() {
+
+  });
+
+  var timer = new Timer();
+
+  timer.update(function() {
+    screen.run();
+    fpsBoard.tick();
+  });
+
+  timer.start();
+})(window, pillow);

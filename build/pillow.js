@@ -681,7 +681,7 @@ module.exports = {
 		"lint"
 	],
 	"scripts": {
-		"lint": "eslint ./src",
+		"lint": "eslint ./src ./examples",
 		"doc": "rm -rf ./docs/ && jsdoc -c ./jsdoc.json",
 		"build": "webpack && babel src/ --out-dir dist/",
 		"server": "startserver -p 8081 -s -m",

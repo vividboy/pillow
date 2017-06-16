@@ -1,11 +1,9 @@
+/* global pillow */
+
 ;(function(global, P) {
-  var Util = P._;
-  var Notify = P.Notify;
   var Screen = P.Screen;
   var Timer = P.Timer;
-  var Graphics = P.Graphics;
   var Text = P.Text;
-  var math = P.Math;
   var Keyboard = P.Keyboard;
 
   var screen = new Screen({

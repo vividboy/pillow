@@ -1,44 +1,46 @@
-/*dafeng 随意demo*/
-;(function(global,P){
-  var m = [];
-    m.push('//wx1.sinaimg.cn/square/6d308bd9gy1fgjwiqlietj20820820sl.jpg');
-    m.push('//www.gravatar.com/avatar/d073bab2ffabc6aff53d6af77662a149?s=290');
+/* global pillow */
+
+;(function(global, P) {
+  var m = [
+    '//wx1.sinaimg.cn/square/6d308bd9gy1fgjwiqlietj20820820sl.jpg',
+    '//www.gravatar.com/avatar/d073bab2ffabc6aff53d6af77662a149?s=290'
+  ];
   var SourceLoader = P.SourceLoader;
-  var Util = P._;
   var math = P.Math;
-  var Img = m[math.getRandom(0,1) >> 0];
+  var Img = m[math.getRandom(0, 1) >> 0];
   var col = 3;
   var elm = document.querySelector('#puzzle');
   var width = elm.width;
   var img;
   var ctx = elm.getContext('2d');
-  var row = width/col;
+  var row = width / col;
   var pos1 = {
-    x:0,
-    y:0
+    x: 0,
+    y: 0
   };
   var pos2 = {
-    x:0,
-    y:0
+    x: 0,
+    y: 0
   };
   var query = new Array(col);
   var old = new Array(col);
-  elm.addEventListener("mousemove", function (e) {
+
+  elm.addEventListener('mousemove', function(e) {
     var target = e.target;
-    pos1.x = Math.floor((e.pageX - target.offsetLeft)/row);
-    pos1.y = Math.floor((e.pageY - target.offsetTop)/row);
+    pos1.x = Math.floor((e.pageX - target.offsetLeft) / row);
+    pos1.y = Math.floor((e.pageY - target.offsetTop) / row);
   });
-  elm.addEventListener("click", function () {
+  elm.addEventListener('click', function () {
     check();
   });
-  function check(){
+  function check() {
     var distance = Math.abs(pos1.x - pos2.x) + Math.abs(pos1.y - pos2.y);
-    if (distance == 1) {
+    if (distance === 1) {
       updatePosition(pos2, pos1);
       updateStage();
     }
   }
-  function clear(){
+  function clear() {
     ctx.clearRect(0, 0, width, width);
   }
   function updateStage() {
@@ -47,8 +49,8 @@
       for (var j = 0; j < col; j++) {
         var x = query[i][j].x;
         var y = query[i][j].y;
-        if (i != pos2.x || j != pos2.y ) {
-          ctx.drawImage(img, x * row, y * row, row, row,i * row, j * row, row, row);
+        if (i !== pos2.x || j !== pos2.y) {
+          ctx.drawImage(img, x * row, y * row, row, row, i * row, j * row, row, row);
         }
       }
     }
@@ -68,23 +70,23 @@
       old[i] = new Array(col);
       for (var j = 0; j < col; j++) {
         query[i][j] = {};
-        query[i][j].x = col-1-i;
-        query[i][j].y = col-1-j;
+        query[i][j].x = col - 1 - i;
+        query[i][j].y = col - 1 - j;
         old[i][j] = {};
         old[i][j].x = i;
         old[i][j].y = j;
       }
     }
-    pos2.x = query[col-1][col-1].x;
-    pos2.y = query[col-1][col-1].y;
+    pos2.x = query[col - 1][col - 1].x;
+    pos2.y = query[col - 1][col - 1].y;
     updateStage();
   }
   var loader = new SourceLoader();
   loader.load([{
-    id:'puzzle',
-    src:Img
+    id: 'puzzle',
+    src: Img
   }]);
-  loader.on('success',function(i){
+  loader.on('success', function(i) {
     init(i['puzzle'].image);
   });
-})(window,pillow)
+})(window, pillow);

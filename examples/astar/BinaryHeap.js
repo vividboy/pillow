@@ -1,3 +1,5 @@
+/* global define */
+
 /* ================================================================
  * BinaryHeap by xdf(xudafeng[at]126.com)
  *
@@ -13,11 +15,11 @@
 ;(function(root, factory){
   'use strict';
   /* amd like aml https://github.com/xudafeng/aml.git */
-  if(typeof define === 'function' && define.amd) {
+  if (typeof define === 'function' && define.amd) {
     return define(['exports'], factory);
-  }else if(typeof exports !== 'undefined') {
+  } else if(typeof exports !== 'undefined') {
     return factory(exports);
-  }else{
+  } else {
     /* browser */
     factory(root['BinaryHeap'] || (root['BinaryHeap'] = {}));
   }
@@ -244,37 +246,37 @@
   proto.percolateDown = function(index) {
     var currentNode = this.list[index];
 
-    while(true) {
+    while (true) {
       var childRightIndex = (index + 1) * 2;
       var childLeftIndex = childRightIndex - 1;
       var swap = null;
 
-      if(childLeftIndex < this.size()) {
+      if (childLeftIndex < this.size()) {
         var childLeft = this.list[childLeftIndex];
         var temp = this.comparator(childLeft, currentNode);
         temp = this.isMinHeap? temp < 0: temp > 0;
         if(temp) swap = childLeftIndex;
       }
 
-      if(childRightIndex < this.size()) {
+      if (childRightIndex < this.size()) {
         var childRight = this.list[childRightIndex];
         var temp = this.comparator(childRight, swap === null ? currentNode : childLeft);
         temp = this.isMinHeap? temp < 0: temp > 0;
 
-        if(temp) swap = childRightIndex;
+        if (temp) swap = childRightIndex;
       }
 
-      if(swap == null) break;
+      if (swap === null) {
+        break;
+      }
       this.list[index] = this.list[swap];
       this.list[swap] = currentNode;
       index = swap;
     }
     return this;
-  }
+  };
 
   exports.Constructor = Constructor;
   exports.version = '0.1.0';
 });
 /* vim: set sw=4 ts=4 et tw=80 : */
-
-
