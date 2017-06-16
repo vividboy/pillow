@@ -27,12 +27,14 @@
         'mouse',
         'particle',
         'polygon',
-        'puzzle'
-      ].forEach(function(item) {
+        'puzzle',
+        'wave'
+      ].forEach(item => {
+        var href = `./examples/${item}`;
         var a = document.createElement('a');
-        a.href = `./examples/${item}`;
+        a.href = href;
         var iframe = document.createElement('iframe');
-        iframe.src = `./examples/${item}`;
+        iframe.src = href;
         iframe.scrolling = 'no';
         a.appendChild(iframe);
         container.appendChild(a);
