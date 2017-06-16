@@ -64,7 +64,7 @@ var pillow =
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 18);
+/******/ 	return __webpack_require__(__webpack_require__.s = 19);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -207,7 +207,7 @@ module.exports = _;
 
 
 var _ = __webpack_require__(0);
-var RenderObject = __webpack_require__(19);
+var RenderObject = __webpack_require__(20);
 
 /**
  * @class pillow.RenderObjectModel RenderObjectModel.
@@ -666,7 +666,7 @@ module.exports = Notify;
 
 module.exports = {
 	"name": "pillowjs",
-	"version": "1.1.12",
+	"version": "1.1.14",
 	"description": "HTML5 2D rendering engine",
 	"repository": {
 		"type": "git",
@@ -1278,6 +1278,38 @@ module.exports = Text;
 "use strict";
 
 
+/**
+ * @class pillow.Collision Collision.
+ * @param {Object} options An object literal containing one or more of the following optional properties:
+ */
+
+function Collision(cfg) {}
+
+Collision.prototype.pointRect = function (point1, point2, rect) {
+  return point1 > rect.x && point1 < rect.right || point2 > rect.y && point2 < rect.bottom;
+};
+
+Collision.prototype.betweenRects = function (rect1, rect2) {
+  return (rect1.right > rect2.x && rect1.right < rect2.right || rect1.x > rect2.x && rect1.x < rect2.right) && (rect1.bottom > rect2.y && rect1.bottom < rect2.bottom || rect1.y < rect2.bottom && rect1.bottom > rect2.y);
+};
+
+Collision.prototype.pointCircle = function (point1, point2, circle) {
+  return Math.pow(point1 - circle.x, 2) + Math.pow(point2 - circle.y, 2) < Math.pow(circle.r, 2);
+};
+
+Collision.prototype.betweenCircles = function (circle1, circle2) {
+  return Math.pow(circle1.x - circle2.x, 2) + Math.pow(circle1.y - circle2.y, 2) < Math.pow(circle1.r + circle2.r, 2);
+};
+
+module.exports = Collision;
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
 var _ = __webpack_require__(0);
 var RenderObjectModel = __webpack_require__(1);
 
@@ -1322,7 +1354,7 @@ _.inherit(Map, RenderObjectModel);
 module.exports = Map;
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1342,7 +1374,7 @@ var _Math = {
 module.exports = _Math;
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1377,17 +1409,17 @@ var proto = {
     image.crossOrigin = '*';
     image.onload = function () {
       var id = item.id;
-      that.hash[id] = {
+      that.hash[id] = _.extend({}, item, {
         image: image,
         width: image.width,
         height: image.height
-      };
+      });
       that.num++;
-      that.emit('loaded', {
+      that.emit('loaded', _.extend({}, item, {
         number: that.num,
         id: id,
         image: that.hash[id]
-      });
+      }));
 
       if (that.num === that.getSize()) {
         that.emit('success', that.hash);
@@ -1406,7 +1438,7 @@ _.inherit(SourceLoader, Notify);
 module.exports = SourceLoader;
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1503,7 +1535,7 @@ var Tween = {
 module.exports = Tween;
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1719,7 +1751,7 @@ Vector2d.componentVector = function (vec, directionVec) {
 module.exports = Vector2d;
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1752,19 +1784,19 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
   exports.Mouse = __webpack_require__(8);
 
   exports._ = __webpack_require__(0);
-  exports.Vector2d = __webpack_require__(17);
-  exports.Math = __webpack_require__(14);
-  exports.SourceLoader = __webpack_require__(15);
-  exports.Map = __webpack_require__(13);
-  exports.Tween = __webpack_require__(16);
-  exports.Collision = __webpack_require__(20);
+  exports.Vector2d = __webpack_require__(18);
+  exports.Math = __webpack_require__(15);
+  exports.SourceLoader = __webpack_require__(16);
+  exports.Map = __webpack_require__(14);
+  exports.Tween = __webpack_require__(17);
+  exports.Collision = __webpack_require__(13);
 
   exports.Timer = __webpack_require__(2).Timer;
   exports.FPSBoard = __webpack_require__(2).FPSBoard;
 });
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1836,38 +1868,6 @@ _.augment(RenderObject, proto);
 _.inherit(RenderObject, Notify);
 
 module.exports = RenderObject;
-
-/***/ }),
-/* 20 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-/**
- * @class pillow.Collision Collision.
- * @param {Object} options An object literal containing one or more of the following optional properties:
- */
-
-function Collision(cfg) {}
-
-Collision.prototype.pointRect = function (point1, point2, rect) {
-  return point1 > rect.x && point1 < rect.right || point2 > rect.y && point2 < rect.bottom;
-};
-
-Collision.prototype.betweenRects = function (rect1, rect2) {
-  return (rect1.right > rect2.x && rect1.right < rect2.right || rect1.x > rect2.x && rect1.x < rect2.right) && (rect1.bottom > rect2.y && rect1.bottom < rect2.bottom || rect1.y < rect2.bottom && rect1.bottom > rect2.y);
-};
-
-Collision.prototype.pointCircle = function (point1, point2, circle) {
-  return Math.pow(point1 - circle.x, 2) + Math.pow(point2 - circle.y, 2) < Math.pow(circle.r, 2);
-};
-
-Collision.prototype.betweenCircles = function (circle1, circle2) {
-  return Math.pow(circle1.x - circle2.x, 2) + Math.pow(circle1.y - circle2.y, 2) < Math.pow(circle1.r + circle2.r, 2);
-};
-
-module.exports = Collision;
 
 /***/ })
 /******/ ]);

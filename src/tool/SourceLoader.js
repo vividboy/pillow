@@ -29,17 +29,17 @@ var proto = {
     image.crossOrigin = '*';
     image.onload = function() {
       var id = item.id;
-      that.hash[id] = {
+      that.hash[id] = _.extend({}, item, {
         image: image,
         width: image.width,
         height: image.height
-      };
+      });
       that.num++;
-      that.emit('loaded', {
+      that.emit('loaded', _.extend({}, item, {
         number: that.num,
         id: id,
         image: that.hash[id]
-      });
+      }));
 
       if (that.num === that.getSize()) {
         that.emit('success', that.hash);
