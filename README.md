@@ -27,7 +27,9 @@ $ npm i pillowjs --save
 
 ## Examples
 
-[online examples](//xudafeng.github.io/pillow)
+- [online examples](//xudafeng.github.io/pillow)
+- [online show](//xudafeng.github.io/pillow/show.htm)
+- [online slide](//xudafeng.github.io/slide/archives/pillow/)
 
 ## Documents
 
