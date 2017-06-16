@@ -358,9 +358,6 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
   Timer.prototype.start = function () {
     var targetTime = new Date().getTime() + this._interval;
     var loop = (function () {
-      if (this._paused) {
-        return;
-      }
       var that = this;
       this._now = this._now || +new Date();
       var now = +new Date();
@@ -380,9 +377,12 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
           targetTime += this._interval;
         }
         this._fps++;
-        this._queue.forEach(function (handle) {
-          handle();
-        });
+
+        if (!this._paused) {
+          this._queue.forEach(function (handle) {
+            handle();
+          });
+        }
       }
 
       requestAnimationFrame(loop);
