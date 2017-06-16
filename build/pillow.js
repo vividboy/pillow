@@ -298,7 +298,16 @@ var proto = {
     var i = children.length;
     var _x = x - that.x;
     var _y = y - that.y;
-    that.emit(type);
+    that.emit(type, {
+      client: {
+        x: x,
+        y: y
+      },
+      offset: {
+        x: _x,
+        y: _y
+      }
+    });
     while (i--) {
       var child = children[i];
       if (child.hitTest && child.hitTest(_x, _y)) {
@@ -666,7 +675,7 @@ module.exports = Notify;
 
 module.exports = {
 	"name": "pillowjs",
-	"version": "1.1.14",
+	"version": "1.1.15",
 	"description": "HTML5 2D rendering engine",
 	"repository": {
 		"type": "git",
