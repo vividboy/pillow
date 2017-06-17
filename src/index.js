@@ -30,6 +30,7 @@
   exports.Map = require('./tool/Map');
   exports.Tween = require('./tool/Tween');
   exports.Collision = require('./tool/Collision');
+  exports.Animate = require('./tool/Animate');
 
   exports.Timer = require('monitor.js').Timer;
   exports.FPSBoard = require('monitor.js').FPSBoard;
