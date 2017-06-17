@@ -1,6 +1,7 @@
 'use strict';
 
 const _ = require('../tool/Util');
+const Animate = require('../tool/Animate');
 
 const noop = () => {
 };
@@ -136,7 +137,7 @@ var methods = {
   },
   run: function(handler) {
     running = true;
-    _.requestAnimationFrame.call(global, function() {
+    Animate.requestAnimateFrame.call(global, function() {
       if (!running) {
         return;
       }

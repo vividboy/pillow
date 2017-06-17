@@ -64,7 +64,7 @@ var pillow =
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 19);
+/******/ 	return __webpack_require__(__webpack_require__.s = 20);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -184,9 +184,6 @@ var _ = {
     return transpose;
   },
   slice: Array.prototype.slice,
-  requestAnimationFrame: global.requestAnimationFrame || global.webkitRequestAnimationFrame || global.mozRequestAnimationFrame || function (callback) {
-    global.setTimeout(callback, 1000 / 60);
-  },
   bindEvent: function bindEvent(e, handler) {
     if (global.addEventListener) {
       global.addEventListener(e, handler, false);
@@ -197,7 +194,7 @@ var _ = {
 };
 
 module.exports = _;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7)))
 
 /***/ }),
 /* 1 */
@@ -207,7 +204,7 @@ module.exports = _;
 
 
 var _ = __webpack_require__(0);
-var RenderObject = __webpack_require__(20);
+var RenderObject = __webpack_require__(21);
 
 /**
  * @class pillow.RenderObjectModel RenderObjectModel.
@@ -507,85 +504,6 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
 
 var _ = __webpack_require__(0);
-var RenderObjectModel = __webpack_require__(1);
-
-/**
- * @class pillow.Img Img.
- * @param {Object} options An object literal containing one or more of the following optional properties:
- * <li><tt>x</tt></li>
- * <li><tt>y</tt></li>
- * <li><tt>width</tt></li>
- * <li><tt>height</tt></li>
- * <li><tt>alpha</tt></li>
- * <li><tt>scaleX</tt></li>
- * <li><tt>scaleY</tt></li>
- * <li><tt>rotation</tt></li>
- * <li><tt>angle</tt></li>
- * <li><tt>visible</tt></li>
- * <li><tt>debug</tt></li>
- */
-
-function Img(cfg) {
-  var that = this;
-  Img.sup.call(that, cfg);
-  _.merge(that, cfg);
-}
-
-var proto = {
-  draw: function draw() {
-    var that = this;
-    var currentFrame = that.getCurrentFrame ? that.getCurrentFrame() : null;
-    var x = currentFrame ? currentFrame.x : that.x;
-    var y = currentFrame ? currentFrame.y : that.y;
-    that.context.drawImage(that.image, x, y, that.width, that.height, 0, 0, that.width, that.height);
-  },
-  hitTest: function hitTest(x, y) {
-    var that = this;
-    return x >= that.x && x <= that.x + that.width && y >= that.y && y <= that.y + that.height;
-  }
-};
-
-_.augment(Img, proto);
-_.inherit(Img, RenderObjectModel);
-
-module.exports = Img;
-
-/***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var g;
-
-// This works in non-strict mode
-g = (function () {
-	return this;
-})();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || Function("return this")() || (1, eval)("this");
-} catch (e) {
-	// This works if the window reference is available
-	if (typeof window === "object") g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
-/***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _ = __webpack_require__(0);
 
 function __emit(type, data) {
   var handlers = _.slice.call(this.NotifyHash[type]);
@@ -670,7 +588,354 @@ Notify.prototype = {
 module.exports = Notify;
 
 /***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _ = __webpack_require__(0);
+var RenderObjectModel = __webpack_require__(1);
+
+/**
+ * @class pillow.Img Img.
+ * @param {Object} options An object literal containing one or more of the following optional properties:
+ * <li><tt>x</tt></li>
+ * <li><tt>y</tt></li>
+ * <li><tt>width</tt></li>
+ * <li><tt>height</tt></li>
+ * <li><tt>alpha</tt></li>
+ * <li><tt>scaleX</tt></li>
+ * <li><tt>scaleY</tt></li>
+ * <li><tt>rotation</tt></li>
+ * <li><tt>angle</tt></li>
+ * <li><tt>visible</tt></li>
+ * <li><tt>debug</tt></li>
+ */
+
+function Img(cfg) {
+  var that = this;
+  Img.sup.call(that, cfg);
+  _.merge(that, cfg);
+}
+
+var proto = {
+  draw: function draw() {
+    var that = this;
+    var currentFrame = that.getCurrentFrame ? that.getCurrentFrame() : null;
+    var x = currentFrame ? currentFrame.x : that.x;
+    var y = currentFrame ? currentFrame.y : that.y;
+    that.context.drawImage(that.image, x, y, that.width, that.height, 0, 0, that.width, that.height);
+  },
+  hitTest: function hitTest(x, y) {
+    var that = this;
+    return x >= that.x && x <= that.x + that.width && y >= that.y && y <= that.y + that.height;
+  }
+};
+
+_.augment(Img, proto);
+_.inherit(Img, RenderObjectModel);
+
+module.exports = Img;
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var Tween = __webpack_require__(6);
+var _ = __webpack_require__(0);
+var Notify = __webpack_require__(3);
+
+var FPS = 60;
+var INTERVAL = 1000 / FPS;
+
+var setTimeoutFrame = function setTimeoutFrame(callback) {
+  return setTimeout(callback, INTERVAL);
+};
+
+var clearTimeoutFrame = function clearTimeoutFrame(tick) {
+  clearTimeout(tick);
+};
+
+var requestAnimateFrame = window.requestAnimateFrame || window.msRequestAnimateFrame || window.webkitRequestAnimateFrame || window.mozkitRequestAnimateFrame || setTimeoutFrame;
+
+var cancelAnimateFrame = window.cancelAnimateFrame || window.msCancelAnimateFrame || window.webkitCancelAnimateFrame || window.mozCancelAnimateFrame || clearTimeoutFrame;
+
+function Frame(handle) {
+  this.isRequested = false;
+  this.frame;
+  this.isCancel = false;
+  this.callback = [];
+  this.handle = handle;
+}
+
+var fproto = {
+  request: function request() {
+    var that = this;
+    if (this.isRequested) {
+      return;
+    }
+    var args = arguments;
+    this.isCancel = false;
+    this.frame = requestAnimateFrame(function () {
+      if (that.isCancel) {
+        return;
+      }
+      that.handle.apply(window, args);
+      that.isRequested = true;
+      if (that.callback) {
+        that.callback.forEach(function (callback) {
+          callback && callback();
+        });
+      }
+    });
+    return this;
+  },
+  cancel: function cancel() {
+    if (this.frame) {
+      this.isCancel = true;
+      cancelAnimateFrame(this.frame);
+    }
+  },
+  then: function then(callback) {
+    if (this.isRequested) {
+      callback && callback();
+    } else {
+      this.callback.push(callback);
+    }
+    return this;
+  },
+  clone: function clone() {
+    return new Frame(this.handle);
+  }
+};
+
+_.augment(Frame, fproto);
+
+function Animate(cfg) {
+  this.duration = 1000;
+  this.delay = 0;
+  this.timing = Tween.easeIn;
+  Animate.sup.call(this, cfg);
+  _.merge(this, cfg);
+  this.isPlaying = false;
+  this.delayTick = 0;
+  this.frameCount = this.duration / INTERVAL;
+  this.framePercent = 1 / this.frameCount;
+  this.frameQueue = [];
+  this.frameIndex = 0;
+  this.init();
+}
+
+var proto = {
+  init: function init() {
+    var frameKeys = ['0'];
+    var that = this;
+    for (var i = 0; i < this.frameCount; i++) {
+      var key = frameKeys[0];
+      var percent = this.framePercent * i;
+      if (key !== null && key <= percent * 100) {
+        this.frameQueue.push(new Frame(function () {
+          that.emit('frame', {
+            percent: arguments[0],
+            timing: arguments[1]
+          });
+        }));
+        frameKeys.shift();
+      } else if (this.frameQueue.length) {
+        this.frameQueue.push(this.frameQueue[this.frameQueue.length - 1].clone());
+      }
+    }
+  },
+  start: function start() {
+    var that = this;
+    if (this.isPlaying) {
+      return;
+    }
+    this.isPlaying = true;
+
+    var next = function next() {
+      if (!that.isPlaying) {
+        return;
+      }
+
+      if (that.frameIndex === that.frameQueue.length) {
+        that.isPlaying = false;
+        that.emit('end');
+      } else {
+        var percent = that.framePercent * (that.frameIndex + 1).toFixed(10);
+        that.currentFrame = that.frameQueue[that.frameIndex];
+        that.currentFrame.request(percent.toFixed(10), that.timing(percent).toFixed(10));
+        that.currentFrame.then(function () {
+          that.frameIndex++;
+          next();
+        });
+      }
+    };
+
+    this.delayTick = setTimeout(function () {
+      that.delayTick = 0;
+      next();
+    }, !that.frameIndex && that.delay || 0);
+    return this;
+  },
+  stop: function stop() {
+    if (!this.isPlaying) {
+      return;
+    }
+    this.isPlaying = false;
+
+    if (this.delayTick) {
+      cancelAnimateFrame(this.delayTick);
+      this.delayTick = 0;
+    }
+
+    if (this.currentFrame) {
+      this.currentFrame.cancel();
+    }
+    return this;
+  }
+};
+
+_.augment(Animate, proto);
+_.inherit(Animate, Notify);
+
+Animate.requestAnimateFrame = requestAnimateFrame;
+Animate.cancelAnimateFrame = cancelAnimateFrame;
+Animate.Tween = Tween;
+
+module.exports = Animate;
+
+/***/ }),
 /* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var pow = Math.pow;
+var sin = Math.sin;
+var PI = Math.PI;
+var BACK_CONST = 1.70158;
+
+/**
+ * @class pillow.Tween Tween.
+ * @param {Object} options An object literal containing one or more of the following optional properties:
+ */
+
+var Tween = {
+  swing: function swing(t) {
+    return -Math.cos(t * PI) / 2 + 0.5;
+  },
+  easeNone: function easeNone(t) {
+    return t;
+  },
+  easeIn: function easeIn(t) {
+    return t * t;
+  },
+  easeOut: function easeOut(t) {
+    return (2 - t) * t;
+  },
+  easeBoth: function easeBoth(t) {
+    return (t *= 2) < 1 ? 0.5 * t * t : 0.5 * (1 - --t * (t - 2));
+  },
+  easeInStrong: function easeInStrong(t) {
+    return t * t * t * t;
+  },
+  easeOutStrong: function easeOutStrong(t) {
+    return 1 - --t * t * t * t;
+  },
+  easeBothStrong: function easeBothStrong(t) {
+    return (t *= 2) < 1 ? 0.5 * t * t * t * t : 0.5 * (2 - (t -= 2) * t * t * t);
+  },
+  elasticIn: function elasticIn(t) {
+    var p = 0.3;
+    var s = p / 4;
+    if (t === 0 || t === 1) return t;
+    return -(pow(2, 10 * (t -= 1)) * sin((t - s) * (2 * PI) / p));
+  },
+  elasticOut: function elasticOut(t) {
+    var p = 0.3;
+    var s = p / 4;
+    if (t === 0 || t === 1) return t;
+    return pow(2, -10 * t) * sin((t - s) * (2 * PI) / p) + 1;
+  },
+  elasticBoth: function elasticBoth(t) {
+    var p = 0.45;
+    var s = p / 4;
+    if (t === 0 || (t *= 2) === 2) return t;
+    if (t < 1) {
+      return -0.5 * (pow(2, 10 * (t -= 1)) * sin((t - s) * (2 * PI) / p));
+    }
+    return pow(2, -10 * (t -= 1)) * sin((t - s) * (2 * PI) / p) * 0.5 + 1;
+  },
+  backIn: function backIn(t) {
+    if (t === 1) t -= 0.001;
+    return t * t * ((BACK_CONST + 1) * t - BACK_CONST);
+  },
+  backOut: function backOut(t) {
+    return (t -= 1) * t * ((BACK_CONST + 1) * t + BACK_CONST) + 1;
+  },
+  backBoth: function backBoth(t) {
+    if ((t *= 2) < 1) {
+      return 0.5 * (t * t * (((BACK_CONST *= 1.525) + 1) * t - BACK_CONST));
+    }
+    return 0.5 * ((t -= 2) * t * (((BACK_CONST *= 1.525) + 1) * t + BACK_CONST) + 2);
+  },
+  bounceIn: function bounceIn(t) {
+    return 1 - Tween.bounceOut(1 - t);
+  },
+  bounceOut: function bounceOut(t) {
+    var s = 7.5625;
+    var r;
+    if (t < 1 / 2.75) {
+      r = s * t * t;
+    } else if (t < 2 / 2.75) {
+      r = s * (t -= 1.5 / 2.75) * t + 0.75;
+    } else if (t < 2.5 / 2.75) {
+      r = s * (t -= 2.25 / 2.75) * t + 0.9375;
+    } else {
+      r = s * (t -= 2.625 / 2.75) * t + 0.984375;
+    }
+    return r;
+  }
+};
+
+module.exports = Tween;
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var g;
+
+// This works in non-strict mode
+g = (function () {
+	return this;
+})();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1, eval)("this");
+} catch (e) {
+	// This works if the window reference is available
+	if (typeof window === "object") g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
+/***/ }),
+/* 8 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -726,13 +991,14 @@ module.exports = {
 };
 
 /***/ }),
-/* 7 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(global) {
 
 var _ = __webpack_require__(0);
+var Animate = __webpack_require__(5);
 
 var noop = function noop() {};
 
@@ -867,7 +1133,7 @@ var methods = {
   },
   run: function run(handler) {
     running = true;
-    _.requestAnimationFrame.call(global, function () {
+    Animate.requestAnimateFrame.call(global, function () {
       if (!running) {
         return;
       }
@@ -908,10 +1174,10 @@ _.bindEvent('blur', function (evt) {
 });
 
 module.exports = Keyboard;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7)))
 
 /***/ }),
-/* 8 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -970,7 +1236,7 @@ _.augment(Mouse, proto);
 module.exports = Mouse;
 
 /***/ }),
-/* 9 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1076,7 +1342,7 @@ _.inherit(Graphics, RenderObjectModel);
 module.exports = Graphics;
 
 /***/ }),
-/* 10 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1137,13 +1403,13 @@ _.inherit(Screen, RenderObjectModel);
 module.exports = Screen;
 
 /***/ }),
-/* 11 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var Img = __webpack_require__(3);
+var Img = __webpack_require__(4);
 var _ = __webpack_require__(0);
 
 /**
@@ -1230,7 +1496,7 @@ _.inherit(Sprite, Img);
 module.exports = Sprite;
 
 /***/ }),
-/* 12 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1281,7 +1547,7 @@ _.inherit(Text, RenderObjectModel);
 module.exports = Text;
 
 /***/ }),
-/* 13 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1313,7 +1579,7 @@ Collision.prototype.betweenCircles = function (circle1, circle2) {
 module.exports = Collision;
 
 /***/ }),
-/* 14 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1363,7 +1629,7 @@ _.inherit(Map, RenderObjectModel);
 module.exports = Map;
 
 /***/ }),
-/* 15 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1391,14 +1657,14 @@ var _Math = {
 module.exports = _Math;
 
 /***/ }),
-/* 16 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 var _ = __webpack_require__(0);
-var Notify = __webpack_require__(5);
+var Notify = __webpack_require__(3);
 
 /**
  * @class pillow.SourceLoader SourceLoader.
@@ -1455,104 +1721,7 @@ _.inherit(SourceLoader, Notify);
 module.exports = SourceLoader;
 
 /***/ }),
-/* 17 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var pow = Math.pow;
-var sin = Math.sin;
-var PI = Math.PI;
-var BACK_CONST = 1.70158;
-
-/**
- * @class pillow.Tween Tween.
- * @param {Object} options An object literal containing one or more of the following optional properties:
- */
-
-var Tween = {
-  swing: function swing(t) {
-    return -Math.cos(t * PI) / 2 + 0.5;
-  },
-  easeNone: function easeNone(t) {
-    return t;
-  },
-  easeIn: function easeIn(t) {
-    return t * t;
-  },
-  easeOut: function easeOut(t) {
-    return (2 - t) * t;
-  },
-  easeBoth: function easeBoth(t) {
-    return (t *= 2) < 1 ? 0.5 * t * t : 0.5 * (1 - --t * (t - 2));
-  },
-  easeInStrong: function easeInStrong(t) {
-    return t * t * t * t;
-  },
-  easeOutStrong: function easeOutStrong(t) {
-    return 1 - --t * t * t * t;
-  },
-  easeBothStrong: function easeBothStrong(t) {
-    return (t *= 2) < 1 ? 0.5 * t * t * t * t : 0.5 * (2 - (t -= 2) * t * t * t);
-  },
-  elasticIn: function elasticIn(t) {
-    var p = 0.3;
-    var s = p / 4;
-    if (t === 0 || t === 1) return t;
-    return -(pow(2, 10 * (t -= 1)) * sin((t - s) * (2 * PI) / p));
-  },
-  elasticOut: function elasticOut(t) {
-    var p = 0.3;
-    var s = p / 4;
-    if (t === 0 || t === 1) return t;
-    return pow(2, -10 * t) * sin((t - s) * (2 * PI) / p) + 1;
-  },
-  elasticBoth: function elasticBoth(t) {
-    var p = 0.45;
-    var s = p / 4;
-    if (t === 0 || (t *= 2) === 2) return t;
-    if (t < 1) {
-      return -0.5 * (pow(2, 10 * (t -= 1)) * sin((t - s) * (2 * PI) / p));
-    }
-    return pow(2, -10 * (t -= 1)) * sin((t - s) * (2 * PI) / p) * 0.5 + 1;
-  },
-  backIn: function backIn(t) {
-    if (t === 1) t -= 0.001;
-    return t * t * ((BACK_CONST + 1) * t - BACK_CONST);
-  },
-  backOut: function backOut(t) {
-    return (t -= 1) * t * ((BACK_CONST + 1) * t + BACK_CONST) + 1;
-  },
-  backBoth: function backBoth(t) {
-    if ((t *= 2) < 1) {
-      return 0.5 * (t * t * (((BACK_CONST *= 1.525) + 1) * t - BACK_CONST));
-    }
-    return 0.5 * ((t -= 2) * t * (((BACK_CONST *= 1.525) + 1) * t + BACK_CONST) + 2);
-  },
-  bounceIn: function bounceIn(t) {
-    return 1 - Tween.bounceOut(1 - t);
-  },
-  bounceOut: function bounceOut(t) {
-    var s = 7.5625;
-    var r;
-    if (t < 1 / 2.75) {
-      r = s * t * t;
-    } else if (t < 2 / 2.75) {
-      r = s * (t -= 1.5 / 2.75) * t + 0.75;
-    } else if (t < 2.5 / 2.75) {
-      r = s * (t -= 2.25 / 2.75) * t + 0.9375;
-    } else {
-      r = s * (t -= 2.625 / 2.75) * t + 0.984375;
-    }
-    return r;
-  }
-};
-
-module.exports = Tween;
-
-/***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1768,7 +1937,7 @@ Vector2d.componentVector = function (vec, directionVec) {
 module.exports = Vector2d;
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1788,39 +1957,40 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
     factory(root['pillow'] || (root['pillow'] = {}));
   }
 })(undefined, function (exports) {
-  var pkg = __webpack_require__(6);
+  var pkg = __webpack_require__(8);
   exports.version = pkg.version;
   exports.RenderObjectModel = __webpack_require__(1);
-  exports.Img = __webpack_require__(3);
-  exports.Sprite = __webpack_require__(11);
-  exports.Text = __webpack_require__(12);
-  exports.Graphics = __webpack_require__(9);
-  exports.Screen = __webpack_require__(10);
+  exports.Img = __webpack_require__(4);
+  exports.Sprite = __webpack_require__(13);
+  exports.Text = __webpack_require__(14);
+  exports.Graphics = __webpack_require__(11);
+  exports.Screen = __webpack_require__(12);
 
-  exports.Keyboard = __webpack_require__(7);
-  exports.Mouse = __webpack_require__(8);
+  exports.Keyboard = __webpack_require__(9);
+  exports.Mouse = __webpack_require__(10);
 
   exports._ = __webpack_require__(0);
-  exports.Vector2d = __webpack_require__(18);
-  exports.Math = __webpack_require__(15);
-  exports.SourceLoader = __webpack_require__(16);
-  exports.Map = __webpack_require__(14);
-  exports.Tween = __webpack_require__(17);
-  exports.Collision = __webpack_require__(13);
+  exports.Vector2d = __webpack_require__(19);
+  exports.Math = __webpack_require__(17);
+  exports.SourceLoader = __webpack_require__(18);
+  exports.Map = __webpack_require__(16);
+  exports.Tween = __webpack_require__(6);
+  exports.Collision = __webpack_require__(15);
+  exports.Animate = __webpack_require__(5);
 
   exports.Timer = __webpack_require__(2).Timer;
   exports.FPSBoard = __webpack_require__(2).FPSBoard;
 });
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 var _ = __webpack_require__(0);
-var Notify = __webpack_require__(5);
+var Notify = __webpack_require__(3);
 
 function RenderObject() {
   var that = this;

@@ -31,13 +31,16 @@
         'wave'
       ].forEach(item => {
         var href = `./examples/${item}`;
-        var a = document.createElement('a');
-        a.href = href;
+        var div = document.createElement('div');
         var iframe = document.createElement('iframe');
         iframe.src = href;
         iframe.scrolling = 'no';
-        a.appendChild(iframe);
-        container.appendChild(a);
+        div.appendChild(iframe);
+        var a = document.createElement('a');
+        a.href = href;
+        a.innerHTML = item;
+        div.appendChild(a);
+        container.appendChild(div);
       });
     </script>
   </body>

@@ -3,13 +3,21 @@ html {
   font: 16px/1.6 "Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 
+body {
+  max-width: 640px;
+}
+
+hr {
+    border-top: 1px solid #ccc;
+}
+
 .waves {
   position:relative;
   height: 150px;
   overflow: hidden;
   width: 100%;
   padding-top: 100px;
-  border: 1px solid gray;
+  border: 1px solid #ddd;
 }
 
 .wave {

@@ -52,7 +52,7 @@ a:active {
   background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.14902));
 }
 
-#app a {
+#app div {
   display: inline-block;
   min-width: 33%;
   overflow: hidden;
@@ -61,6 +61,14 @@ a:active {
   border: 1px solid #ddd;
   margin: 0;
   float: left;
+}
+
+#app a {
+  display: block;
+}
+
+#app a:hover {
+  text-decoration: none;
 }
 
 iframe {

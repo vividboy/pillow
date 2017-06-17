@@ -108,13 +108,6 @@ var _ = {
     return transpose;
   },
   slice: Array.prototype.slice,
-  requestAnimationFrame:
-  global.requestAnimationFrame ||
-  global.webkitRequestAnimationFrame ||
-  global.mozRequestAnimationFrame ||
-  function(callback) {
-    global.setTimeout(callback, 1000 / 60);
-  },
   bindEvent: function(e, handler) {
     if (global.addEventListener) {
       global.addEventListener(e, handler, false);
