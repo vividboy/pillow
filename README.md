@@ -35,6 +35,12 @@ $ npm i pillowjs --save
 
 [online docs](//xudafeng.github.io/pillow/docs)
 
+## TODO
+
+- balloon
+- explosion
+- 3D
+
 ## License
 
 The MIT License (MIT)
