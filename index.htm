@@ -12,50 +12,11 @@
     </div>
     <h1>Touch the pillow, have a lot of rest</h1>
     <h2>Examples:</h2>
-    <ul>
+    <ul id="container">
       <li>
         <h3>
           <a href="./show.htm">show demos</a>
         </h3>
-      </li>
-      <li>
-        <a href="examples/gravity">gravity</a>
-      </li>
-      <li>
-        <a href="examples/mario">mario</a>
-      </li>
-      <li>
-        <a href="examples/mouse">mouse</a>
-      </li>
-      <li>
-        <a href="examples/keyboard">keyboard</a>
-      </li>
-      <li>
-        <a href="examples/particle">particle</a>
-      </li>
-      <li>
-        <a href="examples/puzzle">puzzle</a>
-      </li>
-      <li>
-        <a href="examples/horizontal">horizontal</a>
-      </li>
-      <li>
-        <a href="examples/polygon">polygon</a>
-      </li>
-      <li>
-        <a href="examples/android">android</a>
-      </li>
-      <li>
-        <a href="examples/wave">wave</a>
-      </li>
-      <li>
-        <a href="examples/flappybird">flappybird</a>
-      </li>
-      <li>
-        <a href="examples/astar">astar</a>
-      </li>
-      <li>
-        <a href="examples/3d-scene">3d-scene</a>
       </li>
     </ul>
     <h2>Documents:</h2>
@@ -66,5 +27,32 @@
         </h3>
       </li>
     </ul>
+    <script>
+      var container = document.getElementById('container');
+      [
+        'android',
+        'astar',
+        'diamond',
+        'flappybird',
+        'gravity',
+        'horizontal',
+        'keyboard',
+        'mario',
+        'mouse',
+        'particle',
+        'polygon',
+        'puzzle',
+        'wave',
+        '3d-scene'
+      ].forEach(item => {
+        var href = `./examples/${item}`;
+        var a = document.createElement('a');
+        a.innerHTML = item;
+        var li = document.createElement('li');
+        a.href = href;
+        li.appendChild(a);
+        container.appendChild(li);
+      });
+    </script>
   </body>
 </html>
