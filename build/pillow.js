@@ -851,6 +851,15 @@ var Tween = {
   easeBothStrong: function easeBothStrong(t) {
     return (t *= 2) < 1 ? 0.5 * t * t * t * t : 0.5 * (2 - (t -= 2) * t * t * t);
   },
+  easeInSine: function easeInSine(t, b, c, d) {
+    return -c * Math.cos(t / d * (Math.PI / 2)) + c + b;
+  },
+  easeOutSine: function easeOutSine(t, b, c, d) {
+    return c * Math.sin(t / d * (Math.PI / 2)) + b;
+  },
+  easeInOutSine: function easeInOutSine(t, b, c, d) {
+    return -c / 2 * (Math.cos(Math.PI * t / d) - 1) + b;
+  },
   elasticIn: function elasticIn(t) {
     var p = 0.3;
     var s = p / 4;
@@ -940,7 +949,7 @@ module.exports = g;
 
 module.exports = {
 	"name": "pillowjs",
-	"version": "1.1.15",
+	"version": "1.1.18",
 	"description": "HTML5 2D rendering engine",
 	"repository": {
 		"type": "git",

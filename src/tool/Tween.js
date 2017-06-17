@@ -39,6 +39,15 @@ var Tween = {
       0.5 * t * t * t * t :
       0.5 * (2 - (t -= 2) * t * t * t);
   },
+  easeInSine: function(t, b, c, d) {
+    return -c * Math.cos(t / d * (Math.PI / 2)) + c + b;
+  },
+  easeOutSine: function(t, b, c, d) {
+    return c * Math.sin(t / d * (Math.PI / 2)) + b;
+  },
+  easeInOutSine: function(t, b, c, d) {
+    return -c / 2 * (Math.cos(Math.PI * t / d) - 1) + b;
+  },
   elasticIn: function(t) {
     var p = 0.3;
     var s = p / 4;
