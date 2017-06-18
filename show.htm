@@ -15,24 +15,25 @@
     <div id="app">
     </div>
     <script>
+    var getJSON = function(url, successCallback, failCallback) {
+      var request = new XMLHttpRequest();
+      request.open('GET', url, true);
+      request.onreadystatechange = function() {
+        if (this.readyState === 4) {
+          if (this.status >= 200 && this.status < 400) {
+            successCallback(this.responseText);
+          } else {
+            failCallback();
+          }
+        }
+      };
+      request.send();
+      request = null;
+    };
+    getJSON('./list.json', function(data) {
+      var list = JSON.parse(data).list;
       var container = document.getElementById('app');
-      [
-        'android',
-        'astar',
-        'diamond',
-        'flappybird',
-        'gravity',
-        'horizontal',
-        'keyboard',
-        'mario',
-        'mouse',
-        'particle',
-        'polygon',
-        'puzzle',
-        'wave',
-        '3d-scene',
-        'liquefy'
-      ].forEach(item => {
+      list.forEach(item => {
         var href = `./examples/${item}`;
         var div = document.createElement('div');
         var iframe = document.createElement('iframe');
@@ -45,6 +46,7 @@
         div.appendChild(a);
         container.appendChild(div);
       });
+    });
     </script>
   </body>
 </html>

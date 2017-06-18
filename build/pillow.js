@@ -969,6 +969,7 @@ module.exports = {
 		"build": "webpack && babel src/ --out-dir dist/",
 		"server": "startserver -p 8081 -s -m",
 		"test": "node ./test/pillow.test.js",
+		"update": "node ./scripts/update.js",
 		"prepublish": "npm run build"
 	},
 	"dependencies": {
