@@ -40,6 +40,13 @@ $ npm i pillowjs --save
 - balloon
 - explosion
 - 3D
+- tuneing
+- cart
+- audio
+
+## Related Tools
+
+- [canvas spritesheet editor](//github.com/xudafeng/XSpriteEditor)
 
 ## License
 
