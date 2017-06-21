@@ -17,7 +17,7 @@
   "scripts": {
     "lint": "eslint ./src ./examples",
     "doc": "rm -rf ./docs/ && jsdoc -c ./jsdoc.json",
-    "build": "webpack && babel src/ --out-dir dist/",
+    "build": "webpack -p && babel src/ --out-dir dist/",
     "server": "startserver -p 8081 -s -m",
     "test": "node ./test/pillow.test.js",
     "update": "node ./scripts/update.js",
