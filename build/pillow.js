@@ -953,13 +953,13 @@ module.exports = {
 	"description": "HTML5 2D rendering engine",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/xudafeng/pillow.git"
+		"url": "https://github.com/pillowjs/pillow.git"
 	},
 	"keywords": [
 		"canvas"
 	],
 	"main": "./dist/index.js",
-	"homepage": "https://xudafeng.github.com/pillow",
+	"homepage": "https://pillowjs.github.com/pillow",
 	"precommit": [
 		"lint"
 	],

@@ -3,7 +3,6 @@
 ;(function(global, P) {
   var Screen = P.Screen;
   var Timer = P.Timer;
-  var Text = P.Text;
   var FPSBoard = P.FPSBoard;
 
   var fpsBoard = new FPSBoard({
