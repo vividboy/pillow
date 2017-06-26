@@ -16,7 +16,8 @@ var _Math = {
       g: parseInt(result[2], 16),
       b: parseInt(result[3], 16)
     } : null;
-  }
+  },
+  degToRad: deg => (deg + 360) % 360 * (Math.PI / 180)
 };
 
 module.exports = _Math;
