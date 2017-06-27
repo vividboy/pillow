@@ -42,7 +42,6 @@ $ npm i pillowjs --save
 - 3D
 - tuneing
 - cart
-- audio
 
 ## Related Tools
 

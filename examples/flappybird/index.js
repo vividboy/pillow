@@ -6,7 +6,7 @@
   var Screen = P.Screen;
   var Sprite = P.Sprite;
   var Timer = P.Timer;
-  var SourceLoader = new P.SourceLoader();
+  var loader = new P.SourceLoader();
   var Event = {
     on: function(e, type, fn) {
       e.addEventListener(type, fn, false);
@@ -21,7 +21,7 @@
     SCREENHEIGHT: '458'
   };
 
-  SourceLoader.load([{
+  var list = [{
     id: 'ceiling',
     src: 'images/ceiling.png'
   }, {
@@ -39,11 +39,18 @@
   }, {
     id: 'pipe',
     src: 'images/pipe.png'
-  }]);
+  }];
 
-  SourceLoader.on('success', function(i) {
+  loader.on('loaded', function(e) {
+    var process = e.number / list.length;
+    console.log(`${parseInt(process * 100, 10)}%`);
+  });
+
+  loader.on('success', function(i) {
     global.sss = new Bird(i);
   });
+
+  loader.load(list);
 
   function Bird(images) {
     this.stop = true;
