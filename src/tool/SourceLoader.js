@@ -14,6 +14,7 @@ function SourceLoader(cfg) {
   SourceLoader.sup.call(that, cfg);
   _.merge(that, cfg);
 }
+
 var proto = {
   load: function(query) {
     var that = this;
