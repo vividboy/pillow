@@ -21,6 +21,9 @@
   var canvasH = window.innerHeight;
   canvas.width = canvasW;
   canvas.height = canvasH;
+  var rate = canvasW / 750;
+
+  console.log(rate)
 
   var fpsBoard = new FPSBoard({
     container: 'body',
@@ -55,7 +58,7 @@
     var number = data.number;
     var offsetX = number % 3 * resource['back'].width * 2.2;
     var offsetY = resource['mole'].height * 4 * parseInt(number / 3, 10);
-    var scale = 2;
+    var scale = 2 * rate / 2;
     var con = new RenderObjectModel({
       x: 20 + offsetX,
       y: 50 + offsetY,
