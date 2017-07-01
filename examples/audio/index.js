@@ -10,6 +10,12 @@
   var math = P.Math;
   var Img = P.Img;
   var Mouse = P.Mouse;
+  var Audio = P.Audio;
+
+  var audio = new Audio({
+    id: 'audio',
+    src: './audio.mp3'
+  });
 
   var canvas = document.querySelector('#screen');
   var canvasW = 500;
@@ -47,7 +53,7 @@
 
   loader.on('success', function(resource) {
 
-    var number = 50;
+    var number = 100;
     while (number--) {
       var x = math.getRandom(canvasW / 4, canvasW / 4 * 3);
       var y = math.getRandom(canvasW / 4, canvasW / 4 * 3);
@@ -72,11 +78,13 @@
         image: resource['image'].image,
         alpha: alpha,
         speed: speed,
-        speedv: speedv
+        speedv: speedv,
+        scalev: 0.01
       });
 
       container.on(isMobile ? 'touchstart' : 'mousedown', function() {
         this.removeFromParent();
+        audio.play();
       });
 
       image.update(function() {
@@ -86,6 +94,11 @@
           this.speed -= this.speedv;
         }
         this.rotation += this.speed;
+        if (this.scaleX >= 1 || this.scaleX <= 0) {
+          this.scalev = -this.scalev;
+        }
+        this.scaleX += this.scalev;
+        this.scaleY += this.scalev;
       });
 
       container.append(image);
@@ -95,7 +108,7 @@
 
   loader.load([{
     id: 'image',
-    src: 'https://avatars0.githubusercontent.com/u/9263023?v=3&s=400'
+    src: '//avatars0.githubusercontent.com/u/9263023?v=3&s=400'
   }]);
 
   var timer = new Timer({
@@ -106,5 +119,15 @@
     screen.run();
   });
   timer.start();
+
+  setInterval(function() {
+    audio.play();
+  }, 2 * 1000);
+
+  document
+    .getElementById('button')
+    .addEventListener('click', function() {
+      audio.play();
+    }, false);
 
 })(window, pillow);
