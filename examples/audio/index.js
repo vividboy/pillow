@@ -18,8 +18,8 @@
   });
 
   var canvas = document.querySelector('#screen');
-  var canvasW = 500;
-  var canvasH = 500;
+  var canvasW = window.innerWidth;
+  var canvasH = window.innerHeight;
   canvas.width = canvasW;
   canvas.height = canvasH;
 
@@ -53,7 +53,7 @@
 
   loader.on('success', function(resource) {
 
-    var number = 100;
+    var number = 10;
     while (number--) {
       var x = math.getRandom(canvasW / 4, canvasW / 4 * 3);
       var y = math.getRandom(canvasW / 4, canvasW / 4 * 3);
@@ -109,6 +109,9 @@
   loader.load([{
     id: 'image',
     src: '//avatars0.githubusercontent.com/u/9263023?v=3&s=400'
+  }, {
+    id: 'image1',
+    src: '//avatars0.githubusercontent.com/u/9263023?v=3&s=400'
   }]);
 
   var timer = new Timer({
@@ -122,12 +125,20 @@
 
   setInterval(function() {
     audio.play();
-  }, 2 * 1000);
+  }, 100 * 1000);
 
   document
     .getElementById('button')
-    .addEventListener('click', function() {
+    .addEventListener(isMobile ? 'touchstart' : 'mousedown', function() {
       audio.play();
+    }, false);
+
+  document
+    .getElementById('button1')
+    .addEventListener(isMobile ? 'touchstart' : 'mousedown', function() {
+      setInterval(function() {
+        audio.play();
+      }, 100);
     }, false);
 
 })(window, pillow);
