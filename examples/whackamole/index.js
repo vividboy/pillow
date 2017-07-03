@@ -23,7 +23,7 @@
   canvas.height = canvasH;
   var rate = canvasW / 750;
 
-  console.log(rate)
+  console.log(rate);
 
   var fpsBoard = new FPSBoard({
     container: 'body',
