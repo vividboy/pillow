@@ -6,6 +6,7 @@
 const _ = require('../tool/Util');
 
 var Base = {
+  isIOS: !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/i),
   cache: {},
   context: null,
   masterGain: null,
@@ -27,6 +28,9 @@ var Base = {
     return Base.context;
   },
   enableIOS: () => {
+    if (!Base.isIOS) {
+      return;
+    }
     var unlock = () => {
       var context = Base.getContext();
       var source = context.createBufferSource();
