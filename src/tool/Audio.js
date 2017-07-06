@@ -55,7 +55,7 @@ function WebAudio() {
   this.init();
 }
 
-WebAudio.prototype = {
+var wproto = {
   init: function() {
     this.paused = true;
     this.guid = _.guid();
@@ -75,6 +75,8 @@ WebAudio.prototype = {
     this.guid = _.guid();
   }
 };
+
+_.augment(WebAudio, wproto);
 
 var _refreshBuffer = function(audio, src) {
   audio.node.bufferSource = Base.getContext().createBufferSource();
@@ -181,7 +183,7 @@ function Audio(options) {
   _initAudio.call(this);
 }
 
-Audio.prototype = {
+var proto = {
   play: function() {
     if (!Base.isSupported()) {
       return;
@@ -207,6 +209,8 @@ Audio.prototype = {
     }
   }
 };
+
+_.augment(Audio, proto);
 
 Audio.Base = Base;
 

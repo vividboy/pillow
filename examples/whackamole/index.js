@@ -9,26 +9,27 @@
   var loader = new P.SourceLoader();
   var Img = P.Img;
   var Mouse = P.Mouse;
+  var Audio = P.Audio;
+  var isDebug = false;
 
-  /*
   var audio = new Audio({
     id: 'audio',
     src: './audio.mp3'
-  })*/
+  });
+
+  Audio.Base.enableIOS();
 
   var canvas = document.querySelector('#screen');
   var canvasW = window.innerWidth;
   var canvasH = window.innerHeight;
   canvas.width = canvasW;
   canvas.height = canvasH;
-  var rate = canvasW / 750;
-
-  console.log(rate);
+  var singleWidth = canvasW / 3;
 
   var fpsBoard = new FPSBoard({
     container: 'body',
-    width: 100,
-    height: 60,
+    width: canvasW / 5,
+    height: canvasW / 10,
     boardColor: '#222',
     textColor: '#d2ff1d',
     containerStyles: {
@@ -56,26 +57,37 @@
   var genMole = function(data) {
     var resource = data.resource;
     var number = data.number;
-    var offsetX = number % 3 * resource['back'].width * 2.2;
-    var offsetY = resource['mole'].height * 4 * parseInt(number / 3, 10);
-    var scale = 2 * rate / 2;
+    var rate = resource['mole'].width / singleWidth;
+
+    if (rate < 1) {
+      rate = 0.4;
+    }
+    var offsetY = (singleWidth - (resource['mole'].height + resource['front'].height) * rate) / 2;
+
+    var scale = 1;
     var con = new RenderObjectModel({
-      x: 20 + offsetX,
-      y: 50 + offsetY,
+      debug: isDebug,
+      x: number % 3 * singleWidth,
+      y: singleWidth * parseInt(number / 3, 10),
       scaleX: scale,
       scaleY: scale,
-      width: 100,
-      height: 100
+      width: singleWidth,
+      height: singleWidth,
+      number: number
     });
 
     var backcon = new RenderObjectModel({
-      x: 0,
-      y: resource['mole'].height / 2,
-      width: 100,
-      height: 100
+      debug: isDebug,
+      x: (singleWidth - resource['back'].width * rate) / 2,
+      y: resource['mole'].height / 2 * rate + offsetY,
+      scaleX: rate,
+      scaleY: rate,
+      width: resource['back'].width,
+      height: resource['back'].height
     });
 
     var back = new Img({
+      debug: isDebug,
       x: 0,
       y: 0,
       width: resource['back'].width,
@@ -86,13 +98,17 @@
     backcon.append(back);
 
     var frontcon = new RenderObjectModel({
-      x: 0,
-      y: resource['back'].height + resource['mole'].height / 2,
-      width: 100,
-      height: 100
+      debug: isDebug,
+      x: (singleWidth - resource['front'].width * rate) / 2,
+      y: (resource['back'].height + resource['mole'].height / 2) * rate + offsetY,
+      scaleX: rate,
+      scaleY: rate,
+      width: resource['front'].width,
+      height: resource['front'].height
     });
 
     var front = new Img({
+      debug: isDebug,
       x: 0,
       y: 0,
       width: resource['front'].width,
@@ -103,13 +119,34 @@
     frontcon.append(front);
 
     var molecon = new RenderObjectModel({
-      x: (resource['front'].width - resource['mole'].width) / 2,
-      y: 0,
-      width: 100,
-      height: 100
+      debug: isDebug,
+      x: (singleWidth - resource['mole'].width * rate) / 2,
+      y: offsetY,
+      originY: offsetY,
+      scaleX: rate,
+      scaleY: rate,
+      width: resource['mole'].width,
+      height: resource['mole'].height,
+      isUp: false,
+      offsetTop: 5,
+      offsetBottom: -5
+    });
+
+    molecon.update(function() {
+      if (this.originY - this.y > this.offsetTop) {
+        this.isUp = false;
+      } else if (this.originY - this.y < this.offsetBottom) {
+        this.isUp = true;
+      }
+      if (this.isUp) {
+        this.y--;
+      } else {
+        this.y++;
+      }
     });
 
     var mole = new Img({
+      debug: isDebug,
       x: 0,
       y: 0,
       width: resource['mole'].width,
@@ -123,7 +160,9 @@
     con.append(molecon);
     con.append(frontcon);
 
-    mole.on(isMobile ? 'touchstart' : 'mousedown', function() {
+    con.on(isMobile ? 'touchstart' : 'mousedown', function() {
+      console.log(this.number);
+      audio.play();
     });
 
     con.update(function() {

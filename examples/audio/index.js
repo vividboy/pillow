@@ -62,6 +62,7 @@
       var scaleX = math.getRandom(0, 100) / 200;
       var speedv = math.getRandom(1, 5) / 100;
       var container = new RenderObjectModel({
+        debug: true,
         x: x,
         y: y,
         width: 100,
@@ -69,6 +70,7 @@
       });
 
       var image = new Img({
+        debug: true,
         x: 0,
         y: 0,
         scaleX: scaleX,
