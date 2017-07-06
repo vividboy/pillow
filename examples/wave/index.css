@@ -10,25 +10,26 @@ body {
 .waves {
   position:relative;
   height: 150px;
+  height: 50vw;
   overflow: hidden;
   width: 100%;
-  padding-top: 100px;
   border: 1px solid #ddd;
-  margin-bottom: 50px;
+  margin-bottom: 30px;
 }
 
 .wave {
   position: absolute;
   background: url(./wave.svg) repeat-x;
   height: 200px;
+  height: 66vw;
   top: 100px;
+  top: 20vw;
   width: 6400px;
   animation: wave 8s cubic-bezier(0.36, 0.45, 0.63, 0.53) infinite;
   transform: translate3d(0, 0, 0);
 }
 
 .wave:last-child {
-  top: 100px;
   animation: wave 5s cubic-bezier(0.36, 0.45, 0.63, 0.53) -0.125s infinite, swell 5s ease -1.25s infinite;
   opacity: 1;
 }

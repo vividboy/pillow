@@ -24,7 +24,7 @@
   var container = document.getElementById('container');
   var canvas = document.getElementById('screen');
   var canvasW = container.clientWidth;
-  var canvasH = 200;
+  var canvasH = canvasW * 0.5;
   canvas.width = canvasW;
   canvas.height = canvasH;
 
