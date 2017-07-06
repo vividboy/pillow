@@ -36,6 +36,7 @@ var proto = {
     that.context.rotate(that.rotation * Math.PI / 180);
     that.context.scale(that.scaleX, that.scaleY);
     that.draw();
+    this._debug();
     for (var i = 0; i < that.children.length; i++) {
       that.children[i]._draw(that.context);
     }
@@ -43,13 +44,15 @@ var proto = {
   },
   _debug: function(context) {
     var that = this;
-    that.context = that.context || context;
-    that.draw();
-    for (var i = 0; i < that.children.length; i++) {
-      that.children[i]._debug(that.context);
+    if (!that.debug) {
+      return;
     }
+    that.context = that.context || context;
+    that.context.strokeStyle = 'red';
+    that.context.strokeRect(that.x, that.y, that.width, that.width);
   },
-  draw: function() {},
+  draw: function() {
+  },
   update: function() {
     var that = this;
     that.handle = that.handle || arguments[0];

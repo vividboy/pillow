@@ -40,6 +40,7 @@ function Mouse(cfg) {
   _.merge(that, cfg);
   this.bind();
 }
+
 var proto = {
   bind: function() {
     var that = this;
