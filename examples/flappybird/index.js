@@ -7,14 +7,6 @@
   var Sprite = P.Sprite;
   var Timer = P.Timer;
   var loader = new P.SourceLoader();
-  var Event = {
-    on: function(e, type, fn) {
-      e.addEventListener(type, fn, false);
-    },
-    detach: function(e, type, fn) {
-      e.removeEventListener(type, fn, false);
-    }
-  };
 
   var CONFIG = {
     SCREENWIDTH: '320',
@@ -67,7 +59,6 @@
       this.initWelcome();
       this.initPipe();
       this.initBird();
-      this.bindEvent();
     },
     initScreen: function() {
       var that = this;
@@ -259,16 +250,6 @@
         that.ySpeed = 2;
         clearTimeout(that.jump);
       }, 1000);
-    },
-    bindEvent: function() {
-      var that = this;
-      Event.on(this.screen.target, 'click', function() {
-        if (that.stop) {
-          that.startround();
-        } else {
-          that.jumpUp();
-        }
-      });
     }
   };
 
