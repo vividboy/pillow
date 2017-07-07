@@ -2,7 +2,7 @@
 
 const _ = require('../tool/Util');
 
-function getOffset(element) {
+var getOffset = function(element) {
   var x = 0;
   var y = 0;
   var offsetParent = element;
@@ -17,7 +17,7 @@ function getOffset(element) {
     x: x,
     y: y
   };
-}
+};
 
 /**
  * @class pillow.Mouse Provides methods for Mouse events.

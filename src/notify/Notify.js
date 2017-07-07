@@ -2,7 +2,7 @@
 
 const _ = require('../tool/Util');
 
-function __emit(type, data) {
+var __emit = function(type, data) {
   var handlers = _.slice.call(this.NotifyHash[type]);
   for (var i = 0, l = handlers.length; i < l; i++) {
     var j = _.extend({}, handlers[i]);
@@ -11,7 +11,8 @@ function __emit(type, data) {
     j.handler.call(j.scope, data, j);
   }
 };
-function __detach(type) {
+
+var __detach = function(type) {
   var handlers = this.NotifyHash;
   if (type) {
     delete handlers[type];
@@ -19,7 +20,8 @@ function __detach(type) {
     this.NotifyHash = {};
   }
 };
-function __bind(key, handle) {
+
+var __bind = function(key, handle) {
   var events = key.split(' ');
   for (var i = 0, l = events.length; i < l; i++) {
     var t = events[i];
@@ -31,7 +33,7 @@ function __bind(key, handle) {
       type: t
     });
   }
-}
+};
 
 function Notify() {
   this.DataHash = {};
@@ -39,7 +41,7 @@ function Notify() {
 }
 
 Notify.prototype = {
-  on: function(arg1, arg2) {
+  on: function(arg1, arg2, isOnece) {
     if (_.type(arg1) === 'object') {
       for (var j in arg1) {
         __bind.call(this, j, arg1[j]);
@@ -47,6 +49,10 @@ Notify.prototype = {
     } else {
       __bind.call(this, arg1, arg2);
     }
+    return this;
+  },
+  once: function(arg1, arg2) {
+    this.on(arg1, arg2, true);
     return this;
   },
   emit: function(types, data) {
