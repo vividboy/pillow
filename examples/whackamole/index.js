@@ -11,6 +11,7 @@
   var Mouse = P.Mouse;
   var Audio = P.Audio;
   var isDebug = false;
+  var math = P.Math;
 
   var audio = new Audio({
     id: 'audio',
@@ -53,6 +54,8 @@
 
   screen.update(function() {
   });
+
+  var queue = [];
 
   var genMole = function(data) {
     var resource = data.resource;
@@ -128,21 +131,8 @@
       width: resource['mole'].width,
       height: resource['mole'].height,
       isUp: false,
-      offsetTop: 5,
+      offsetTop: 4,
       offsetBottom: -5
-    });
-
-    molecon.update(function() {
-      if (this.originY - this.y > this.offsetTop) {
-        this.isUp = false;
-      } else if (this.originY - this.y < this.offsetBottom) {
-        this.isUp = true;
-      }
-      if (this.isUp) {
-        this.y--;
-      } else {
-        this.y++;
-      }
     });
 
     var mole = new Img({
@@ -161,7 +151,7 @@
     con.append(frontcon);
 
     con.on(isMobile ? 'touchstart' : 'mousedown', function() {
-      console.log(this.number);
+      document.querySelector('#message').innerHTML = `I am number ${this.number + 1}`;
       audio.play();
     });
 
@@ -169,17 +159,38 @@
     });
 
     screen.append(con);
+
+    return molecon;
   };
 
   loader.on('success', function(resource) {
 
     var number = 9;
     while (number--) {
-      genMole({
+      var molecon = genMole({
         resource: resource,
         number: number
       });
+      queue.push(molecon);
     }
+
+    queue.forEach(item => {
+      setTimeout(() => {
+        item.update(function() {
+          if (this.originY - this.y > this.offsetTop) {
+            this.isUp = false;
+          } else if (this.originY - this.y < this.offsetBottom) {
+            this.isUp = true;
+          }
+          if (this.isUp) {
+            this.y--;
+          } else {
+            this.y++;
+          }
+        });
+      }, math.getRandom(1, 2000));
+    });
+
   });
 
   loader.load([{
