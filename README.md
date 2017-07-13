@@ -42,6 +42,8 @@ $ npm i pillowjs --save
 - 3D
 - tuneing
 - cart
+- particle system
+- process
 
 ## Related Tools
 

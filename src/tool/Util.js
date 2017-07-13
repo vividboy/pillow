@@ -47,9 +47,6 @@ var _ = {
       r.prototype[k] = v;
     });
   },
-  log: function(l) {
-    console && this.type(console.log) === 'function' && console.log(l);
-  },
   indexOf: function(arr, val) {
     if (arr.indexOf) {
       return arr.indexOf(val);
@@ -107,7 +104,6 @@ var _ = {
     });
     return transpose;
   },
-  slice: Array.prototype.slice,
   bindEvent: function(e, handler) {
     if (global.addEventListener) {
       global.addEventListener(e, handler, false);
