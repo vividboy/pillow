@@ -3,7 +3,7 @@
 const _ = require('../tool/Util');
 
 var __emit = function(type, data) {
-  var handlers = _.slice.call(this.NotifyHash[type]);
+  var handlers = Array.prototype.slice.call(this.NotifyHash[type]);
   for (var i = 0, l = handlers.length; i < l; i++) {
     var j = _.extend({}, handlers[i]);
     var scope = j.scope ? j.scope : this;

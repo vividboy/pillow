@@ -23,7 +23,7 @@ var _ = {
     });
   },
   extend: function() {
-    var args = this.slice.call(arguments);
+    var args = Array.prototype.slice.call(arguments);
     var object = args.shift();
     for (var i = 0, l = args.length; i < l; i++) {
       var props = args[i];
