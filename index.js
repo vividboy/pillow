@@ -29,7 +29,7 @@ getJSON(`./list.json?t=${+Date}`, function(data) {
 
   if (container) {
     list.forEach(item => {
-      var href = `${location.href}/examples/${item}`;
+      var href = `${location.href}examples/${item}`;
       var a = document.createElement('a');
       a.innerHTML = item;
       var li = document.createElement('li');
