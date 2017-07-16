@@ -61,31 +61,6 @@ var proto = {
       });
     }
   },
-  traversal: function(callback) {
-    var node = this;
-    var current;
-    var children;
-    var nodes = _.type(node) === 'array' ? node.slice(0).reverse() : [node];
-    var parents = [];
-
-    if (_.type(nodes[0]) === 'undefined' && nodes.length === 1) {
-      return;
-    }
-    for (let i = nodes.length - 1; i >= 0; i--) {
-      parents.push(null);
-    }
-    while (nodes.length > 0) {
-      current = nodes.pop();
-      parents.pop();
-      callback(current);
-      children = current && current['children'] ? current['children'] : [];
-
-      for (let i = children.length - 1; i >= 0; i--) {
-        nodes.push(children[i]);
-        parents.push(current);
-      }
-    }
-  },
   dispatch: function(type, x, y) {
     var that = this;
     var children = that.children;

@@ -36,7 +36,7 @@ var proto = {
       that.canvas.width = that.width || that.canvas.width;
       that.canvas.height = that.height || that.canvas.height;
     } else {
-      _.log('init error');
+      console.log('init error');
       return;
     }
   },

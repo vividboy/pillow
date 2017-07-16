@@ -49,7 +49,7 @@ var proto = {
     }
     that.context = that.context || context;
     that.context.strokeStyle = 'red';
-    that.context.strokeRect(that.x, that.y, that.width, that.width);
+    that.context.strokeRect(0, 0, that.width, that.height);
   },
   draw: function() {
   },
