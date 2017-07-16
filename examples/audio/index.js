@@ -65,14 +65,14 @@
         debug: true,
         x: x,
         y: y,
-        width: 100,
-        height: 100
+        width: resource['image'].width,
+        height: resource['image'].height
       });
 
       var image = new Img({
-        debug: true,
         x: 0,
         y: 0,
+        debug: true,
         scaleX: scaleX,
         scaleY: scaleX,
         width: resource['image'].width,
