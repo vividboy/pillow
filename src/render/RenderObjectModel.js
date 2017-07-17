@@ -87,7 +87,7 @@ var proto = {
   },
   hitTest: function(x, y) {
     var that = this;
-    return x >= that.x && x <= that.x + that.width && y >= that.y && y <= that.y + that.height;
+    return x >= that.x && x <= that.x + that.width * that.scaleX && y >= that.y && y <= that.y + that.height * that.scaleY;
   }
 };
 
