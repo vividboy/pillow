@@ -59,12 +59,12 @@ var proto = {
     var that = this;
     that.frame = that.paused ? that.frame : index;
   },
-  getCurrentFrame: function() {
+  getCurrentFrame: function getCurrentFrame() {
     var that = this;
     var x = that.frame % that.xs;
-    var y = parseInt(that.frame / that.xs, 10);
+    var y = parseInt(that.frame / that.xs, 10) % that.ys;
 
-    if (!x && y === that.ys) {
+    if (!x && y === that.ys - 1) {
       if (that.loop) {
         that.frame = 0;
       } else {
