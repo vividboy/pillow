@@ -29,9 +29,7 @@ var proto = {
     var image = new Image();
 
     if (!/^data:/.test(item.src) && item.crossOrigin !== false) {
-      image.crossOrigin = item.crossOrigin === true
-        ? '*'
-        : (item.crossOrigin || '*');
+      image.crossOrigin = item.crossOrigin === true ? '*' : item.crossOrigin || '*';
     }
 
     image.onload = function() {
