@@ -27,7 +27,13 @@ var proto = {
   imageLoader: function(item) {
     var that = this;
     var image = new Image();
-    image.crossOrigin = '*';
+
+    if (!/^data:/.test(item.src) && item.crossOrigin !== false) {
+      image.crossOrigin = item.crossOrigin === true
+        ? '*'
+        : (item.crossOrigin || '*');
+    }
+
     image.onload = function() {
       var id = item.id;
       that.hash[id] = _.extend({}, item, {
