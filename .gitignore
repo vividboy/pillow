@@ -6,3 +6,4 @@ Thumbs.db
 *.sw*
 *.un~
 dist
+build
