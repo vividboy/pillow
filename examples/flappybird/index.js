@@ -1,6 +1,7 @@
 /* global pillow */
 
 ;(function(global, P) {
+  var debug = true;
   var RenderObjectModel = P.RenderObjectModel;
   var Img = P.Img;
   var Screen = P.Screen;
@@ -67,7 +68,8 @@
         width: CONFIG['SCREENWIDTH'],
         height: CONFIG['SCREENHEIGHT'],
         x: 0,
-        y: 0
+        y: 0,
+        debug: debug
       });
       this.timer = new Timer({
         fps: 60
@@ -86,14 +88,16 @@
           x: counter * cellWidth,
           y: 0,
           width: CONFIG['SCREENWIDTH'],
-          height: cellHeight
+          height: cellHeight,
+          debug: debug
         });
         container.append(new Img({
           x: 0,
           y: 0,
           width: cellWidth,
           height: cellHeight,
-          image: this.resource.ceiling.image
+          image: this.resource.ceiling.image,
+          debug: debug
         }));
         container.update(function() {
           this.x--;
@@ -110,14 +114,16 @@
           x: counter * cellWidth,
           y: CONFIG['SCREENHEIGHT'] - cellHeight,
           width: CONFIG['SCREENWIDTH'],
-          height: cellHeight
+          height: cellHeight,
+          debug: debug
         });
         container.append(new Img({
           x: 0,
           y: 0,
           width: cellWidth,
           height: cellHeight,
-          image: this.resource.land.image
+          image: this.resource.land.image,
+          debug: debug
         }));
         container.update(function() {
           this.x--;
@@ -141,7 +147,8 @@
           y: 0,
           width: cellWidth,
           height: cellHeight,
-          image: this.resource.sky.image
+          image: this.resource.sky.image,
+          debug: debug
         }));
         container.update(function() {
           this.x--;
@@ -156,14 +163,16 @@
         x: (CONFIG['SCREENWIDTH'] - cellWidth) / 2,
         y: (CONFIG['SCREENHEIGHT'] - cellHeight) / 3,
         width: cellWidth,
-        height: cellHeight
+        height: cellHeight,
+        debug: debug
       });
       var welcomeContainer = this.welcomeContainer = new Img({
         x: 0,
         y: 0,
         width: cellWidth,
         height: cellHeight,
-        image: this.resource.splash.image
+        image: this.resource.splash.image,
+        debug: debug
       });
       container.append(welcomeContainer);
       this.screen.append(container);
@@ -176,7 +185,8 @@
         x: (CONFIG['SCREENWIDTH'] - cellWidth) / 2 - 80,
         y: (CONFIG['SCREENHEIGHT'] - cellHeight) / 2 + 20,
         width: cellWidth,
-        height: cellHeight / 4
+        height: cellHeight / 4,
+        debug: debug
       });
       this.ySpeed = 1;
       container.update(function() {
@@ -195,7 +205,8 @@
         width: cellWidth,
         height: cellHeight / 4,
         loop: true,
-        image: this.resource.bird.image
+        image: this.resource.bird.image,
+        debug: debug
       });
       new Timer(function() {
         bird.next();
@@ -211,7 +222,8 @@
         x: CONFIG['SCREENWIDTH'],
         y: 0,
         width: cellWidth,
-        height: cellHeight
+        height: cellHeight,
+        debug: debug
       });
       container.update(function() {
         if (that.stop) {
@@ -224,7 +236,8 @@
         y: 0,
         width: cellWidth,
         height: cellHeight,
-        image: this.resource.pipe.image
+        image: this.resource.pipe.image,
+        debug: debug
       });
       container.append(pipe);
       this.screen.append(container);
