@@ -48,6 +48,11 @@ var proto = {
       this.children.splice(index, 1);
     }
   },
+  removeLastChildren: function() {
+    if (this.children.length) {
+      this.children.pop();
+    }
+  },
   removeAllChildren: function() {
     this.children = [];
   },
@@ -79,7 +84,7 @@ var proto = {
     });
     while (i--) {
       var child = children[i];
-      if (child.hitTest && child.hitTest(_x, _y)) {
+      if (child && child.hitTest && child.hitTest(_x, _y)) {
         child.dispatch(type, _x, _y);
         return;
       }
