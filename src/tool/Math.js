@@ -17,13 +17,7 @@ var _Math = {
       b: parseInt(result[3], 16)
     } : null;
   },
-  degToRad: deg => (deg + 360) % 360 * (Math.PI / 180),
-  min: function (num1, num2) {
-    return num1 < num2 ? num1 : num2;
-  },
-  max: function (num1, num2) {
-    return num1 > num2 ? num1 : num2;
-  }
+  degToRad: deg => (deg + 360) % 360 * (Math.PI / 180)
 };
 
 module.exports = _Math;

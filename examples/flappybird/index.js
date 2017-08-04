@@ -11,7 +11,6 @@
   var FPSBoard = P.FPSBoard;
   var loader = new P.SourceLoader();
   var isFirst = true;
-  var condition = 100;
 
   var fpsBoard = new FPSBoard({
     container: '#container',
@@ -56,12 +55,8 @@
     src: 'images/pipe-up.png'
   }];
 
-  loader.on('loaded', function (e) {
-    var process = e.number / list.length;
-  });
-
   loader.on('success', function (i) {
-    new Bird(i);
+    global.bird = new Bird(i);
   });
 
   loader.load(list);
@@ -100,9 +95,11 @@
       this.timer.start();
     },
     initCeiling: function () {
+      var that = this;
       var cellWidth = this.resource.ceiling.width;
       var cellHeight = this.resource.ceiling.height;
-      var counter = 20 || Math.floor(CONFIG['SCREENWIDTH'] / cellWidth) + 100;
+      var counter = Math.floor(CONFIG['SCREENWIDTH'] / cellWidth) + 3;
+      var staticCounter = counter;
       while (counter--) {
         let container = new RenderObjectModel({
           x: counter * cellWidth,
@@ -115,10 +112,14 @@
           y: 0,
           width: cellWidth,
           height: cellHeight,
-          image: this.resource.ceiling.image
+          image: that.resource.ceiling.image
         }));
         container.update(function () {
-          this.x--;
+          if (this.x <= -cellWidth) {
+            this.x = cellWidth * (staticCounter - 2);
+          } else {
+            this.x--;
+          }
         });
         this.screen.append(container);
       }
@@ -126,7 +127,8 @@
     initLand: function () {
       var cellWidth = this.resource.land.width;
       var cellHeight = this.resource.land.height;
-      var counter = 20 || Math.floor(CONFIG['SCREENWIDTH'] / cellWidth) + 100;
+      var counter = Math.floor(CONFIG['SCREENWIDTH'] / cellWidth) + 3;
+      var staticCounter = counter;
       while (counter--) {
         var container = new RenderObjectModel({
           x: counter * cellWidth,
@@ -142,7 +144,11 @@
           image: this.resource.land.image
         }));
         container.update(function () {
-          this.x--;
+          if (this.x <= -cellWidth) {
+            this.x = cellWidth * (staticCounter - 2);
+          } else {
+            this.x--;
+          }
         });
         this.screen.append(container);
       }
@@ -150,7 +156,8 @@
     initSky: function () {
       var cellWidth = this.resource.sky.width;
       var cellHeight = this.resource.sky.height;
-      var counter = 20 || Math.floor(CONFIG['SCREENWIDTH'] / cellWidth) + 100;
+      var counter = Math.floor(CONFIG['SCREENWIDTH'] / cellWidth) + 3;
+      var staticCounter = counter;
       while (counter--) {
         var container = new RenderObjectModel({
           x: counter * cellWidth,
@@ -166,7 +173,11 @@
           image: this.resource.sky.image
         }));
         container.update(function () {
-          this.x--;
+          if (this.x <= -cellWidth) {
+            this.x = cellWidth * (staticCounter - 2);
+          } else {
+            this.x--;
+          }
         });
         this.screen.append(container);
       }
@@ -191,8 +202,6 @@
       this.screen.append(container);
     },
     clearWelcome: function () {
-      var cellWidth = this.resource.splash.width;
-      var cellHeight = this.resource.splash.height;
       this.screen.removeChildren(0);
     },
     initBird: function () {
@@ -205,13 +214,6 @@
         width: cellWidth,
         height: cellHeight / 4
       });
-      // this.ySpeed = 1;
-      // container.update(function() {
-      //   if (that.stop) {
-      //     return;
-      //   }
-      //   container.y += that.ySpeed;
-      // });
       var bird = new Sprite({
         x: 0,
         y: 0,
@@ -245,38 +247,40 @@
       var cellHeight = this.resource.pipe.height;
       var cellDownWidth = this.resource.pipeDown.width;
       var cellDownHeight = this.resource.pipeDown.height;
-      var spaceHeight = math.min(cellHeight, CONFIG['SCREENHEIGHT'] - this.resource.ceiling.height - this.resource.land.height);
+      var spaceHeight = Math.min(cellHeight, CONFIG['SCREENHEIGHT'] - this.resource.ceiling.height - this.resource.land.height);
       var counter = 1;
-      while (counter <= 20) {
+      var staticCounter = 4;
+      while (counter <= staticCounter) {
+        var valueX = CONFIG['SCREENWIDTH'] / 2 * counter;
         var containers = [];
         var random = math.getRandom(80, 230);
         var spaceLeft = spaceHeight - random - cellDownHeight - CONFIG['GAP'];
         var container = new RenderObjectModel({
-          x: (CONFIG['SCREENWIDTH'] / 2) * counter,
+          x: valueX,
           y: that.resource.ceiling.height,
           width: cellWidth,
           height: spaceHeight
         });
         var pipeDownContainer = new RenderObjectModel({
-          x: (CONFIG['SCREENWIDTH'] / 2) * counter,
+          x: valueX,
           y: random,
           width: cellWidth,
           height: cellHeight
         });
         var downContainer = new RenderObjectModel({
-          x: (CONFIG['SCREENWIDTH'] / 2) * counter,
+          x: valueX,
           y: spaceHeight - spaceLeft + cellDownHeight + that.resource.ceiling.height,
           width: cellWidth,
           height: spaceLeft - cellDownHeight
         });
         var pipeUpContainer = new RenderObjectModel({
-          x: (CONFIG['SCREENWIDTH'] / 2) * counter,
+          x: valueX,
           y: spaceHeight - spaceLeft + that.resource.ceiling.height,
           width: cellWidth,
           height: cellDownHeight
         });
-        containers.push(container);  
-        containers.push(pipeDownContainer);     
+        containers.push(container);
+        containers.push(pipeDownContainer);
         containers.push(downContainer);
         containers.push(pipeUpContainer);
         var pipe = new Img({
@@ -300,7 +304,7 @@
           height: spaceLeft - cellDownHeight,
           image: this.resource.pipe.image
         });
-        var pipeUp  = new Img({
+        var pipeUp = new Img({
           x: 0,
           y: 0,
           width: cellDownWidth,
@@ -312,7 +316,11 @@
             if (that.stop) {
               return;
             }
-            this.x--;
+            if (this.x <= -cellWidth) {
+              this.x = CONFIG['SCREENWIDTH'] / 2 * (staticCounter - 1) + (CONFIG['SCREENWIDTH'] - 2 * cellWidth) / 2;
+            } else {
+              this.x--;
+            }
           });
         });
         container.append(pipe);
@@ -328,32 +336,10 @@
     },
     bind: function () {
       var that = this;
-      var m = new Mouse({
+      global.mouse = new Mouse({
         screen: that.screen
       });
     }
-    // startround: function() {
-    //   var that = this;
-    //   new Timer(function() {
-    //     if (that.welcomeContainer.alpha === 0) {
-    //       return;
-    //     }
-    //     that.welcomeContainer.alpha -= 0.02;
-
-    //     if (that.welcomeContainer.alpha <= 0) {
-    //       that.welcomeContainer.alpha = 0;
-    //     }
-    //   }).start();
-    //   that.stop = false;
-    // },
-    // jumpUp: function() {
-    //   var that = this;
-    //   this.ySpeed = -1;
-    //   this.jump = setTimeout(function() {
-    //     that.ySpeed = 2;
-    //     clearTimeout(that.jump);
-    //   }, 1000);
-    // }
   };
 
 })(window, pillow);
