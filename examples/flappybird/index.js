@@ -53,6 +53,9 @@
   }, {
     id: 'pipeUp',
     src: 'images/pipe-up.png'
+  }, {
+    id: 'gameover',
+    src: 'images/gameover.png'
   }];
 
   loader.on('success', function (i) {
@@ -62,6 +65,7 @@
   loader.load(list);
 
   function Bird(images) {
+    this.paused = true;
     this.stop = false;
     this.resource = images;
     this.init();
@@ -70,12 +74,12 @@
   Bird.prototype = {
     init: function () {
       this.initScreen();
-      this.initWelcome();
       this.initCeiling();
       this.initLand();
       this.initSky();
       this.initPipe();
       this.initBird();
+      this.initWelcome();
       this.bind();
     },
     initScreen: function () {
@@ -89,6 +93,9 @@
       });
       this.timer = new Timer();
       this.timer.update(function () {
+        if (that.stop) {
+          return;
+        }
         that.screen.run();
         fpsBoard.tick();
       });
@@ -115,16 +122,19 @@
           image: that.resource.ceiling.image
         }));
         container.update(function () {
-          if (this.x <= -cellWidth) {
-            this.x = cellWidth * (staticCounter - 2);
-          } else {
-            this.x--;
+          if (!that.paused && !that.stop) {
+            if (this.x <= -cellWidth) {
+              this.x = cellWidth * (staticCounter - 2);
+            } else {
+              this.x--;
+            }
           }
         });
         this.screen.append(container);
       }
     },
     initLand: function () {
+      var that = this;
       var cellWidth = this.resource.land.width;
       var cellHeight = this.resource.land.height;
       var counter = Math.floor(CONFIG['SCREENWIDTH'] / cellWidth) + 3;
@@ -144,16 +154,19 @@
           image: this.resource.land.image
         }));
         container.update(function () {
-          if (this.x <= -cellWidth) {
-            this.x = cellWidth * (staticCounter - 2);
-          } else {
-            this.x--;
+          if (!that.paused && !that.stop) {
+            if (this.x <= -cellWidth) {
+              this.x = cellWidth * (staticCounter - 2);
+            } else {
+              this.x--;
+            }
           }
         });
         this.screen.append(container);
       }
     },
     initSky: function () {
+      var that = this;
       var cellWidth = this.resource.sky.width;
       var cellHeight = this.resource.sky.height;
       var counter = Math.floor(CONFIG['SCREENWIDTH'] / cellWidth) + 3;
@@ -173,10 +186,12 @@
           image: this.resource.sky.image
         }));
         container.update(function () {
-          if (this.x <= -cellWidth) {
-            this.x = cellWidth * (staticCounter - 2);
-          } else {
-            this.x--;
+          if (!that.paused && !that.stop) {
+            if (this.x <= -cellWidth) {
+              this.x = cellWidth * (staticCounter - 2);
+            } else {
+              this.x--;
+            }
           }
         });
         this.screen.append(container);
@@ -201,11 +216,27 @@
       container.append(welcomeContainer);
       this.screen.append(container);
     },
-    clearWelcome: function () {
-      this.screen.removeChildren(0);
+    initGameover: function () {
+      var cellWidth = this.resource.gameover.width;
+      var cellHeight = this.resource.gameover.height;
+      var container = new RenderObjectModel({
+        x: (CONFIG['SCREENWIDTH'] - cellWidth) / 2,
+        y: (CONFIG['SCREENHEIGHT'] - cellHeight) / 2.5,
+        width: cellWidth,
+        height: cellHeight
+      });
+      container.append(new Img({
+        x: 0,
+        y: 0,
+        width: cellWidth,
+        height: cellHeight,
+        image: this.resource.gameover.image
+      }));
+      this.screen.append(container);
     },
     initBird: function () {
       var that = this;
+      that.ySpeed = 0;
       var cellWidth = this.resource.bird.width;
       var cellHeight = this.resource.bird.height;
       var container = this.birdContainer = new RenderObjectModel({
@@ -228,16 +259,30 @@
       });
       this.birdTimer = new Timer();
       this.birdTimer.update(function () {
-        bird.next();
+        if (!that.paused && !that.stop) {
+          bird.next();
+        }
       });
       this.birdTimer.start();
       container.append(bird);
       this.screen.append(container);
-
       this.screen.on('mousedown', function () {
+        that.jumpUp();
         if (isFirst) {
-          that.clearWelcome();
+          that.screen.removeLastChildren();
           isFirst = false;
+          that.paused = false;
+          container.update(function () {
+            if (that.stop ||
+              container.y > CONFIG['SCREENHEIGHT'] - that.resource.land.height - cellHeight / 4 ||
+              container.y < that.resource.ceiling.height) {
+              that.stopGame();
+              return;
+            }
+            if (!that.paused && !that.stop) {
+              container.y += that.ySpeed;
+            }
+          });
         }
       });
     },
@@ -259,13 +304,13 @@
           x: valueX,
           y: that.resource.ceiling.height,
           width: cellWidth,
-          height: spaceHeight
+          height: random
         });
         var pipeDownContainer = new RenderObjectModel({
           x: valueX,
           y: random,
-          width: cellWidth,
-          height: cellHeight
+          width: cellDownWidth,
+          height: cellDownHeight
         });
         var downContainer = new RenderObjectModel({
           x: valueX,
@@ -313,13 +358,18 @@
         });
         containers.forEach(container => {
           container.update(function () {
-            if (that.stop) {
-              return;
-            }
-            if (this.x <= -cellWidth) {
-              this.x = CONFIG['SCREENWIDTH'] / 2 * (staticCounter - 1) + (CONFIG['SCREENWIDTH'] - 2 * cellWidth) / 2;
-            } else {
-              this.x--;
+            if (!that.paused && !that.stop) {
+              let bird = that.birdContainer;
+              if (bird &&
+                (bird.x > this.x - bird.width && bird.x < this.x + cellDownWidth) &&
+                (bird.y > this.y - bird.height && bird.y < this.y + this.height)) {
+                that.stop = true;
+              }
+              if (this.x <= -cellWidth) {
+                this.x = CONFIG['SCREENWIDTH'] / 2 * (staticCounter - 1) + (CONFIG['SCREENWIDTH'] - 2 * cellWidth) / 2;
+              } else {
+                this.x--;
+              }
             }
           });
         });
@@ -333,6 +383,20 @@
         this.screen.append(pipeUpContainer);
         counter++;
       }
+    },
+    jumpUp: function () {
+      var that = this;
+      this.ySpeed = -1;
+      if (!isFirst) {
+        clearTimeout(this.jump);
+      }
+      this.jump = setTimeout(function () {
+        that.ySpeed = 2;
+      }, 400);
+    },
+    stopGame: function () {
+      this.stop = true;
+      this.initGameover();
     },
     bind: function () {
       var that = this;

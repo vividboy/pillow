@@ -48,6 +48,11 @@ var proto = {
       this.children.splice(index, 1);
     }
   },
+  removeLastChildren: function() {
+    if (this.children.length) {
+      this.children.pop();
+    }
+  },
   removeAllChildren: function() {
     this.children = [];
   },
