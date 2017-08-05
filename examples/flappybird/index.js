@@ -24,8 +24,8 @@
   });
 
   var CONFIG = {
-    SCREENWIDTH: '320',
-    SCREENHEIGHT: '458',
+    SCREENWIDTH: document.documentElement.clientWidth,
+    SCREENHEIGHT: document.documentElement.clientHeight,
     GAP: '100'
   };
 
